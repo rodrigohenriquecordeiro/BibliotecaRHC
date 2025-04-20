@@ -1,0 +1,6 @@
+@BibliotecaRHC.API_HostAddress = http://localhost:5145
+
+GET {{BibliotecaRHC.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
