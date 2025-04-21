@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BibliotecaRHC.API.Migrations
+namespace BibliotecaRHC.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class ProjetoInicial : Migration
+    public partial class ProjetoBiblioteca : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,8 +28,7 @@ namespace BibliotecaRHC.API.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AnoDePublicacao = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    NumeroDePaginas = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NumeroDePaginas = table.Column<int>(type: "int", nullable: false),
                     ClassificacaoCatalografica = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Observacao = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)

@@ -1,7 +1,7 @@
 ﻿using BibliotecaRHC.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BibliotecaRHC.API.Context;
+namespace BibliotecaRHC.Data.Context;
 
 public class AppDbContext : DbContext
 {

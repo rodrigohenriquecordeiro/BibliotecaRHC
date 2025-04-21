@@ -1,5 +1,5 @@
 ﻿using BibliotecaRHC.Models;
-using BibliotecaRHC.Data;
+using BibliotecaRHC.Data.Repositories;
 
 namespace BibliotecaRHC.Services;
 
@@ -27,6 +27,8 @@ public class LivroService : ILivroService
             existente.ClassificacaoCatalografica = livro.ClassificacaoCatalografica;
             existente.Observacao = livro.Observacao;
             existente.DataDeAquisicao = livro.DataDeAquisicao;
+
+            await _repository.Atualizar(livro);
         }
     }
 

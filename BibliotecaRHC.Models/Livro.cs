@@ -26,7 +26,7 @@ public class Livro
     [Required(ErrorMessage = "Obrigatório colocar o Número de Páginas")]
     [Range(minimum: 1, maximum: 10000, ErrorMessage = "Número de páginas excede o permitido")]
     [RegularExpression("([0-9]+)", ErrorMessage = "Número de Páginas somente aceita valores numéricos")]
-    public string? NumeroDePaginas { get; set; }
+    public int? NumeroDePaginas { get; set; }
 
     [Required(ErrorMessage = "Obrigatório colocar a Classificação Catalográfica")]
     [StringLength(100, ErrorMessage = "Permitido no máximo 100 caracteres")]
