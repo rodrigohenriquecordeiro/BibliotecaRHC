@@ -1,5 +1,5 @@
-﻿using BibliotecaRHC.Models.Entities;
-using BibliotecaRHC.Models.Interfaces;
+﻿using BibliotecaRHC.Models;
+using BibliotecaRHC.Data;
 
 namespace BibliotecaRHC.Services;
 

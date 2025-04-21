@@ -1,7 +1,6 @@
-﻿using BibliotecaRHC.Models.Entities;
-using BibliotecaRHC.Models.Interfaces;
+﻿using BibliotecaRHC.Models;
 
-namespace BibliotecaRHC.Data.Repositories;
+namespace BibliotecaRHC.Data;
 
 public class LivroRepository : ILivroRepository
 {
@@ -39,4 +38,17 @@ public class LivroRepository : ILivroRepository
     }
 
     public async Task Excluir(int id) => await Task.Run(() => _livros.RemoveAll(p => p.Id == id));
+}
+
+public interface ILivroRepository
+{
+    Task<IEnumerable<Livro>> ObterTodos();
+
+    Task<Livro> ObterPorId(int id);
+
+    Task Adicionar(Livro livro);
+
+    Task Atualizar(Livro livro);
+
+    Task Excluir(int id);
 }

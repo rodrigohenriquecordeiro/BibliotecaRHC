@@ -1,4 +1,4 @@
-﻿using BibliotecaRHC.Models.Entities;
+﻿using BibliotecaRHC.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaRHC.API.Context;

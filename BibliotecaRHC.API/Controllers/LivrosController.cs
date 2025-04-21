@@ -1,4 +1,4 @@
-﻿using BibliotecaRHC.Models.Entities;
+﻿using BibliotecaRHC.Models;
 using BibliotecaRHC.Services;
 using Microsoft.AspNetCore.Mvc;
 

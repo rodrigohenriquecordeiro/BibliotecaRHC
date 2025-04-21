@@ -1,6 +1,5 @@
 using BibliotecaRHC.API.Context;
-using BibliotecaRHC.Data.Repositories;
-using BibliotecaRHC.Models.Interfaces;
+using BibliotecaRHC.Data;
 using BibliotecaRHC.Services;
 using Microsoft.EntityFrameworkCore;
 
