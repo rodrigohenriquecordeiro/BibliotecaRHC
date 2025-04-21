@@ -9,18 +9,15 @@ public class LivroService : ILivroService
 
     public LivroService(ILivroRepository repository) => _repository = repository;
 
-    public IEnumerable<Livro> ObterLivros() => _repository.ObterTodos();
+    public async Task<IEnumerable<Livro>> ObterLivros() => await _repository.ObterTodos();
 
-    public Livro ObterLivroPorId(int id) => _repository.ObterPorId(id);
+    public async Task<Livro> ObterLivroPorId(int id) => await _repository.ObterPorId(id);
 
-    public void AdicionarLivro(Livro livro)
+    public async Task AdicionarLivro(Livro livro) => await _repository.Adicionar(livro);
+
+    public async Task AtualizarLivro(Livro livro)
     {
-        _repository.Adicionar(livro);
-    }
-
-    public void AtualizarLivro(Livro livro)
-    {
-        var existente = _repository.ObterPorId(livro.Id);
+        var existente = await _repository.ObterPorId(livro.Id);
         if (existente != null)
         {
             existente.Autor = livro.Autor;
@@ -33,18 +30,18 @@ public class LivroService : ILivroService
         }
     }
 
-    public void RemoverLivro(int id) => _repository.Excluir(id);
+    public async Task RemoverLivro(int id) => await _repository.Excluir(id);
 }
 
 public interface ILivroService
 {
-    IEnumerable<Livro> ObterLivros();
+    Task<IEnumerable<Livro>> ObterLivros();
 
-    Livro ObterLivroPorId(int id);
+    Task<Livro> ObterLivroPorId(int id);
 
-    void AdicionarLivro(Livro livro);
+    Task AdicionarLivro(Livro livro);
 
-    void AtualizarLivro(Livro livro);
+    Task AtualizarLivro(Livro livro);
 
-    void RemoverLivro(int id);
+    Task RemoverLivro(int id);
 }

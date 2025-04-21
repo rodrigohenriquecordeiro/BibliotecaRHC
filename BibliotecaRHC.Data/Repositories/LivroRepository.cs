@@ -5,31 +5,38 @@ namespace BibliotecaRHC.Data.Repositories;
 
 public class LivroRepository : ILivroRepository
 {
-    private readonly List<Livro> _livros = [];
+    private readonly List<Livro> _livros = new();
 
-    public IEnumerable<Livro> ObterTodos() => _livros;
+    public async Task<IEnumerable<Livro>> ObterTodos() => await Task.FromResult(_livros);
 
-    public Livro ObterPorId(int id) 
+    public async Task<Livro> ObterPorId(int id)
     {
-        return _livros.FirstOrDefault(p => p.Id == id) ?? throw new InvalidOperationException("Livro não encontrado.");
+        var livro = _livros.FirstOrDefault(p => p.Id == id);
+        return await Task.FromResult(livro ?? throw new InvalidOperationException("Livro não encontrado."));
     }
 
-    public void Adicionar(Livro livro) => _livros.Add(livro);
-
-    public void Atualizar(Livro livro)
+    public async Task Adicionar(Livro livro)
     {
-        var existente = ObterPorId(livro.Id);
+        await Task.Run(() => _livros.Add(livro));
+    }
+
+    public async Task Atualizar(Livro livro)
+    {
+        var existente = _livros.FirstOrDefault(p => p.Id == livro.Id);
         if (existente != null)
         {
-            existente.Autor = livro.Autor;
-            existente.NomeDoLivro = livro.NomeDoLivro;
-            existente.AnoDePublicacao = livro.AnoDePublicacao;
-            existente.NumeroDePaginas = livro.NumeroDePaginas;
-            existente.ClassificacaoCatalografica = livro.ClassificacaoCatalografica;
-            existente.Observacao = livro.Observacao;
-            existente.DataDeAquisicao = livro.DataDeAquisicao;
+            await Task.Run(() =>
+            {
+                existente.Autor = livro.Autor;
+                existente.NomeDoLivro = livro.NomeDoLivro;
+                existente.AnoDePublicacao = livro.AnoDePublicacao;
+                existente.NumeroDePaginas = livro.NumeroDePaginas;
+                existente.ClassificacaoCatalografica = livro.ClassificacaoCatalografica;
+                existente.Observacao = livro.Observacao;
+                existente.DataDeAquisicao = livro.DataDeAquisicao;
+            });
         }
     }
 
-    public void Excluir(int id) => _livros.RemoveAll(p => p.Id == id);
+    public async Task Excluir(int id) => await Task.Run(() => _livros.RemoveAll(p => p.Id == id));
 }

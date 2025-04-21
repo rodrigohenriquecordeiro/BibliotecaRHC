@@ -1,4 +1,7 @@
 using BibliotecaRHC.API.Context;
+using BibliotecaRHC.Data.Repositories;
+using BibliotecaRHC.Models.Interfaces;
+using BibliotecaRHC.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,9 @@ builder.Services.AddSwaggerGen();
 
 string? mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
+
+builder.Services.AddScoped<ILivroRepository, LivroRepository>();
+builder.Services.AddScoped<ILivroService, LivroService>();
 
 var app = builder.Build();
 

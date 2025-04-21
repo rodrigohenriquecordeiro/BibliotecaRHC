@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BibliotecaRHC.Data\BibliotecaRHC.Data.csproj" />
     <ProjectReference Include="..\BibliotecaRHC.Models\BibliotecaRHC.Models.csproj" />
     <ProjectReference Include="..\BibliotecaRHC.Services\BibliotecaRHC.Services.csproj" />
   </ItemGroup>

@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BibliotecaRHC.Models.Entities;
+﻿using BibliotecaRHC.Models.Entities;
 
 namespace BibliotecaRHC.Models.Interfaces;
 
 public interface ILivroRepository
 {
-    IEnumerable<Livro> ObterTodos();
+    Task<IEnumerable<Livro>> ObterTodos(); 
 
-    Livro ObterPorId(int id);
+    Task<Livro> ObterPorId(int id);
 
-    void Adicionar(Livro produto);
+    Task Adicionar(Livro livro);
 
-    void Atualizar(Livro produto);
+    Task Atualizar(Livro livro);
 
-    void Excluir(int id);
+    Task Excluir(int id);
 }
