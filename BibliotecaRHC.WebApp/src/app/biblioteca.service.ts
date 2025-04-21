@@ -1,0 +1,41 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Livro } from './livro';
+import { catchError, Observable, throwError } from 'rxjs';
+
+@Injectable({providedIn: 'root'})
+
+export class BibliotecaService {
+
+  private readonly API = 'http://localhost:3000/livros';
+
+  constructor(private http: HttpClient) { }
+
+  listar(): Observable<Livro[]> {
+    return this.http.get<Livro[]>(this.API);
+  }
+
+  buscarPorCodigo(id: number) {
+    return this.http.get<Livro>(`${this.API}/${id}`);
+  }
+
+  criar(livro: Livro): Observable<Livro> {
+    return this.http.post<Livro>(this.API, livro);
+  }
+
+  editar(livro: Livro) {
+    return this.http.put<Livro>(`${this.API}/${livro.id}`, livro);
+  }
+
+  excluir(id: number) {
+    const url = `${this.API}/${id}`;
+    console.log(`Tentando excluir: ${url}`);
+    return this.http.delete<Livro>(url).pipe(
+      catchError((error) => {
+        console.error('Erro ao excluir:', error);
+        return throwError(error);
+      })
+    );
+  }
+  
+}
