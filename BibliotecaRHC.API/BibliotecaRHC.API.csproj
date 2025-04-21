@@ -17,11 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BibliotecaRHC.Models\BibliotecaRHC.Models.csproj" />
+    <ProjectReference Include="..\BibliotecaRHC.Services\BibliotecaRHC.Services.csproj" />
   </ItemGroup>
 
 </Project>

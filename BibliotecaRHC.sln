@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibliotecaRHC.API", "Biblio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibliotecaRHC.Models", "BibliotecaRHC.Models\BibliotecaRHC.Models.csproj", "{C6953601-8802-4761-B0C2-39E6E5A5A120}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibliotecaRHC.Services", "BibliotecaRHC.Services\BibliotecaRHC.Services.csproj", "{0F520D8D-87DC-4F40-881F-A8E715D47A91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibliotecaRHC.Data", "BibliotecaRHC.Data\BibliotecaRHC.Data.csproj", "{2A997080-7905-47C5-B036-F9F46A733DA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{C6953601-8802-4761-B0C2-39E6E5A5A120}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6953601-8802-4761-B0C2-39E6E5A5A120}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6953601-8802-4761-B0C2-39E6E5A5A120}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F520D8D-87DC-4F40-881F-A8E715D47A91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F520D8D-87DC-4F40-881F-A8E715D47A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F520D8D-87DC-4F40-881F-A8E715D47A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F520D8D-87DC-4F40-881F-A8E715D47A91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A997080-7905-47C5-B036-F9F46A733DA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A997080-7905-47C5-B036-F9F46A733DA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A997080-7905-47C5-B036-F9F46A733DA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A997080-7905-47C5-B036-F9F46A733DA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
