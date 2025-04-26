@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BibliotecaService } from '../../../biblioteca.service';
 import { Livro } from '../../../livro';
-import { map, Observable } from 'rxjs';
-import { Data } from '@angular/router';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-form',
@@ -25,22 +24,38 @@ export class CadastrarComponent {
     observacao: new FormControl<string | null>(null)
   });
 
+  codigoUltimoLivro: number | null = null; 
+  codigoProximoLivro: number | null = null; 
+
   constructor(private service: BibliotecaService) { }
 
   ngOnInit(): void {
-    this.ultimoCodigoDoLivro().subscribe({
-      next: (codigo) => {
-        this.form.patchValue({ codigoDoLivro: codigo + 1 });
+    this.obterProximoCodigoLivro();
+  }
+
+  obterProximoCodigoLivro(): void {
+    this.service.obterCodigoUltimoLivro().pipe(
+      map((codigo: number | Number) => Number(codigo) + 1)
+    ).subscribe({
+      next: (codigo: number) => {
+        this.codigoUltimoLivro = codigo;
+        this.codigoProximoLivro = codigo;
+        this.form.get('codigoDoLivro')?.setValue(codigo);
       },
-      error: (err) => console.error('Erro ao obter o último código do livro:', err)
+      error: (err) => console.error('Erro ao obter o código do último livro:', err)
     });
   }
 
   cadastrar(): void {
+    if (this.codigoProximoLivro === null) {
+      console.error('O código do próximo livro não foi carregado.');
+      return;
+    }
+
     const formValue = this.form.value;
 
     const livro: Livro = {
-      id: formValue.codigoDoLivro!,
+      id: this.codigoProximoLivro, 
       autor: formValue.autor!,
       nomeDoLivro: formValue.nomeDoLivro!,
       editora: formValue.editora!,
@@ -52,15 +67,10 @@ export class CadastrarComponent {
     };
 
     this.service.criar(livro).subscribe({
-      next: () => this.form.reset(),
+      next: () => {
+        this.form.reset();
+      },
       error: (err) => console.error('Erro ao cadastrar o livro:', err)
     });
   }
-
-  ultimoCodigoDoLivro(): Observable<number> {
-    return this.service.listar().pipe(
-      map(livros => livros.reduce((acc, livro) => Math.max(acc, livro.id), 0))
-    );
-  }
-  
 }

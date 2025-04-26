@@ -7,7 +7,7 @@
         <form class="row g-3" [formGroup]="form">
             <div class="col-md-2">
                 <label for="codigoDoLivro" class="form-label"><strong>Código do Livro</strong></label>
-                <input type="number" class="form-control" id="codigoDoLivro" formControlName="codigoDoLivro" readonly>
+                <input type="number" class="form-control" id="codigoDoLivro" formControlName="codigoDoLivro" [value]="codigoUltimoLivro" readonly>
             </div>
             <div class="col-md-6">
                 <label for="escritor" class="form-label"><strong>Autor</strong></label>
