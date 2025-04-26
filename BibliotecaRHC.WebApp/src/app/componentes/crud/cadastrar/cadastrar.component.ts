@@ -15,8 +15,8 @@ export class CadastrarComponent {
 
   form = new FormGroup({
     codigoDoLivro: new FormControl<number | null>(null, Validators.required),
-    escritor: new FormControl<string | null>(null, Validators.required),
-    livro: new FormControl<string | null>(null, Validators.required),
+    autor: new FormControl<string | null>(null, Validators.required),
+    nomeDoLivro: new FormControl<string | null>(null, Validators.required),
     editora: new FormControl<string | null>(null, Validators.required),
     numeroDePaginas: new FormControl<number | null>(null, Validators.required),
     anoDePublicacao: new FormControl<number | null>(null, Validators.required),
@@ -41,8 +41,8 @@ export class CadastrarComponent {
 
     const livro: Livro = {
       id: formValue.codigoDoLivro!,
-      escritor: formValue.escritor!,
-      livro: formValue.livro!,
+      autor: formValue.autor!,
+      nomeDoLivro: formValue.nomeDoLivro!,
       editora: formValue.editora!,
       numeroDePaginas: formValue.numeroDePaginas!,
       anoDePublicacao: formValue.anoDePublicacao!,

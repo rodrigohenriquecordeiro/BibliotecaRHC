@@ -7,12 +7,12 @@ import { catchError, Observable, throwError } from 'rxjs';
 
 export class BibliotecaService {
 
-  private readonly API = 'http://localhost:3000/livros';
+  private readonly API = 'http://localhost:5145/api/livros';
 
   constructor(private http: HttpClient) { }
 
   listar(): Observable<Livro[]> {
-    return this.http.get<Livro[]>(this.API);
+    return this.http.get<Livro[]>(`${this.API}/obter-livros`);
   }
 
   buscarPorCodigo(id: number) {

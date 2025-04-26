@@ -1,11 +1,11 @@
 export interface Livro {
     id: number;
-    escritor: string;
-    livro: string;
+    autor: string;
+    nomeDoLivro: string;
     editora: string;
-    numeroDePaginas: number;
     anoDePublicacao: number;
-    dataDeAquisicao: Date;
+    numeroDePaginas: number;
     classificacaoCatalografica: string;
     observacao: string;
+    dataDeAquisicao: Date;
 }
