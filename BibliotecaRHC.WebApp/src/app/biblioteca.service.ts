@@ -20,7 +20,7 @@ export class BibliotecaService {
   }
 
   criar(livro: Livro): Observable<Livro> {
-    return this.http.post<Livro>(this.API, livro);
+    return this.http.post<Livro>(`${this.API}/adicionar-livro`, livro);
   }
 
   editar(livro: Livro) {
