@@ -51,4 +51,12 @@ public class LivrosController : ControllerBase
         await _service.RemoverLivro(id);
         return NoContent();
     }
+
+    [HttpGet("obter-codigo-ultimo-livro")]
+    public async Task<IActionResult> GetUltimoCodigo()
+    {
+        int ultimoCodigo = await _service.ObterCodigoUltimoLivro();
+        if (ultimoCodigo == 0) return NotFound();
+        return Ok(ultimoCodigo);
+    }
 }

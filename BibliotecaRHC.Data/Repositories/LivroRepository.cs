@@ -80,6 +80,21 @@ public class LivroRepository : ILivroRepository
             throw new InvalidOperationException("Livro não encontrado.");
         }
     }
+
+    public async Task<int> ObterCodigoUltimoLivro()
+    {
+        var ultimoLivro = await _context.Livros!.OrderByDescending(l => l.Id).FirstOrDefaultAsync();
+        if (ultimoLivro != null)
+        {
+            Console.WriteLine($"O último livro cadastrado tem o ID: {ultimoLivro.Id}");
+            return ultimoLivro.Id;
+        }
+        else
+        {
+            Console.WriteLine("Nenhum livro cadastrado.");
+            return 0;
+        }
+    }
 }
 
 public interface ILivroRepository
@@ -93,4 +108,6 @@ public interface ILivroRepository
     Task Atualizar(Livro livro);
 
     Task Excluir(int id);
+
+    Task<int> ObterCodigoUltimoLivro();
 }
