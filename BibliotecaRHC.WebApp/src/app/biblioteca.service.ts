@@ -38,8 +38,8 @@ export class BibliotecaService {
     );
   }
   
-  obterCodigoUltimoLivro(): Observable<Number> {
-    return this.http.get<Number>(`${this.API}/obter-codigo-ultimo-livro`);
+  obterCodigoProximoLivro(): Observable<Number> {
+    return this.http.get<Number>(`${this.API}/obter-codigo-proximo-livro`);
   }
 
 }

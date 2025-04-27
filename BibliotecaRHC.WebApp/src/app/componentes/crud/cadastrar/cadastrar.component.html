@@ -7,7 +7,7 @@
         <form class="row g-3" [formGroup]="form">
             <div class="col-md-2">
                 <label for="codigoDoLivro" class="form-label"><strong>Código do Livro</strong></label>
-                <input type="number" class="form-control" id="codigoDoLivro" formControlName="codigoDoLivro" [value]="codigoUltimoLivro" readonly>
+                <input type="number" class="form-control" id="codigoDoLivro" formControlName="codigoDoLivro" readonly>
             </div>
             <div class="col-md-6">
                 <label for="escritor" class="form-label"><strong>Autor</strong></label>
@@ -46,6 +46,6 @@
 
     <div class="d-flex justify-content-end mt-4">
         <a class="btn bg-primary btn-lg ms-2" href="/minha-estante" role="button">Voltar</a>
-        <a class="btn bg-primary btn-lg ms-2" href="/minha-estante" role="button" (click)="cadastrar()">Salvar</a>
-    </div>    
+        <button type="button" class="btn bg-primary btn-lg ms-2" (click)="cadastrar()">Salvar</button>
+    </div>
 </section>

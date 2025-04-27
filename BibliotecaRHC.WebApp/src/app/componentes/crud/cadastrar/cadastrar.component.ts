@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BibliotecaService } from '../../../biblioteca.service';
 import { Livro } from '../../../livro';
-import { map } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-form',
@@ -10,6 +10,7 @@ import { map } from 'rxjs';
   templateUrl: './cadastrar.component.html',
   styleUrl: './cadastrar.component.css'
 })
+
 export class CadastrarComponent {
 
   form = new FormGroup({
@@ -24,53 +25,57 @@ export class CadastrarComponent {
     observacao: new FormControl<string | null>(null)
   });
 
-  codigoUltimoLivro: number | null = null; 
-  codigoProximoLivro: number | null = null; 
-
   constructor(private service: BibliotecaService) { }
 
-  ngOnInit(): void {
-    this.obterProximoCodigoLivro();
+  async ngOnInit(): Promise<void> {
+    try {
+      const proximoCodigo = await firstValueFrom(this.service.obterCodigoProximoLivro());
+      const codigoLivro = Number(proximoCodigo);
+  
+      this.form.get('codigoDoLivro')?.setValue(codigoLivro);
+    } catch (error) {
+      console.error('Erro ao buscar o código do livro:', error);
+    }
   }
 
-  obterProximoCodigoLivro(): void {
-    this.service.obterCodigoUltimoLivro().pipe(
-      map((codigo: number | Number) => Number(codigo) + 1)
-    ).subscribe({
-      next: (codigo: number) => {
-        this.codigoUltimoLivro = codigo;
-        this.codigoProximoLivro = codigo;
-        this.form.get('codigoDoLivro')?.setValue(codigo);
-      },
-      error: (err) => console.error('Erro ao obter o código do último livro:', err)
-    });
-  }
-
-  cadastrar(): void {
-    if (this.codigoProximoLivro === null) {
-      console.error('O código do próximo livro não foi carregado.');
+  async cadastrar(): Promise<void> {
+    if (this.form.invalid) {
+      console.error('Formulário inválido.');
       return;
     }
 
-    const formValue = this.form.value;
+    try {
+      const proximoCodigo = await firstValueFrom(this.service.obterCodigoProximoLivro());
+      const codigoLivro = Number(proximoCodigo);
+      
+      this.form.get('codigoDoLivro')?.setValue(codigoLivro);
+      const formValue = this.form.value;
 
-    const livro: Livro = {
-      id: this.codigoProximoLivro, 
-      autor: formValue.autor!,
-      nomeDoLivro: formValue.nomeDoLivro!,
-      editora: formValue.editora!,
-      numeroDePaginas: formValue.numeroDePaginas!,
-      anoDePublicacao: formValue.anoDePublicacao!,
-      dataDeAquisicao: new Date(formValue.dataDeAquisicao! + 'T00:00:00'),
-      classificacaoCatalografica: formValue.classificacaoCatalografica!,
-      observacao: formValue.observacao || ''
-    };
+      let dataFormatada: string | null = null;
+      if (formValue.dataDeAquisicao) {
+        const data = new Date(formValue.dataDeAquisicao);
+        dataFormatada = data.toISOString().split('T')[0];
+      }
 
-    this.service.criar(livro).subscribe({
-      next: () => {
-        this.form.reset();
-      },
-      error: (err) => console.error('Erro ao cadastrar o livro:', err)
-    });
+      const livro: Livro = {
+        id: codigoLivro,
+        autor: formValue.autor!,
+        nomeDoLivro: formValue.nomeDoLivro!,
+        editora: formValue.editora!,
+        numeroDePaginas: formValue.numeroDePaginas!.toString(),
+        anoDePublicacao: formValue.anoDePublicacao!.toString(),
+        dataDeAquisicao: dataFormatada!,
+        classificacaoCatalografica: formValue.classificacaoCatalografica!,
+        observacao: formValue.observacao || ''
+      };
+
+      await firstValueFrom(this.service.criar(livro));
+
+      console.log('Livro cadastrado com sucesso!');
+      this.form.reset();
+    } catch (error) {
+      console.error('Erro ao cadastrar o livro:', error);
+    }
   }
+
 }

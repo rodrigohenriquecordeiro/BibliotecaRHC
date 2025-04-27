@@ -34,7 +34,7 @@ public class LivroService : ILivroService
 
     public async Task RemoverLivro(int id) => await _repository.Excluir(id);
 
-    public async Task<int> ObterCodigoUltimoLivro() => await _repository.ObterCodigoUltimoLivro();
+    public async Task<int> GeraCodigoProximoLivro() => await _repository.ObterCodigoUltimoLivro() + 1;
 }
 
 public interface ILivroService
@@ -49,5 +49,5 @@ public interface ILivroService
 
     Task RemoverLivro(int id);
 
-    Task<int> ObterCodigoUltimoLivro();
+    Task<int> GeraCodigoProximoLivro();
 }

@@ -3,9 +3,9 @@ export interface Livro {
     autor: string;
     nomeDoLivro: string;
     editora: string;
-    anoDePublicacao: number;
-    numeroDePaginas: number;
+    anoDePublicacao: string;
+    numeroDePaginas: string;
     classificacaoCatalografica: string;
     observacao: string;
-    dataDeAquisicao: Date;
+    dataDeAquisicao: string;
 }
