@@ -24,14 +24,10 @@ export class MinhaEstanteComponent {
     });
   }
 
-  onCheckboxChange(event: any, id: number) {
+  onSelecionarLivro(event: any, id: number) {
     if (event.target.checked) {
-      this.selectedLivros = [id]; 
-      this.livroSelecionado = this.livros.find(livro => livro.id === id) || null;
-    } else {
-      this.selectedLivros = [];
-      this.livroSelecionado = null;
-    }
+      this.service.setIdSelecionado(id);
+    } 
   }
 
   confirmarApagar() {

@@ -2,12 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Livro } from './livro';
 import { catchError, Observable, throwError } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 
 export class BibliotecaService {
 
   private readonly API = 'http://localhost:5145/api/livros';
+  
+  private idSelecionadoSource = new BehaviorSubject<number | null>(null);
+  idSelecionado$ = this.idSelecionadoSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -16,7 +20,7 @@ export class BibliotecaService {
   }
 
   buscarPorCodigo(id: number) {
-    return this.http.get<Livro>(`${this.API}/${id}`);
+    return this.http.get<Livro>(`${this.API}/obter-livro-por-id/${id}`);
   }
 
   criar(livro: Livro): Observable<Livro> {
@@ -24,7 +28,7 @@ export class BibliotecaService {
   }
 
   editar(livro: Livro) {
-    return this.http.put<Livro>(`${this.API}/${livro.id}`, livro);
+    return this.http.put<Livro>(`${this.API}/atualizar-livro/${livro.id}`, livro);
   }
 
   excluir(id: number) {
@@ -40,6 +44,14 @@ export class BibliotecaService {
   
   obterCodigoProximoLivro(): Observable<Number> {
     return this.http.get<Number>(`${this.API}/obter-codigo-proximo-livro`);
+  }
+
+  setIdSelecionado(id: number): void {
+    this.idSelecionadoSource.next(id);
+  }
+
+  limparSelecionado(): void {
+    this.idSelecionadoSource.next(null);
   }
 
 }
