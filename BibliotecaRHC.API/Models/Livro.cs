@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace BibliotecaRHC.Models;
+namespace BibliotecaRHC.API.Models;
 
 public class Livro
 {

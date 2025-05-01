@@ -1,8 +1,8 @@
-﻿using BibliotecaRHC.Models;
-using BibliotecaRHC.Data.Context;
+﻿using BibliotecaRHC.API.Context;
 using Microsoft.EntityFrameworkCore;
+using BibliotecaRHC.API.Models;
 
-namespace BibliotecaRHC.Data.Repositories;
+namespace BibliotecaRHC.API.Repositories;
 
 public class LivroRepository : ILivroRepository
 {

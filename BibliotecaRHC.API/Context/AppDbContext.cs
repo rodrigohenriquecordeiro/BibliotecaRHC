@@ -1,8 +1,8 @@
-﻿using BibliotecaRHC.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using BibliotecaRHC.API.Models;
 
-namespace BibliotecaRHC.Data.Context;
+namespace BibliotecaRHC.API.Context;
 
 public class AppDbContext : IdentityDbContext
 {

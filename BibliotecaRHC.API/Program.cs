@@ -1,6 +1,6 @@
-using BibliotecaRHC.Data.Context;
-using BibliotecaRHC.Data.Repositories;
-using BibliotecaRHC.Services;
+using BibliotecaRHC.API.Context;
+using BibliotecaRHC.API.Repositories;
+using BibliotecaRHC.API.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

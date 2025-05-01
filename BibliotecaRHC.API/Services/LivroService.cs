@@ -1,7 +1,7 @@
-﻿using BibliotecaRHC.Models;
-using BibliotecaRHC.Data.Repositories;
+﻿using BibliotecaRHC.API.Models;
+using BibliotecaRHC.API.Repositories;
 
-namespace BibliotecaRHC.Services;
+namespace BibliotecaRHC.API.Services;
 
 public class LivroService : ILivroService
 {

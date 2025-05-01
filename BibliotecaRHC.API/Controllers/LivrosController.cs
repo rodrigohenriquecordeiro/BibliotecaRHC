@@ -1,5 +1,5 @@
-﻿using BibliotecaRHC.Models;
-using BibliotecaRHC.Services;
+﻿using BibliotecaRHC.API.Models;
+using BibliotecaRHC.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BibliotecaRHC.API.Controllers;
