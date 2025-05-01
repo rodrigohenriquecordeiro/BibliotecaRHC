@@ -32,7 +32,7 @@ export class BibliotecaService {
   }
 
   excluir(id: number) {
-    const url = `${this.API}/${id}`;
+    const url = `${this.API}/remover-livro/${id}`;
     console.log(`Tentando excluir: ${url}`);
     return this.http.delete<Livro>(url).pipe(
       catchError((error) => {

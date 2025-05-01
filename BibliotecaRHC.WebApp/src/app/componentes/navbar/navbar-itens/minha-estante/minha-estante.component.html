@@ -9,7 +9,7 @@
       Editar
     </button>
     <button type="button" class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#modalApagar"
-      style="width: 100px;" [disabled]="selectedLivros.length === 0 || selectedLivros.length > 1">
+      [disabled]="idLivrosSelecionados.length !== 1">
       Apagar
     </button>
     <div class="modal fade" id="modalApagar" tabindex="-1" aria-hidden="true">
@@ -24,7 +24,8 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-            <button type="button" class="btn btn-primary" (click)="confirmarApagar()" data-bs-dismiss="modal">Confirmar</button>
+            <button type="button" class="btn btn-primary" (click)="confirmarApagar()"
+              data-bs-dismiss="modal">Confirmar</button>
           </div>
         </div>
       </div>
@@ -51,8 +52,7 @@
     <tbody class="table-group-divider">
       <tr *ngFor="let livro of livros">
         <td class="text-center">
-          <input class="form-check-input" type="checkbox" id="checkboxNoLabel" [checked]="selectedLivros.includes(livro.id)"
-            (change)="onSelecionarLivro($event, livro.id)">
+          <input type="checkbox" (change)="onSelecionarLivro($event, livro.id)" />
         </td>
         <td class="text-center">{{livro.id}}</td>
         <td class="text-wrap">{{livro.autor}}</td>
