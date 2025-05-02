@@ -18,15 +18,80 @@ public class AuthController : ControllerBase
     private readonly IConfiguration _configuration;
 
     public AuthController(
-        ITokenService tokenService, 
-        UserManager<ApplicationUser> userManager, 
-        RoleManager<IdentityRole> roleManager, 
+        ITokenService tokenService,
+        UserManager<ApplicationUser> userManager,
+        RoleManager<IdentityRole> roleManager,
         IConfiguration configuration)
     {
         _tokenService = tokenService;
         _userManager = userManager;
         _roleManager = roleManager;
         _configuration = configuration;
+    }
+
+    [HttpPost("create-role")]
+    public async Task<IActionResult> CreateRole(string roleName)
+    {
+        var roleExist = await _roleManager.RoleExistsAsync(roleName);
+
+        if (!roleExist)
+        {
+            var roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
+
+            if (roleResult.Succeeded)
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = $"Criado role {roleName} com sucesso" });
+            else
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = $"Erro ao criar a role {roleName}" });
+        }
+
+        return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = $"A role {roleName} já existe" });
+    }
+
+    [HttpPost("add-user-to-role")]
+    public async Task<IActionResult> AddUserToRole(string email, string roleName)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+
+        if (user != null)
+        {
+            var result = await _userManager.AddToRoleAsync(user, roleName);
+
+            if (result.Succeeded)
+                return StatusCode(StatusCodes.Status200OK, 
+                                  new Response { Status = "Success", Message = $"Usuário {user.Email} adicionado a role {roleName} com sucesso" });
+            else
+                return StatusCode(StatusCodes.Status400BadRequest,
+                                      new Response { Status = "Error", Message = $"Erro ao adicionar ouUsuário {user.Email} a role {roleName}" });
+        }
+
+        return BadRequest(new { error = "Não foi possível localizar usuário"});
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterModel model)
+    {
+        var userExist = await _userManager.FindByNameAsync(model.UserName!);
+
+        if (userExist != null)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Já existe esse usuário" });
+        }
+
+        ApplicationUser user = new()
+        {
+            Email = model.Email,
+            SecurityStamp = Guid.NewGuid().ToString(),
+            UserName = model.UserName
+        };
+
+        var result = await _userManager.CreateAsync(user, model.Password!);
+
+        if (!result.Succeeded)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Erro ao criar esse usuário" });
+        }
+
+        return Ok(new Response { Status = "Success", Message = "Usuário criado com sucesso" });
     }
 
     [HttpPost("login")]
@@ -67,37 +132,11 @@ public class AuthController : ControllerBase
                 Expiration = token.ValidTo
             });
         }
-        
+
         return Unauthorized();
     }
 
-    [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterModel model)
-    {
-        var userExist = await _userManager.FindByNameAsync(model.UserName!);
-
-        if (userExist != null)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Já existe esse usuário" });
-        }
-
-        ApplicationUser user = new()
-        {
-            Email = model.Email,
-            SecurityStamp = Guid.NewGuid().ToString(),
-            UserName = model.UserName
-        };
-
-        var result = await _userManager.CreateAsync(user, model.Password!);
-
-        if (!result.Succeeded)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Erro ao criar esse usuário" });
-        }
-
-        return Ok(new Response { Status = "Success", Message = "Usuário criado com sucesso"});
-    }
-
+    [Authorize(Policy = "AdminOnly")]
     [HttpPost("refresh-token")]
     public async Task<IActionResult> RefreshToken(TokenModel tokenModel)
     {
@@ -131,7 +170,7 @@ public class AuthController : ControllerBase
         });
     }
 
-    [Authorize]
+    [Authorize(Policy ="AdminOnly")]
     [HttpPost("revoke/{userName}")]
     public async Task<IActionResult> Revoke(string userName)
     {
@@ -140,9 +179,9 @@ public class AuthController : ControllerBase
         if (user == null) return NotFound("Usuário não encontrado");
 
         user.RefreshToken = null;
-        
+
         await _userManager.UpdateAsync(user);
-        
+
         return NoContent();
     }
 }
