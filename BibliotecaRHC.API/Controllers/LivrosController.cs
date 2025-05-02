@@ -1,5 +1,6 @@
 ﻿using BibliotecaRHC.API.Models;
 using BibliotecaRHC.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BibliotecaRHC.API.Controllers;
@@ -15,6 +16,7 @@ public class LivrosController : ControllerBase
         _service = service;
     }
 
+    [Authorize]
     [HttpPost("adicionar-livro")]
     public async Task<IActionResult> Post([FromBody] Livro livro)
     {
@@ -22,9 +24,11 @@ public class LivrosController : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = livro.Id }, livro);
     }
 
+    [Authorize]
     [HttpGet("obter-livros")]
     public async Task<IActionResult> Get() => Ok(await _service.ObterLivros());
 
+    [Authorize]
     [HttpGet("obter-livro-por-id/{id}")]
     public async Task<IActionResult> Get(int id)
     {
@@ -33,6 +37,7 @@ public class LivrosController : ControllerBase
         return Ok(produto);
     }
 
+    [Authorize]
     [HttpPut("atualizar-livro/{id}")]
     public async Task<IActionResult> Put(int id, [FromBody] Livro livro)
     {
@@ -45,6 +50,7 @@ public class LivrosController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpDelete("remover-livro/{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -52,6 +58,7 @@ public class LivrosController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpGet("obter-codigo-proximo-livro")]
     public async Task<IActionResult> GetCodigoProximoLivro() => Ok(await _service.GeraCodigoProximoLivro());
 }
