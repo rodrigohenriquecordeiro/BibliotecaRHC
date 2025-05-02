@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using BibliotecaRHC.API.Models;
 using BibliotecaRHC.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -70,4 +71,78 @@ public class AuthController : ControllerBase
         return Unauthorized();
     }
 
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterModel model)
+    {
+        var userExist = await _userManager.FindByNameAsync(model.UserName!);
+
+        if (userExist != null)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Já existe esse usuário" });
+        }
+
+        ApplicationUser user = new()
+        {
+            Email = model.Email,
+            SecurityStamp = Guid.NewGuid().ToString(),
+            UserName = model.UserName
+        };
+
+        var result = await _userManager.CreateAsync(user, model.Password!);
+
+        if (!result.Succeeded)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Erro ao criar esse usuário" });
+        }
+
+        return Ok(new Response { Status = "Success", Message = "Usuário criado com sucesso"});
+    }
+
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshToken(TokenModel tokenModel)
+    {
+        if (tokenModel is null) return BadRequest("Request inválido");
+
+        string? accessToken = tokenModel.AccessToken ?? throw new ArgumentNullException(nameof(tokenModel));
+        string? refreshToken = tokenModel.RefreshToken ?? throw new ArgumentNullException(nameof(tokenModel));
+
+        var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken!, _configuration);
+
+        if (principal is null) return BadRequest("Token/Refresh Token inválidos");
+
+        string userName = principal.Identity!.Name!;
+        var user = await _userManager.FindByNameAsync(userName);
+
+        if (user == null ||
+            user.RefreshToken != refreshToken ||
+            user.RefreshTokenExpiryTime <= DateTime.Now)
+            return BadRequest("Token/Refresh Token inválidos");
+
+        var newAccessToken = _tokenService.GenerateAccessToken(principal.Claims.ToList(), _configuration);
+        var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+        user.RefreshToken = newRefreshToken;
+        await _userManager.UpdateAsync(user);
+
+        return new ObjectResult(new
+        {
+            accessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
+            refreshToken = newRefreshToken,
+        });
+    }
+
+    [Authorize]
+    [HttpPost("revoke/{userName}")]
+    public async Task<IActionResult> Revoke(string userName)
+    {
+        var user = await _userManager.FindByNameAsync(userName);
+
+        if (user == null) return NotFound("Usuário não encontrado");
+
+        user.RefreshToken = null;
+        
+        await _userManager.UpdateAsync(user);
+        
+        return NoContent();
+    }
 }
