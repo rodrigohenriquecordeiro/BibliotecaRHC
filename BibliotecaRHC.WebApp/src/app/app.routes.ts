@@ -9,20 +9,23 @@ import { NavbarComponent } from './componentes/navbar/navbar-menu/navbar.compone
 import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
-    { path: 'login', component: LoginComponent },
-    {
-      path: '',
-      component: NavbarComponent,
-      canActivate: [AuthGuard],
-      children: [
-        { path: '', redirectTo: 'minha-estante', pathMatch: 'full' },
-        { path: 'minha-estante', component: MinhaEstanteComponent },
-        { path: 'cadastrar', component: CadastrarComponent },
-        { path: 'editar', component: EditarComponent },
-        { path: 'lidos', component: LidosComponent },
-        { path: 'projetos-de-leitura', component: ProjetosDeLeituraComponent }
-      ]
-    },
-    { path: '**', redirectTo: 'login' }
-  ];
-  
+  { path: 'login', component: LoginComponent },
+  {
+    path: '',
+    redirectTo: 'login', 
+    pathMatch: 'full'
+  },
+  {
+    path: '',
+    component: NavbarComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'minha-estante', component: MinhaEstanteComponent },
+      { path: 'cadastrar', component: CadastrarComponent },
+      { path: 'editar', component: EditarComponent },
+      { path: 'lidos', component: LidosComponent },
+      { path: 'projetos-de-leitura', component: ProjetosDeLeituraComponent }
+    ]
+  },
+  { path: '**', redirectTo: 'login' } 
+]
