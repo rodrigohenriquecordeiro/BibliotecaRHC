@@ -42,9 +42,6 @@ export class MinhaEstanteComponent implements OnInit {
 
   confirmarApagar() {
     const idParaApagar = this.idLivrosSelecionados[0];
-    if (!idParaApagar) return;
-
-    if (!confirm('Tem certeza que deseja apagar o livro selecionado?')) return;
 
     this.service.excluir(idParaApagar).subscribe({
       next: () => {
