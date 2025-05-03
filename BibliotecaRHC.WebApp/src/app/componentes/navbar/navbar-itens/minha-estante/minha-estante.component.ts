@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Livro } from '../../../../livro';
 import { BibliotecaService } from '../../../../biblioteca.service';
@@ -7,19 +7,24 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-minha-estante',
+  standalone: true,
   imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './minha-estante.component.html',
   styleUrl: './minha-estante.component.css'
 })
-
-export class MinhaEstanteComponent {
+export class MinhaEstanteComponent implements OnInit {
   livros: Livro[] = [];
   idLivrosSelecionados: number[] = [];
 
-  constructor(private service: BibliotecaService) { }
+  constructor(private service: BibliotecaService) {}
 
   ngOnInit(): void {
-    this.service.listar().subscribe((livros) => this.livros = livros);
+    this.service.listar().subscribe({
+      next: livros => {
+        this.livros = livros;
+      },
+      error: err => console.error('MinhaEstanteComponent: Erro ao buscar livros:', err) 
+    });
   }
 
   onSelecionarLivro(event: any, id: number) {
@@ -38,6 +43,8 @@ export class MinhaEstanteComponent {
   confirmarApagar() {
     const idParaApagar = this.idLivrosSelecionados[0];
     if (!idParaApagar) return;
+
+    if (!confirm('Tem certeza que deseja apagar o livro selecionado?')) return;
 
     this.service.excluir(idParaApagar).subscribe({
       next: () => {
