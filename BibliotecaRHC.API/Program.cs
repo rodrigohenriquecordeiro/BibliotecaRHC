@@ -87,12 +87,16 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp", policy =>
-    {
-        policy.WithOrigins("http://localhost:4200")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+    options.AddPolicy("AllowLocalhostOrigins",
+        policy =>
+        {
+            policy.WithOrigins(
+                    "http://localhost:4200",
+                    "http://localhost:5145")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials(); 
+        });
 });
 
 var app = builder.Build();
@@ -106,9 +110,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseCors("AllowLocalhostOrigins");
 
-app.UseCors("AllowAngularApp");
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

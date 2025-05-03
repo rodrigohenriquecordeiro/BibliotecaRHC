@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BibliotecaRHC.API.Controllers;
 
 [ApiController]
-[Route("api/livros")]
+[Route("api/auth")]
 public class AuthController : ControllerBase
 {
     private readonly ITokenService _tokenService;
@@ -97,7 +97,7 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
-        var user = await _userManager.FindByNameAsync(model.UserName!);
+        var user = await _userManager.FindByEmailAsync(model.UserEmail!);
 
         if (user is not null && await _userManager.CheckPasswordAsync(user, model.Password!))
         {
