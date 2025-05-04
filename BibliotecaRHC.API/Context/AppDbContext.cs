@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BibliotecaRHC.API.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using BibliotecaRHC.API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaRHC.API.Context;
 
