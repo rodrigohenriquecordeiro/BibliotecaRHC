@@ -1,5 +1,5 @@
-﻿using BibliotecaRHC.API.Models;
-using BibliotecaRHC.API.Services;
+﻿using BibliotecaRHC.API.Domain;
+using BibliotecaRHC.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,33 +20,34 @@ public class LivrosController : ControllerBase
     [HttpPost("adicionar-livro")]
     public async Task<IActionResult> Post([FromBody] Livro livro)
     {
-        await _service.AdicionarLivro(livro);
-        return CreatedAtAction(nameof(Get), new { id = livro.Id }, livro);
+        var novoLivro = await _service.AdicionarLivroAsync(livro);
+        return CreatedAtAction(nameof(GetById), new { id = novoLivro.Id }, novoLivro);
     }
 
     [Authorize]
     [HttpGet("obter-livros")]
-    public async Task<IActionResult> Get() => Ok(await _service.ObterLivros());
+    public async Task<IActionResult> GetTodos() => Ok(await _service.ObterTodosOsLivros());
 
     [Authorize]
     [HttpGet("obter-livro-por-id/{id}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var produto = await _service.ObterLivroPorId(id);
-        if (produto == null) return NotFound();
-        return Ok(produto);
+        var livro = await _service.ObterLivroPorId(id);
+        if (livro == null) return NotFound();
+        return Ok(livro);
     }
 
     [Authorize]
     [HttpPut("atualizar-livro/{id}")]
     public async Task<IActionResult> Put(int id, [FromBody] Livro livro)
     {
-        if (id != livro.Id) return BadRequest("ID do livro não corresponde ao ID fornecido na URL.");
+        if (id != livro.Id)
+            return BadRequest("ID do livro não corresponde ao ID fornecido na URL.");
 
-        var existente = await _service.ObterLivroPorId(id);
-        if (existente == null) return NotFound();
+        var atualizado = await _service.AtualizarLivro(livro);
+        if (atualizado == null)
+            return NotFound();
 
-        await _service.AtualizarLivro(livro);
         return NoContent();
     }
 
@@ -54,7 +55,8 @@ public class LivrosController : ControllerBase
     [HttpDelete("remover-livro/{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        await _service.RemoverLivro(id);
+        var removido = await _service.RemoverLivro(id);
+        if (removido == null) return NotFound();
         return NoContent();
     }
 

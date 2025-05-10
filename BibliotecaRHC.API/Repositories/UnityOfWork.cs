@@ -4,7 +4,7 @@ namespace BibliotecaRHC.API.Repositories;
 
 public class UnityOfWork : IUnityOfWork
 {
-    public AppDbContext _context;
+    private readonly AppDbContext _context;
     private ILivroRepository? _livroRepository;
 
     public UnityOfWork(AppDbContext context)
@@ -12,21 +12,13 @@ public class UnityOfWork : IUnityOfWork
         _context = context;
     }
 
-    public ILivroRepository LivroRepository
-    {
-        get
-        {
-            return _livroRepository ??= new LivroRepository(_context);
-        }
-    }
+    public ILivroRepository LivroRepository => _livroRepository ??= new LivroRepository(_context);
 
-    public void Commit()
-    {
-        _context.SaveChanges();
-    }
+    public async Task<int> CommitAsync() => await _context.SaveChangesAsync();
 
     public void Dispose()
     {
         _context.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

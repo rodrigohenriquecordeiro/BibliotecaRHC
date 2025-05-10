@@ -1,12 +1,10 @@
-﻿using System.Linq.Expressions;
+﻿namespace BibliotecaRHC.API.Repositories;
 
-namespace BibliotecaRHC.API.Repositories;
-
-public interface IRepository<T>
+public interface IRepository<T> where T : class
 {
-    IEnumerable<T> GetAll();
-    T? GetByID(Expression<Func<T, bool>> predicate);
-    T Create(T entity);
-    T Update(T entity);
-    T Delete(T entity);
+    Task<IEnumerable<T>> GetAllAsync();
+    Task<T?> GetByIDAsync(int id);
+    void Add(T entity);
+    void Update(T entity);
+    void Remove(T entity);
 }

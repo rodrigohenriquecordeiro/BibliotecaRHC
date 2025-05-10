@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using BibliotecaRHC.API.Context;
+﻿using BibliotecaRHC.API.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaRHC.API.Repositories;
@@ -7,40 +6,21 @@ namespace BibliotecaRHC.API.Repositories;
 public class Repository<T> : IRepository<T> where T : class
 {
     protected readonly AppDbContext _context;
+    protected readonly DbSet<T> _dbSet;
 
     public Repository(AppDbContext context)
     {
         _context = context;
+        _dbSet = context.Set<T>();
     }
 
-    public IEnumerable<T> GetAll()
-    {
-        return [.. _context.Set<T>().AsNoTracking()];
-    }
+    public async Task<IEnumerable<T>> GetAllAsync() => await _dbSet.AsNoTracking().ToListAsync();
 
-    public T? GetByID(Expression<Func<T, bool>> predicate)
-    {
-        return _context.Set<T>().FirstOrDefault(predicate);
-    }
+    public async Task<T?> GetByIDAsync(int id) => await _dbSet.FindAsync(id);
 
-    public T Create(T entity)
-    {
-        _context.Set<T>().Add(entity);
-        _context.SaveChanges();
-        return entity;
-    }
+    public void Add(T entity) => _dbSet.Add(entity);
 
-    public T Update(T entity)
-    {
-        _context.Entry(entity).State = EntityState.Modified;
-        _context.SaveChanges();
-        return entity;
-    }
+    public void Update(T entity) => _context.Entry(entity).State = EntityState.Modified;
 
-    public T Delete(T entity)
-    {
-        _context.Remove(entity);
-        _context.SaveChanges();
-        return entity;
-    }
+    public void Remove(T entity) => _dbSet.Remove(entity);
 }

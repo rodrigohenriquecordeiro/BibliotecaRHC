@@ -1,8 +1,8 @@
 ﻿namespace BibliotecaRHC.API.Repositories;
 
-public interface IUnityOfWork
+public interface IUnityOfWork : IDisposable
 {
     ILivroRepository LivroRepository { get; }
 
-    void Commit();
+    Task<int> CommitAsync();
 }
