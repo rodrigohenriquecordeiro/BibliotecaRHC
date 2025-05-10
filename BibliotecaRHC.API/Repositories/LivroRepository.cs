@@ -6,9 +6,11 @@ namespace BibliotecaRHC.API.Repositories;
 
 public class LivroRepository : Repository<Livro>, ILivroRepository
 {
-    public LivroRepository(AppDbContext context) : base(context)
-    {
+    IUnityOfWork _unityOfWork;
 
+    public LivroRepository(AppDbContext context, IUnityOfWork unityOfWork) : base(context)
+    {
+        _unityOfWork = unityOfWork;
     }
 
     public async Task<int> ObterCodigoUltimoLivro()

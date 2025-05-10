@@ -83,6 +83,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUnityOfWork, UnityOfWork>();
 builder.Services.AddScoped<ILivroRepository, LivroRepository>();
 builder.Services.AddScoped<ILivroService, LivroService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
