@@ -1,4 +1,5 @@
 using BibliotecaRHC.API.Context;
+using BibliotecaRHC.API.Domain;
 using BibliotecaRHC.API.Models;
 using BibliotecaRHC.API.Repositories;
 using BibliotecaRHC.API.Services;
@@ -81,6 +82,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
 });
 
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ILivroRepository, LivroRepository>();
 builder.Services.AddScoped<ILivroService, LivroService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
@@ -95,7 +97,7 @@ builder.Services.AddCors(options =>
                     "http://localhost:5145")
                   .AllowAnyHeader()
                   .AllowAnyMethod()
-                  .AllowCredentials(); 
+                  .AllowCredentials();
         });
 });
 
