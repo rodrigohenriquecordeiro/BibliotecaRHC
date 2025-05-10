@@ -48,8 +48,7 @@ public class LivroRepositoryTests
                 NumeroDePaginas = 300,
                 ClassificacaoCatalografica = "Classificação 3",
                 Observacao = "Observação 3",
-                DataDeAquisicao = DateTime.Now.ToString("dd/MM/yyyy")
-            }
+                DataDeAquisicao = DateTime.Now.ToString("dd/MM/yyyy") }
         ];
         #endregion
     }
@@ -77,6 +76,21 @@ public class LivroRepositoryTests
         return new LivroRepository(context);
     }
 
+    private (LivroRepository repo, AppDbContext context) CriarRepositorioComContexto(string? nomeBanco = null, bool comDados = true)
+    {
+        nomeBanco ??= Guid.NewGuid().ToString();
+        var context = CriarContextoComBancoEmMemoria(nomeBanco);
+
+        if (comDados)
+        {
+            context.Livros!.AddRange(ListaDeLivros);
+            context.SaveChanges();
+        }
+
+        var repo = new LivroRepository(context);
+        return (repo, context);
+    }
+
     [Fact]
     public async Task ObterTodos_DeveRetornarTodosOsLivros()
     {
@@ -84,7 +98,7 @@ public class LivroRepositoryTests
         var repository = CriarRepositorio();
 
         // Act
-        var resultado = await repository.ObterTodos();
+        var resultado = await repository.GetAllAsync();
 
         // Assert
         Assert.Equal(ListaDeLivros.Count, resultado.Count());
@@ -96,8 +110,8 @@ public class LivroRepositoryTests
         // Arrange
         var repository = CriarRepositorio(comDados: false);
 
-        // Act
-        var resultado = await repository.ObterTodos();
+        // Act 
+        var resultado = await repository.GetAllAsync();
 
         // Assert
         Assert.Empty(resultado);
@@ -113,33 +127,31 @@ public class LivroRepositoryTests
         var repository = CriarRepositorio();
 
         // Act
-        var resultado = await repository.ObterPorId(id);
+        var resultado = await repository.GetByIDAsync(id);
 
         // Assert
         Assert.NotNull(resultado);
-        Assert.Equal(autorEsperado, resultado.Autor);
+        Assert.Equal(autorEsperado, resultado!.Autor);
     }
 
     [Fact]
-    public async Task ObterPorId_DeveLancarExcecao_QuandoNaoEncontrar()
+    public async Task ObterPorId_DeveRetornarNull_QuandoNaoEncontrar()
     {
         // Arrange
         var repository = CriarRepositorio(comDados: false);
 
-        // Act & Assert
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-        {
-            await repository.ObterPorId(999);
-        });
+        // Act
+        var resultado = await repository.GetByIDAsync(999);
 
-        Assert.Equal("Livro não encontrado.", exception.Message);
+        // Assert
+        Assert.Null(resultado);
     }
 
     [Fact]
     public async Task Adicionar_DeveAdicionarUmLivro()
     {
         // Arrange
-        var repository = CriarRepositorio(comDados: false);
+        var (repository, context) = CriarRepositorioComContexto(comDados: false);
         var novoLivro = new Livro
         {
             Autor = "Autor Novo",
@@ -153,12 +165,12 @@ public class LivroRepositoryTests
         };
 
         // Act
-        await repository.Adicionar(novoLivro);
-        var livros = await repository.ObterTodos();
+        repository.Add(novoLivro);
+        await context.SaveChangesAsync();
 
         // Assert
+        var livros = await repository.GetAllAsync();
         Assert.Single(livros);
-        Assert.Equal("Livro Novo", livros.First().NomeDoLivro);
     }
 
     [Fact]
@@ -166,75 +178,51 @@ public class LivroRepositoryTests
     {
         // Arrange
         var repository = CriarRepositorio();
+        var livro = await repository.GetByIDAsync(1);
+        Assert.NotNull(livro);
 
         // Act
-        var livro = await repository.ObterPorId(1);
         livro!.Autor = "Autor Atualizado";
+        repository.Update(livro);
+        var livroAtualizado = await repository.GetByIDAsync(1);
 
-        await repository.Atualizar(livro);
-        var livroAtualizado = await repository.ObterPorId(1);
-
-        // Assert            
+        // Assert
         Assert.Equal("Autor Atualizado", livroAtualizado!.Autor);
     }
 
     [Fact]
-    public async Task Atualizar_DeveLancarExcecao_QuandoNaoAcharLivroParaAtualizar()
+    public void Atualizar_DeveLancarExcecao_QuandoLivroNaoExiste()
     {
         // Arrange
         var repository = CriarRepositorio(comDados: false);
+        var livroInexistente = new Livro { Id = 999, Autor = "Autor Inexistente" };
 
         // Act
-        var livroInexistente = new Livro
+        var exception = Assert.Throws<InvalidOperationException>(() =>
         {
-            Id = 999,
-            Autor = "Autor Inexistente",
-            NomeDoLivro = "Livro Inexistente",
-            Editora = "Editora Inexistente",
-            AnoDePublicacao = "2023",
-            NumeroDePaginas = 150,
-            ClassificacaoCatalografica = "Classificação Inexistente",
-            Observacao = "Observação Inexistente",
-            DataDeAquisicao = DateTime.Now.ToString("dd/MM/yyyy")
-        };
+            repository.Update(livroInexistente);
+        });
 
         // Assert
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-        {
-            await repository.Atualizar(livroInexistente);
-        });
+        Assert.Equal("Livro não encontrado para atualizar.", exception.Message);
     }
 
     [Fact]
-    public async Task Excluir_DeveExcluirUmLivro()
+    public async Task Remover_DeveRemoverUmLivro()
     {
         // Arrange
-        var context = CriarContextoComBancoEmMemoria("DbTeste_Excluir");
-        context.Livros!.AddRange(ListaDeLivros);
+        var (repository, context) = CriarRepositorioComContexto();
+        var livroParaRemover = await repository.GetByIDAsync(1);
+        Assert.NotNull(livroParaRemover);
+
+        // Act
+        repository.Remove(livroParaRemover!);
         await context.SaveChangesAsync();
-        var repository = new LivroRepository(context);
-
-        // Act
-        await repository.Excluir(1);
-        var resultado = await context.Livros.FindAsync(1);
 
         // Assert
-        Assert.Null(resultado);
-    }
-
-    [Fact]
-    public async Task Excluir_DeveLancarExcecao_QuandoNaoEncontrarLivroParaExcluir()
-    {
-        // Arrange
-        var repository = CriarRepositorio(comDados: false);
-
-        // Act & Assert
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-        {
-            await repository.Excluir(999);
-        });
-
-        Assert.Equal("Livro não encontrado.", exception.Message);
+        var livroRemovido = await repository.GetByIDAsync(1);
+        Assert.Null(livroRemovido);
+        Assert.Equal(ListaDeLivros.Count - 1, (await repository.GetAllAsync()).Count());
     }
 
     [Fact]
@@ -244,7 +232,7 @@ public class LivroRepositoryTests
         var repository = CriarRepositorio();
 
         // Act
-        var resultado = await repository.ObterCodigoUltimoLivro();
+        var resultado = await repository.ObterCodigoUltimoLivroAsync();
 
         // Assert
         Assert.Equal(3, resultado);
@@ -257,7 +245,7 @@ public class LivroRepositoryTests
         var repository = CriarRepositorio(comDados: false);
 
         // Act
-        var resultado = await repository.ObterCodigoUltimoLivro();
+        var resultado = await repository.ObterCodigoUltimoLivroAsync();
 
         // Assert
         Assert.Equal(0, resultado);

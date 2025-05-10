@@ -20,7 +20,21 @@ public class Repository<T> : IRepository<T> where T : class
 
     public void Add(T entity) => _dbSet.Add(entity);
 
-    public void Update(T entity) => _context.Entry(entity).State = EntityState.Modified;
+    public void Update(T entity)
+    {
+        var key = _context.Entry(entity).Property("Id").CurrentValue;
+        var existente = _context.Set<T>().Find(key);
 
-    public void Remove(T entity) => _dbSet.Remove(entity);
+        if (existente == null)
+            throw new InvalidOperationException($"{typeof(T).Name} não encontrado para atualizar.");
+
+        _context.Entry(existente).CurrentValues.SetValues(entity);
+        _context.SaveChanges();
+    }
+
+    public void Remove(T entity)
+    {
+        _dbSet.Remove(entity);
+        _context.SaveChanges();
+    }
 }
