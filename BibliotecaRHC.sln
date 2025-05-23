@@ -5,7 +5,7 @@ VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibliotecaRHC.API", "BibliotecaRHC.API\BibliotecaRHC.API.csproj", "{C6F2F65D-8A97-4085-97C4-A398A440B187}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibliotecaRHC.Testes", "BibliotecaRHC.Testes\BibliotecaRHC.Testes.csproj", "{5777FFC3-A100-4256-8AE9-E94946EDE843}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BibliotecaRHC.Tests", "BibliotecaRHC.Testes\BibliotecaRHC.Tests.csproj", "{5777FFC3-A100-4256-8AE9-E94946EDE843}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

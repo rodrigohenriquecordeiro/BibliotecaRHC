@@ -3,7 +3,7 @@ using BibliotecaRHC.API.Models;
 using BibliotecaRHC.API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace BibliotecaRHC.Testes;
+namespace BibliotecaRHC.Tests;
 
 public class LivroRepositoryTests
 {

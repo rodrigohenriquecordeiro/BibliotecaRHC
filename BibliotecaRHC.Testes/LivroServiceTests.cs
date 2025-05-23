@@ -4,7 +4,7 @@ using BibliotecaRHC.API.Repositories;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace BibliotecaRHC.Testes;
+namespace BibliotecaRHC.Tests;
 
 public class LivroServiceTests
 {
