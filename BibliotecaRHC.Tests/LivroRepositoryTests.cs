@@ -53,29 +53,6 @@ public class LivroRepositoryTests
         #endregion
     }
 
-    private AppDbContext CriarContextoComBancoEmMemoria(string nomeBanco)
-    {
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(nomeBanco)
-            .Options;
-
-        return new AppDbContext(options);
-    }
-
-    private LivroRepository CriarRepositorio(string? nomeBanco = null, bool comDados = true)
-    {
-        nomeBanco ??= Guid.NewGuid().ToString();
-        var context = CriarContextoComBancoEmMemoria(nomeBanco);
-
-        if (comDados)
-        {
-            context.Livros!.AddRange(ListaDeLivros);
-            context.SaveChanges();
-        }
-
-        return new LivroRepository(context);
-    }
-
     private (LivroRepository repo, AppDbContext context) CriarRepositorioComContexto(string? nomeBanco = null, bool comDados = true)
     {
         nomeBanco ??= Guid.NewGuid().ToString();
@@ -250,4 +227,29 @@ public class LivroRepositoryTests
         // Assert
         Assert.Equal(0, resultado);
     }
+
+    #region Funções Auxiliares
+    private AppDbContext CriarContextoComBancoEmMemoria(string nomeBanco)
+    {
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseInMemoryDatabase(nomeBanco)
+            .Options;
+
+        return new AppDbContext(options);
+    }
+
+    private LivroRepository CriarRepositorio(string? nomeBanco = null, bool comDados = true)
+    {
+        nomeBanco ??= Guid.NewGuid().ToString();
+        var context = CriarContextoComBancoEmMemoria(nomeBanco);
+
+        if (comDados)
+        {
+            context.Livros!.AddRange(ListaDeLivros);
+            context.SaveChanges();
+        }
+
+        return new LivroRepository(context);
+    }
+    #endregion
 }
