@@ -6,6 +6,7 @@ public class UnityOfWork : IUnityOfWork
 {
     private readonly AppDbContext _context;
     private ILivroRepository? _livroRepository;
+    private IFrasesInesqueciveisRepository? _frasesInesqueciveisRepository;
 
     public UnityOfWork(AppDbContext context)
     {
@@ -13,6 +14,7 @@ public class UnityOfWork : IUnityOfWork
     }
 
     public ILivroRepository LivroRepository => _livroRepository ??= new LivroRepository(_context);
+    public IFrasesInesqueciveisRepository FrasesInesqueciveisRepository => _frasesInesqueciveisRepository ??= new FrasesInesqueciveisRepository(_context);
 
     public async Task<int> CommitAsync() => await _context.SaveChangesAsync();
 

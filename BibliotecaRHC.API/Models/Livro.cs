@@ -39,6 +39,8 @@ public class Livro
     [Required(ErrorMessage = "Obrigatório colocar a Data de Aquisição")]
     public string? DataDeAquisicao { get; set; }
 
+    public ICollection<FrasesInesqueciveis> Frases { get; set; } = [];
+
     public void ValidaClasse()
     {
         ValidationContext context = new(this, serviceProvider: null, items: null);
@@ -47,7 +49,7 @@ public class Livro
 
         if (isValid == false)
         {
-            StringBuilder sbrErrors = new StringBuilder();
+            StringBuilder sbrErrors = new();
             foreach (var validationResult in results)
             {
                 sbrErrors.AppendLine(validationResult.ErrorMessage);
