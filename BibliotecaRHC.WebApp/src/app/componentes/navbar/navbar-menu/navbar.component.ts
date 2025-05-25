@@ -1,23 +1,19 @@
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../auth.service';
 
 @Component({
   selector: 'app-navbar',
+  standalone: true,
   imports: [RouterModule, CommonModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  constructor(private authService: AuthService) {}
 
-  constructor(private router: Router) {}
-  
   logout() {
-    localStorage.removeItem('usuarioLogado');
-    this.router.navigate(['/login']);
-  }
-
-  isLogado(): boolean {
-    return !!localStorage.getItem('usuarioLogado');
+    this.authService.logout();
   }
 }

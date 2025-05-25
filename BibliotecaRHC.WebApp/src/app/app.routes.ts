@@ -5,8 +5,8 @@ import { EditarComponent } from './componentes/crud/editar/editar.component';
 import { LidosComponent } from './componentes/navbar/navbar-itens/lidos/lidos.component';
 import { ProjetosDeLeituraComponent } from './componentes/navbar/navbar-itens/projetos-de-leitura/projetos-de-leitura.component';
 import { LoginComponent } from './componentes/login/login.component';
-import { NavbarComponent } from './componentes/navbar/navbar-menu/navbar.component';
 import { AuthGuard } from './auth.guard';
+import { LayoutAutenticadoComponent } from './componentes/layout-autenticado/layout-autenticado.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -17,7 +17,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    component: NavbarComponent,
+    component: LayoutAutenticadoComponent,
     canActivate: [AuthGuard],
     children: [
       { path: 'minha-estante', component: MinhaEstanteComponent },

@@ -17,3 +17,12 @@ td, th {
 .text-wrap {
     white-space: normal; 
 }
+
+.conteudo-principal {
+  flex-grow: 1;  
+  min-height: 60vh;
+}
+
+.btn:hover {
+    border: 1px solid black !important;
+}
