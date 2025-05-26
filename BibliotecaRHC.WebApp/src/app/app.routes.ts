@@ -7,6 +7,7 @@ import { ProjetosDeLeituraComponent } from './componentes/navbar/navbar-itens/pr
 import { LoginComponent } from './componentes/login/login.component';
 import { AuthGuard } from './auth.guard';
 import { LayoutAutenticadoComponent } from './componentes/layout-autenticado/layout-autenticado.component';
+import { FrasesInesqueciveisComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -24,7 +25,8 @@ export const routes: Routes = [
       { path: 'cadastrar', component: CadastrarComponent },
       { path: 'editar', component: EditarComponent },
       { path: 'lidos', component: LidosComponent },
-      { path: 'projetos-de-leitura', component: ProjetosDeLeituraComponent }
+      { path: 'projetos-de-leitura', component: ProjetosDeLeituraComponent },
+      {path: 'frases-inesqueciveis', component: FrasesInesqueciveisComponent}
     ]
   },
   { path: '**', redirectTo: 'login' } 
