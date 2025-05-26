@@ -101,6 +101,7 @@ namespace BibliotecaRHC.API.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Autor")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
@@ -111,12 +112,12 @@ namespace BibliotecaRHC.API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("LivroId")
-                        .HasColumnType("int");
+                    b.Property<string>("NomeDoLivro")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LivroId");
 
                     b.ToTable("FrasesInesqueciveis");
                 });
@@ -304,15 +305,6 @@ namespace BibliotecaRHC.API.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("BibliotecaRHC.API.Models.FrasesInesqueciveis", b =>
-                {
-                    b.HasOne("BibliotecaRHC.API.Models.Livro", "Livro")
-                        .WithMany("Frases")
-                        .HasForeignKey("LivroId");
-
-                    b.Navigation("Livro");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -362,11 +354,6 @@ namespace BibliotecaRHC.API.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("BibliotecaRHC.API.Models.Livro", b =>
-                {
-                    b.Navigation("Frases");
                 });
 #pragma warning restore 612, 618
         }

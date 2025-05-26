@@ -8,17 +8,18 @@ public class FrasesInesqueciveis
     public int Id { get; set; }
 
     [Required(ErrorMessage = "Obrigatório colocar a Frase")]
-    [Range(minimum: 10, maximum: 65535, ErrorMessage = "Número de caracteres excede o permitido")]
+    [StringLength(65000, ErrorMessage = "Número de caracteres excede o permitido")]
     public string? Frase { get; set; }
 
+    [Required(ErrorMessage = "Obrigatório colocar o Autor")]
     [StringLength(200, ErrorMessage = "Permitido no máximo 200 caracteres")]
     public string? Autor { get; set; }
 
-    public int? LivroId { get; set; }
+    [Required(ErrorMessage = "Obrigatório colocar o Livro")]
+    [StringLength(300, ErrorMessage = "Permitido no máximo 300 caracteres")]
+    public string? NomeDoLivro { get; set; }
 
-    public Livro? Livro { get; set; } = null!;
-
-    public DateTime DataCriacao { get; set; }
+    public DateTime DataCriacao { get; set; } = DateTime.Now;
 
     public void ValidaClasse()
     {

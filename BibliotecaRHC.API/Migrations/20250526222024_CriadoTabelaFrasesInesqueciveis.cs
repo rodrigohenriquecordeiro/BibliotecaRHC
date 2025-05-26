@@ -20,24 +20,17 @@ namespace BibliotecaRHC.API.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Frase = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LivroId = table.Column<int>(type: "int", nullable: true),
+                    Autor = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NomeDoLivro = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     DataCriacao = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FrasesInesqueciveis", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_FrasesInesqueciveis_Livros_LivroId",
-                        column: x => x.LivroId,
-                        principalTable: "Livros",
-                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FrasesInesqueciveis_LivroId",
-                table: "FrasesInesqueciveis",
-                column: "LivroId");
         }
 
         /// <inheritdoc />

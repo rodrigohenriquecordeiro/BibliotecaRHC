@@ -41,30 +41,24 @@ namespace BibliotecaRHC.API.Domain
 
         public async Task<FrasesInesqueciveis> AdicionarFrase(FrasesInesqueciveis frase)
         {
-            var novaFrase = new FrasesInesqueciveis
-            {
-                LivroId = frase.Id,
-                DataCriacao = DateTime.Now
-            };
-
-            _unityOfWork.FrasesInesqueciveisRepository.Add(novaFrase);
+            _unityOfWork.FrasesInesqueciveisRepository.Add(frase);
             await _unityOfWork.CommitAsync();
-            return novaFrase;
+            return frase;
         }
 
-        public async Task<FrasesInesqueciveis?> AtualizarFrase(int id)
+        public async Task<FrasesInesqueciveis?> AtualizarFrase(FrasesInesqueciveis frase)
         {
-            var fraseInesquecivel = await _unityOfWork.FrasesInesqueciveisRepository.GetByIDAsync(id);
+            var fraseQueSeraAlterada = await _unityOfWork.FrasesInesqueciveisRepository.GetByIDAsync(frase.Id);
 
-            if (fraseInesquecivel == null)
+            if (fraseQueSeraAlterada == null)
             {
-                _logger.LogWarning($"Frase com ID {id} não encontrada para atualização.");
+                _logger.LogWarning($"Frase com ID {frase.Id} não encontrada para atualização.");
                 return null;
             }
 
-            _unityOfWork.FrasesInesqueciveisRepository.Update(fraseInesquecivel);
+            _unityOfWork.FrasesInesqueciveisRepository.Update(frase);
             await _unityOfWork.CommitAsync();
-            return fraseInesquecivel;
+            return frase;
         }
         public async Task<FrasesInesqueciveis?> RemoverFrase(int id)
         {
@@ -110,7 +104,7 @@ namespace BibliotecaRHC.API.Domain
         Task<IEnumerable<FrasesInesqueciveis>> ObterTodasAsFrases();
         Task<FrasesInesqueciveis?> ObterFrasePorId(int id);
         Task<FrasesInesqueciveis> AdicionarFrase(FrasesInesqueciveis frase);
-        Task<FrasesInesqueciveis?> AtualizarFrase(int id);
+        Task<FrasesInesqueciveis?> AtualizarFrase(FrasesInesqueciveis frase);
         Task<FrasesInesqueciveis?> RemoverFrase(int id);
         Task<FrasesInesqueciveis?> ObterFraseAleatoria();
     }

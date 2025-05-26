@@ -44,7 +44,7 @@ public class FrasesInesqueciveisController : ControllerBase
         if (id != frase.Id)
             return BadRequest("ID da frase não corresponde ao ID fornecido na URL.");
 
-        var atualizado = await _service.AtualizarFrase(frase.Id);
+        var atualizado = await _service.AtualizarFrase(frase);
         if (atualizado == null)
             return NotFound();
 
