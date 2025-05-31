@@ -1,0 +1,42 @@
+<div class="container my-4">
+  <h1 class="text-center h4 mb-3">Gerenciamento das Frases Inesquecíveis</h1>
+  <div class="text-center mb-4">
+    <button class="btn btn-success" (click)="abrirModal()">
+      Adicionar Frase
+    </button>
+  </div>
+
+  <hr class="mb-4" />
+
+  <div class="d-flex flex-wrap gap-4 justify-content-start">
+    <div class="card shadow-sm" style="width: 18rem">
+      <div class="card-body">
+        <span class="livro d-block mb-2">A Dança dos Dragões</span>
+        <p class="card-text frase mb-1">
+          "Um leitor vive mil vidas antes de morrer. O homem que nunca lê vive
+          apenas uma".
+        </p>
+        <p class="autor mt-2 mb-3">George R.R. Martin</p>
+        <div class="d-flex justify-content-end">
+          <button
+            type="button"
+            class="btn btn-outline-primary btn-sm me-2"
+            title="Editar"
+          >
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-danger btn-sm"
+            title="Apagar"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Você pode duplicar este card para mais frases -->
+  </div>
+
+  <app-frases-inesqueciveis-adicionar></app-frases-inesqueciveis-adicionar>
+</div>
