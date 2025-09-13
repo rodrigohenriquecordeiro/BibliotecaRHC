@@ -17,7 +17,7 @@ namespace BibliotecaRHC.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.13")
+                .HasAnnotation("ProductVersion", "8.0.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -110,6 +110,7 @@ namespace BibliotecaRHC.API.Migrations
 
                     b.Property<string>("Frase")
                         .IsRequired()
+                        .HasMaxLength(65000)
                         .HasColumnType("longtext");
 
                     b.Property<string>("NomeDoLivro")
