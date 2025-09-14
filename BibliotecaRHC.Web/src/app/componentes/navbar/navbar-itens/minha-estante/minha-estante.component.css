@@ -1,0 +1,19 @@
+.bg-primary {
+    background-color: #015043f1 !important;
+    color: white !important;
+}
+
+table {
+    table-layout: auto;
+    width: 100%;
+}
+
+td, th {
+    white-space: nowrap; 
+    text-overflow: ellipsis; 
+    overflow: hidden; 
+}
+
+.text-wrap {
+    white-space: normal; 
+}

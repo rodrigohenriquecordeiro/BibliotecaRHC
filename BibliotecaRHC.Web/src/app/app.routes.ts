@@ -1,24 +1,31 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { authGuard } from './guards/auth.guard';
-import { loginGuard } from './guards/login.guard';
-import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { MinhaEstanteComponent } from './componentes/navbar/navbar-itens/minha-estante/minha-estante.component';
+import { CadastrarComponent } from './componentes/crud/cadastrar/cadastrar.component';
+import { EditarComponent } from './componentes/crud/editar/editar.component';
+import { LidosComponent } from './componentes/navbar/navbar-itens/lidos/lidos.component';
+import { ProjetosDeLeituraComponent } from './componentes/navbar/navbar-itens/projetos-de-leitura/projetos-de-leitura.component';
+import { LoginComponent } from './componentes/login/login.component';
+import { NavbarComponent } from './componentes/navbar/navbar-menu/navbar.component';
+import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
+  { path: 'login', component: LoginComponent },
   {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [loginGuard]
+    path: '',
+    redirectTo: 'login', 
+    pathMatch: 'full'
   },
   {
     path: '',
-    component: MainLayoutComponent,
-    canActivate: [authGuard],
+    component: NavbarComponent,
+    canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardComponent },
+      { path: 'minha-estante', component: MinhaEstanteComponent },
+      { path: 'cadastrar', component: CadastrarComponent },
+      { path: 'editar', component: EditarComponent },
+      { path: 'lidos', component: LidosComponent },
+      { path: 'projetos-de-leitura', component: ProjetosDeLeituraComponent }
     ]
   },
-  { path: '**', redirectTo: 'login' }
-];
+  { path: '**', redirectTo: 'login' } 
+]
