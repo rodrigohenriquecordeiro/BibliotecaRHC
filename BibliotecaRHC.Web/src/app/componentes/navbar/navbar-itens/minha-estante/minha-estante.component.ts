@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Livro } from '../../../../models/livro';
 import { BibliotecaService } from '../../../../services/biblioteca/biblioteca.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-minha-estante',
@@ -16,7 +16,10 @@ export class MinhaEstanteComponent implements OnInit {
   livros: Livro[] = [];
   idLivrosSelecionados: number[] = [];
 
-  constructor(private service: BibliotecaService) {}
+  constructor(
+    private service: BibliotecaService,
+    private router: Router 
+  ) {}
 
   ngOnInit(): void {
     this.service.listar().subscribe({
@@ -50,5 +53,16 @@ export class MinhaEstanteComponent implements OnInit {
       },
       error: err => console.error('Erro ao excluir o livro:', err)
     });
+  }
+
+  editarLivro() {
+    const idParaEditar = this.idLivrosSelecionados[0];
+    if (!idParaEditar) {
+      console.warn('Nenhum livro selecionado para edição.');
+      return;
+    }
+
+    this.service.setIdSelecionado(idParaEditar); 
+    this.router.navigate(['/editar']);
   }
 }

@@ -5,7 +5,8 @@
     <button type="button" [routerLink]="['/cadastrar']" class="btn btn-primary mx-1" style="width: 100px;">
       Cadastrar
     </button>
-    <button type="button" [routerLink]="['/editar']" class="btn btn-primary mx-1" style="width: 100px;">
+    <button type="button" [routerLink]="['/editar']" class="btn btn-primary mx-1" style="width: 100px;" 
+    (click)="editarLivro()" [disabled]="idLivrosSelecionados.length !== 1">
       Editar
     </button>
     <button type="button" class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#modalApagar"
@@ -60,7 +61,7 @@
         <td class="text-wrap">{{livro.editora}}</td>
         <td class="text-center">{{livro.numeroDePaginas}}</td>
         <td class="text-center">{{livro.anoDePublicacao}}</td>
-        <td class="text-center">{{livro.dataDeAquisicao | date:'dd/MM/yyyy'}}</td>
+        <td class="text-center">{{ livro.dataDeAquisicao | date:'dd/MM/yyyy' }}</td>
         <td class="text-wrap">{{livro.classificacaoCatalografica}}</td>
         <td class="text-wrap">{{livro.observacao}}</td>
       </tr>

@@ -47,7 +47,7 @@ export class EditarComponent {
       const livro = await firstValueFrom(this.service.buscarPorCodigo(id));
       if (livro) {
         console.log('Livro encontrado:', livro);
-        await this.preencherFormulario(livro);
+        this.preencherFormulario(livro);
       } else {
         console.error('Livro não encontrado com o ID:', id);
       }
@@ -56,17 +56,19 @@ export class EditarComponent {
     }
   }
 
-  async preencherFormulario(livro: Livro): Promise<void> {
-    this.form.get('codigoDoLivro')?.setValue(livro.id);
-    this.form.get('nomeDoLivro')?.setValue(livro.nomeDoLivro);
-    this.form.get('autor')?.setValue(livro.autor);
-    this.form.get('editora')?.setValue(livro.editora);
-    this.form.get('numeroDePaginas')?.setValue(Number(livro.numeroDePaginas));
-    this.form.get('anoDePublicacao')?.setValue(Number(livro.anoDePublicacao));
-    this.form.get('dataDeAquisicao')?.setValue(livro.dataDeAquisicao);
-    this.form.get('classificacaoCatalografica')?.setValue(livro.classificacaoCatalografica);
-    this.form.get('observacao')?.setValue(livro.observacao);
-  }
+  preencherFormulario(livro: Livro): void {
+  this.form.patchValue({
+    codigoDoLivro: livro.id,
+    nomeDoLivro: livro.nomeDoLivro,
+    autor: livro.autor,
+    editora: livro.editora,
+    numeroDePaginas: Number(livro.numeroDePaginas),
+    anoDePublicacao: Number(livro.anoDePublicacao),
+    dataDeAquisicao: livro.dataDeAquisicao,
+    classificacaoCatalografica: livro.classificacaoCatalografica,
+    observacao: livro.observacao
+  });
+}
   
   async salvarAlteracoes(): Promise<void> {
     if (this.form.invalid) {
