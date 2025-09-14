@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Livro } from '../models/livro';
+import { Livro } from '../../models/livro';
 import { catchError, Observable, throwError, BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })

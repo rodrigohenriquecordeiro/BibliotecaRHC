@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BibliotecaService } from '../../../services/biblioteca/biblioteca.service';
-import { Livro } from '../../../services/models/livro';
+import { Livro } from '../../../models/livro';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -15,8 +15,8 @@ export class CadastrarComponent {
 
   form = new FormGroup({
     codigoDoLivro: new FormControl<number | null>(null, Validators.required),
-    autor: new FormControl<string | null>(null, Validators.required),
     nomeDoLivro: new FormControl<string | null>(null, Validators.required),
+    autor: new FormControl<string | null>(null, Validators.required),
     editora: new FormControl<string | null>(null, Validators.required),
     numeroDePaginas: new FormControl<number | null>(null, Validators.required),
     anoDePublicacao: new FormControl<number | null>(null, Validators.required),
@@ -59,8 +59,8 @@ export class CadastrarComponent {
 
       const livro: Livro = {
         id: codigoLivro,
-        autor: formValue.autor!,
         nomeDoLivro: formValue.nomeDoLivro!,
+        autor: formValue.autor!,
         editora: formValue.editora!,
         numeroDePaginas: formValue.numeroDePaginas!.toString(),
         anoDePublicacao: formValue.anoDePublicacao!.toString(),

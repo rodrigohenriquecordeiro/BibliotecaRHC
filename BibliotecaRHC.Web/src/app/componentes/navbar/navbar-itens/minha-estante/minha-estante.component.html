@@ -39,8 +39,8 @@
       <tr>
         <th scope="col" class="text-center">#</th>
         <th scope="col" class="text-center">Código</th>
-        <th scope="col">Autor</th>
         <th scope="col">Livro</th>
+        <th scope="col">Autor</th>
         <th scope="col">Editora</th>
         <th scope="col" class="text-center">Nº de Páginas</th>
         <th scope="col" class="text-center">Publicação</th>
@@ -55,8 +55,8 @@
           <input type="checkbox" (change)="onSelecionarLivro($event, livro.id)" />
         </td>
         <td class="text-center">{{livro.id}}</td>
-        <td class="text-wrap">{{livro.autor}}</td>
         <td class="text-wrap">{{livro.nomeDoLivro}}</td>
+        <td class="text-wrap">{{livro.autor}}</td>
         <td class="text-wrap">{{livro.editora}}</td>
         <td class="text-center">{{livro.numeroDePaginas}}</td>
         <td class="text-center">{{livro.anoDePublicacao}}</td>

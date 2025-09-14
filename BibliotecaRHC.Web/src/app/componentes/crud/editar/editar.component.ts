@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { BibliotecaService } from '../../../services/biblioteca/biblioteca.service';
-import { Livro } from '../../../services/models/livro';
+import { Livro } from '../../../models/livro';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -20,8 +20,8 @@ export class EditarComponent {
 
   form = new FormGroup({
     codigoDoLivro: new FormControl<number | null>(null, Validators.required),
-    autor: new FormControl<string | null>(null, Validators.required),
     nomeDoLivro: new FormControl<string | null>(null, Validators.required),
+    autor: new FormControl<string | null>(null, Validators.required),
     editora: new FormControl<string | null>(null, Validators.required),
     numeroDePaginas: new FormControl<number | null>(null, Validators.required),
     anoDePublicacao: new FormControl<number | null>(null, Validators.required),
@@ -58,8 +58,8 @@ export class EditarComponent {
 
   async preencherFormulario(livro: Livro): Promise<void> {
     this.form.get('codigoDoLivro')?.setValue(livro.id);
-    this.form.get('autor')?.setValue(livro.autor);
     this.form.get('nomeDoLivro')?.setValue(livro.nomeDoLivro);
+    this.form.get('autor')?.setValue(livro.autor);
     this.form.get('editora')?.setValue(livro.editora);
     this.form.get('numeroDePaginas')?.setValue(Number(livro.numeroDePaginas));
     this.form.get('anoDePublicacao')?.setValue(Number(livro.anoDePublicacao));
@@ -79,8 +79,8 @@ export class EditarComponent {
 
       const livro: Livro = {
         id: this.idLivro!, 
-        autor: formValue.autor!,
         nomeDoLivro: formValue.nomeDoLivro!,
+        autor: formValue.autor!,
         editora: formValue.editora!,
         numeroDePaginas: formValue.numeroDePaginas!.toString(),
         anoDePublicacao: formValue.anoDePublicacao!.toString(),
