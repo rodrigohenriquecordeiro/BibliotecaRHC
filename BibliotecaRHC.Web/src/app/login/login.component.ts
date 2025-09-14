@@ -1,26 +1,45 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'; 
+import { AuthService } from '../services/auth.service'; 
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   standalone: true,
-  imports: [FormsModule]
+  imports: [FormsModule, CommonModule]
 })
 export class LoginComponent {
-  username: string = '';
+  userEmail: string = '';
   password: string = '';
+  errorMessage: string | null = null;
+  
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  constructor(private router: Router) {}
+  login(): void {
+    if (this.userEmail && this.password) {
+      const credentials = {
+        userEmail: this.userEmail,
+        password: this.password
+      };
 
-  login() {
-    if (this.username && this.password) {
-      alert(`Bem-vindo, ${this.username}!`);
-      this.router.navigate(['/dashboard']); 
+      this.authService.login(credentials).subscribe({
+        next: (response) => {
+          console.log('Login bem-sucedido!', response);
+          this.errorMessage = null;
+          this.router.navigate(['/dashboard']); 
+        },
+        error: (err: HttpErrorResponse) => {
+          console.error('Erro no login:', err);
+          this.errorMessage = 'E-mail ou senha inválidos. Tente novamente.';
+        }
+      });
     } else {
-      alert('Preencha usuário e senha.');
+      this.errorMessage = 'Por favor, preencha o e-mail e a senha.';
     }
   }
 }
