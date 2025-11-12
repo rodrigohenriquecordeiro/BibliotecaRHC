@@ -18,7 +18,7 @@ export class MinhaEstanteComponent implements OnInit {
 
   constructor(
     private service: BibliotecaService,
-    private router: Router 
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -26,13 +26,13 @@ export class MinhaEstanteComponent implements OnInit {
       next: livros => {
         this.livros = livros;
       },
-      error: err => console.error('MinhaEstanteComponent: Erro ao buscar livros:', err) 
+      error: err => console.error('MinhaEstanteComponent: Erro ao buscar livros:', err)
     });
   }
 
   onSelecionarLivro(event: any, id: number) {
     if (event.target.checked) {
-      this.idLivrosSelecionados.push(id);
+      this.idLivrosSelecionados.push(id); 
     } else {
       this.idLivrosSelecionados = this.idLivrosSelecionados.filter(i => i !== id);
     }
@@ -44,15 +44,31 @@ export class MinhaEstanteComponent implements OnInit {
   }
 
   confirmarApagar() {
-    const idParaApagar = this.idLivrosSelecionados[0];
+    if (this.idLivrosSelecionados.length === 0) {
+      console.warn('Nenhum livro selecionado para exclusão.');
+      return;
+    }
 
-    this.service.excluir(idParaApagar).subscribe({
-      next: () => {
-        this.livros = this.livros.filter(l => l.id !== idParaApagar);
-        this.idLivrosSelecionados = [];
-      },
-      error: err => console.error('Erro ao excluir o livro:', err)
-    });
+    const idsParaApagar = [...this.idLivrosSelecionados];
+    
+    const apagarLivro = (id: number) => {
+        return new Promise<void>((resolve, reject) => {
+            this.service.excluir(id).subscribe({
+                next: () => resolve(),
+                error: (err) => reject(err)
+            });
+        });
+    };
+
+    Promise.all(idsParaApagar.map(apagarLivro))
+        .then(() => {
+            this.livros = this.livros.filter(l => !idsParaApagar.includes(l.id));
+            this.idLivrosSelecionados = [];
+            console.log(`${idsParaApagar.length} livro(s) apagado(s) com sucesso.`);
+        })
+        .catch(err => {
+          console.error('Erro ao excluir um ou mais livros:', err);
+        });
   }
 
   editarLivro() {
@@ -61,8 +77,8 @@ export class MinhaEstanteComponent implements OnInit {
       console.warn('Nenhum livro selecionado para edição.');
       return;
     }
-
-    this.service.setIdSelecionado(idParaEditar); 
+    
+    this.service.setIdSelecionado(idParaEditar);
     this.router.navigate(['/editar']);
   }
 }

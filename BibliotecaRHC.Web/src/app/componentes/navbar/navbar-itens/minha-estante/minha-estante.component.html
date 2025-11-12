@@ -5,23 +5,26 @@
     <button type="button" [routerLink]="['/cadastrar']" class="btn btn-primary mx-1" style="width: 100px;">
       Cadastrar
     </button>
-    <button type="button" [routerLink]="['/editar']" class="btn btn-primary mx-1" style="width: 100px;" 
-    (click)="editarLivro()" [disabled]="idLivrosSelecionados.length !== 1">
+    
+    <button type="button" [routerLink]="['/editar']" class="btn btn-primary mx-1" style="width: 100px;"
+      (click)="editarLivro()" [disabled]="idLivrosSelecionados.length !== 1">
       Editar
     </button>
+    
     <button type="button" class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#modalApagar"
-      [disabled]="idLivrosSelecionados.length !== 1">
+      [disabled]="idLivrosSelecionados.length === 0">
       Apagar
     </button>
+    
     <div class="modal fade" id="modalApagar" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Apagar um Livro</h1>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Apagar Livro(s)</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            Você tem certeza que deseja apagar o livro <strong>{{ getLivroSelecionado()?.nomeDoLivro }}</strong>?
+            Você tem certeza que deseja apagar <strong>{{ idLivrosSelecionados.length }} livro(s)</strong> selecionado(s)?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
@@ -53,7 +56,9 @@
     <tbody class="table-group-divider">
       <tr *ngFor="let livro of livros">
         <td class="text-center">
-          <input type="checkbox" (change)="onSelecionarLivro($event, livro.id)" />
+          <input type="checkbox" 
+                 [checked]="idLivrosSelecionados.includes(livro.id)"
+                 (change)="onSelecionarLivro($event, livro.id)" />
         </td>
         <td class="text-center">{{livro.id}}</td>
         <td class="text-wrap">{{livro.nomeDoLivro}}</td>
