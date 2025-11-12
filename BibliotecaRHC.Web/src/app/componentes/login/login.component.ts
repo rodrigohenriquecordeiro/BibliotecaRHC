@@ -29,13 +29,10 @@ export class LoginComponent {
       .subscribe({
         next: (response: any) => {
           const token = response.token; 
-          console.log('Token recebido:', token);
           this.authService.saveToken(token);
-          console.log('Usuário logado com sucesso.');
           this.router.navigate(['/minha-estante']);
         },
         error: (err) => {
-          console.error('Erro no login:', err);
           this.erroLogin = 'Credenciais inválidas. Tente novamente.';
         }
       });
