@@ -16,8 +16,4 @@ export class NavbarComponent {
     localStorage.removeItem('usuarioLogado');
     this.router.navigate(['/login']);
   }
-
-  isLogado(): boolean {
-    return !!localStorage.getItem('usuarioLogado');
-  }
 }
