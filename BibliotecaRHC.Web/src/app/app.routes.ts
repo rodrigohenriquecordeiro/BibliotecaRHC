@@ -7,12 +7,14 @@ import { ProjetosDeLeituraComponent } from './componentes/navbar/navbar-itens/pr
 import { LoginComponent } from './componentes/login/login.component';
 import { NavbarComponent } from './componentes/navbar/navbar-menu/navbar.component';
 import { AuthGuard } from './auth.guard';
+import { FrasesInesqueciveisDashboardComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis-dashboard/frases-inesqueciveis-dashboard.component';
+
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
     path: '',
-    redirectTo: 'login', 
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
@@ -24,8 +26,9 @@ export const routes: Routes = [
       { path: 'cadastrar', component: CadastrarComponent },
       { path: 'editar', component: EditarComponent },
       { path: 'lidos', component: LidosComponent },
-      { path: 'projetos-de-leitura', component: ProjetosDeLeituraComponent }
+      { path: 'projetos-de-leitura', component: ProjetosDeLeituraComponent },
+      { path: 'frases-inesqueciveis-dashboard', component: FrasesInesqueciveisDashboardComponent }
     ]
   },
-  { path: '**', redirectTo: 'login' } 
-]
+  { path: '**', redirectTo: 'login' }
+];
