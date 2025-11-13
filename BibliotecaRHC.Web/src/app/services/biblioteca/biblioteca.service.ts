@@ -2,11 +2,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Livro } from '../../models/livro';
 import { catchError, Observable, throwError, BehaviorSubject } from 'rxjs';
+import { Frase } from '../../models/frase';
 
 @Injectable({ providedIn: 'root' })
 export class BibliotecaService {
 
-  private readonly API = 'https://localhost:7254/api/livros';
+  private readonly API = 'https://localhost:7254/api/';
   
   private idSelecionadoSource = new BehaviorSubject<number | null>(null);
   idSelecionado$ = this.idSelecionadoSource.asObservable();
@@ -21,31 +22,31 @@ export class BibliotecaService {
   }
 
   listar(): Observable<Livro[]> {
-    return this.http.get<Livro[]>(`${this.API}/obter-livros`, {
+    return this.http.get<Livro[]>(`${this.API}livros/obter-livros`, {
       headers: this.getAuthHeaders()
     });
   }
 
   buscarPorCodigo(id: number): Observable<Livro> {
-      return this.http.get<Livro>(`${this.API}/obter-livro-por-id/${id}`, {
+      return this.http.get<Livro>(`${this.API}livros/obter-livro-por-id/${id}`, {
       headers: this.getAuthHeaders()
     });
   }
 
   criar(livro: Livro): Observable<Livro> {
-    return this.http.post<Livro>(`${this.API}/adicionar-livro`, livro, {
+    return this.http.post<Livro>(`${this.API}livros/adicionar-livro`, livro, {
       headers: this.getAuthHeaders()
     });
   }
 
   editar(livro: Livro): Observable<Livro> {
-    return this.http.put<Livro>(`${this.API}/atualizar-livro/${livro.id}`, livro, {
+    return this.http.put<Livro>(`${this.API}livros/atualizar-livro/${livro.id}`, livro, {
       headers: this.getAuthHeaders()
     });
   }
 
   excluir(id: number): Observable<Livro> {
-    return this.http.delete<Livro>(`${this.API}/remover-livro/${id}`, {
+    return this.http.delete<Livro>(`${this.API}livros/remover-livro/${id}`, {
       headers: this.getAuthHeaders()
     }).pipe(
       catchError((error) => {
@@ -56,7 +57,7 @@ export class BibliotecaService {
   }
 
   obterCodigoProximoLivro(): Observable<number> {
-    return this.http.get<number>(`${this.API}/obter-codigo-proximo-livro`, {
+    return this.http.get<number>(`${this.API}livros/obter-codigo-proximo-livro`, {
       headers: this.getAuthHeaders()
     });
   }
@@ -68,4 +69,15 @@ export class BibliotecaService {
   limparSelecionado(): void {
     this.idSelecionadoSource.next(null);
   }
+
+  listarFrases(): Observable<Frase[]> {
+      return this.http.get<Frase[]>(`${this.API}frases/obter-frases`, { 
+        headers: this.getAuthHeaders()
+      }).pipe(
+        catchError((error) => {
+          console.error('Erro ao listar frases:', error);
+          return throwError(() => error);
+        })
+      );
+    }
 }
