@@ -107,6 +107,17 @@ export class BibliotecaService {
     });
   }
 
+  excluirFrase(id: number): Observable<Frase> {
+    return this.http.delete<Frase>(`${this.API}frases/remover-frase/${id}`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError((error) => {
+        console.error('Erro ao excluir:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
   setIdSelecionadoFrase(id: number): void {
     this.idSelecionadoFraseSource.next(id);
   }

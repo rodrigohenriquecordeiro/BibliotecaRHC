@@ -1,8 +1,7 @@
 <div class="container my-4">
   <h1 class="text-center h4 mb-3">Gerenciamento das Frases Inesquecíveis</h1>
   <div class="text-center mb-4">
-    <button type="button" [routerLink]="['/frases-inesqueciveis-adicionar']"
-    class="btn btn-success">
+    <button type="button" [routerLink]="['/frases-inesqueciveis-adicionar']" class="btn btn-success">
       Adicionar Frase
     </button>
 
@@ -20,10 +19,12 @@
           <div class="d-flex justify-content-between align-items-baseline mt-auto pt-3">
             <p class="autor m-0">{{ frase.autor }}</p>
             <div>
-              <button type="button" class="btn btn-outline-primary btn-xs me-2" title="Editar" (click)="onEditar(frase.id)">
+              <button type="button" class="btn btn-outline-primary btn-xs me-2" title="Editar"
+                (click)="onEditar(frase.id)">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button type="button" class="btn btn-outline-danger btn-xs" title="Apagar" [routerLink]="['/frases-inesqueciveis-apagar']">
+              <button type="button" class="btn btn-outline-danger btn-xs" title="Apagar" data-bs-toggle="modal"
+                data-bs-target="#modalApagar" (click)="onApagar(frase.id)">
                 <i class="bi bi-trash"></i>
               </button>
             </div>
@@ -35,6 +36,25 @@
         Nenhuma frase inesquecível foi adicionada ainda.
       </div>
       }
+    </div>
+
+    <div class="modal fade" id="modalApagar" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Apagar Frase</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Você tem certeza que deseja apagar a frase selecionada?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+            <button type="button" class="btn btn-primary" (click)="confirmarApagar()"
+              data-bs-dismiss="modal">Confirmar</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
