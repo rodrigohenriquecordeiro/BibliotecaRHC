@@ -9,7 +9,8 @@ import { NavbarComponent } from './componentes/navbar/navbar-menu/navbar.compone
 import { AuthGuard } from './auth.guard';
 import { FrasesInesqueciveisDashboardComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis-dashboard/frases-inesqueciveis-dashboard.component';
 import { FrasesInesqueciveisAdicionarComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis-adicionar/frases-inesqueciveis-adicionar.component';
-
+import { FrasesInesqueciveisEditarComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis-editar/frases-inesqueciveis-editar.component';
+import { FrasesInesqueciveisApagarComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis-apagar/frases-inesqueciveis-apagar.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -29,7 +30,9 @@ export const routes: Routes = [
       { path: 'lidos', component: LidosComponent },
       { path: 'projetos-de-leitura', component: ProjetosDeLeituraComponent },
       { path: 'frases-inesqueciveis-dashboard', component: FrasesInesqueciveisDashboardComponent },
-      { path: 'frases-inesqueciveis-adicionar', component: FrasesInesqueciveisAdicionarComponent}
+      { path: 'frases-inesqueciveis-adicionar', component: FrasesInesqueciveisAdicionarComponent},
+      { path: 'frases-inesqueciveis-editar', component: FrasesInesqueciveisEditarComponent},
+      { path: 'frases-inesqueciveis-apagar', component: FrasesInesqueciveisApagarComponent}
     ]
   },
   { path: '**', redirectTo: 'login' }

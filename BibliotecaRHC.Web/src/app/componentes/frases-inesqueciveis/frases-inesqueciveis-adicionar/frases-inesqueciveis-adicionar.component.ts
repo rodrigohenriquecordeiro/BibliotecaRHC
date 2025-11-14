@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { BibliotecaService } from '../../../services/biblioteca/biblioteca.service';
 import { Frase } from '../../../models/frase';

@@ -17,6 +17,7 @@ export class FrasesInesqueciveisDashboardComponent implements OnInit {
   frases: Frase[] = []; 
   constructor(
     private service: BibliotecaService,
+    private router: Router
   ) {}
 
   @ViewChild(FrasesInesqueciveisAdicionarComponent)
@@ -30,11 +31,15 @@ export class FrasesInesqueciveisDashboardComponent implements OnInit {
     this.service.listarFrases().subscribe({
       next: (listaFrases) => {
         this.frases = listaFrases; 
-        console.log('Frases carregadas:', listaFrases);
       },
       error: (err) => {
         console.error('Falha ao carregar frases no dashboard:', err);
       }
     });
   }
+
+  onEditar(id: number): void {
+  	this.service.setIdSelecionadoFrase(id);
+  	this.router.navigate(['/frases-inesqueciveis-editar']); 
+  }
 }

@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Livro } from '../../models/livro';
-import { catchError, Observable, throwError, BehaviorSubject } from 'rxjs';
 import { Frase } from '../../models/frase';
+import { catchError, Observable, throwError, BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class BibliotecaService {
@@ -11,6 +11,9 @@ export class BibliotecaService {
 
   private idSelecionadoSource = new BehaviorSubject<number | null>(null);
   idSelecionado$ = this.idSelecionadoSource.asObservable();
+
+  private idSelecionadoFraseSource = new BehaviorSubject<number | null>(null);
+  idSelecionadoFrase$ = this.idSelecionadoFraseSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -90,5 +93,25 @@ export class BibliotecaService {
         return throwError(() => error);
       })
     );
+  }
+
+  buscarFrasePorCodigo(id: number): Observable<Frase> {
+    return this.http.get<Frase>(`${this.API}frases/obter-frase-por-id/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  editarFrase(frase: Frase): Observable<Frase> {
+    return this.http.put<Frase>(`${this.API}frases/atualizar-frase/${frase.id}`, frase, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  setIdSelecionadoFrase(id: number): void {
+    this.idSelecionadoFraseSource.next(id);
+  }
+
+  limparFraseSelecionado(): void {
+    this.idSelecionadoFraseSource.next(null);
   }
 }
