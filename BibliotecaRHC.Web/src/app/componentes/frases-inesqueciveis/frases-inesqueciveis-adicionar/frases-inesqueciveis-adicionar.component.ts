@@ -55,9 +55,7 @@ export class FrasesInesqueciveisAdicionarComponent {
 
       await firstValueFrom(this.service.criarFrase(frase));
       this.form.reset();
-
       this.router.navigate(['/frases-inesqueciveis-dashboard']);
-
     } catch (error) {
       console.error('Erro ao cadastrar frase:', error);
     }

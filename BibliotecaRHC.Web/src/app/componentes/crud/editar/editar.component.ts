@@ -5,11 +5,15 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-editar',
-  imports: [CommonModule,
-    ReactiveFormsModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule],
   templateUrl: './editar.component.html',
   styleUrl: './editar.component.css'
 })
@@ -30,7 +34,10 @@ export class EditarComponent {
     observacao: new FormControl<string | null>(null)
   });
 
-  constructor(private service: BibliotecaService) {}
+  constructor(
+    private service: BibliotecaService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.service.idSelecionado$.subscribe(id => {
@@ -41,7 +48,7 @@ export class EditarComponent {
       }
     });
   }
-  
+
   async carregarLivro(id: number): Promise<void> {
     try {
       const livro = await firstValueFrom(this.service.buscarPorCodigo(id));
@@ -57,19 +64,19 @@ export class EditarComponent {
   }
 
   preencherFormulario(livro: Livro): void {
-  this.form.patchValue({
-    codigoDoLivro: livro.id,
-    nomeDoLivro: livro.nomeDoLivro,
-    autor: livro.autor,
-    editora: livro.editora,
-    numeroDePaginas: Number(livro.numeroDePaginas),
-    anoDePublicacao: Number(livro.anoDePublicacao),
-    dataDeAquisicao: livro.dataDeAquisicao,
-    classificacaoCatalografica: livro.classificacaoCatalografica,
-    observacao: livro.observacao
-  });
-}
-  
+    this.form.patchValue({
+      codigoDoLivro: livro.id,
+      nomeDoLivro: livro.nomeDoLivro,
+      autor: livro.autor,
+      editora: livro.editora,
+      numeroDePaginas: Number(livro.numeroDePaginas),
+      anoDePublicacao: Number(livro.anoDePublicacao),
+      dataDeAquisicao: livro.dataDeAquisicao,
+      classificacaoCatalografica: livro.classificacaoCatalografica,
+      observacao: livro.observacao
+    });
+  }
+
   async salvarAlteracoes(): Promise<void> {
     if (this.form.invalid) {
       console.error('Formulário inválido.');
@@ -80,7 +87,7 @@ export class EditarComponent {
       const formValue = this.form.value;
 
       const livro: Livro = {
-        id: this.idLivro!, 
+        id: this.idLivro!,
         nomeDoLivro: formValue.nomeDoLivro!,
         autor: formValue.autor!,
         editora: formValue.editora!,
@@ -95,6 +102,7 @@ export class EditarComponent {
 
       console.log('Alterações salvas com sucesso!');
       this.form.reset();
+      this.router.navigate(['/minha-estante']);
     } catch (error) {
       console.error('Erro ao salvar as alterações:', error);
     }

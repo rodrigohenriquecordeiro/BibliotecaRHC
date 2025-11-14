@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { BibliotecaService } from '../../../services/biblioteca/biblioteca.service';
 import { Livro } from '../../../models/livro';
 import { firstValueFrom } from 'rxjs';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-form',
@@ -25,7 +26,10 @@ export class CadastrarComponent {
     observacao: new FormControl<string | null>(null)
   });
 
-  constructor(private service: BibliotecaService) { }
+   constructor(
+    private service: BibliotecaService,
+    private router: Router
+  ) { }
 
   async ngOnInit(): Promise<void> {
     try {
@@ -73,6 +77,7 @@ export class CadastrarComponent {
 
       console.log('Livro cadastrado com sucesso!');
       this.form.reset();
+      this.router.navigate(['/minha-estante']);
     } catch (error) {
       console.error('Erro ao cadastrar o livro:', error);
     }
