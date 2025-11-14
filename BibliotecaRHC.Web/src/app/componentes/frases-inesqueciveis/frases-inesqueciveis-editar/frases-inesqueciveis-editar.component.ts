@@ -3,11 +3,17 @@ import { FormGroup, Validators, FormControl, ReactiveFormsModule } from '@angula
 import { BibliotecaService } from '../../../services/biblioteca/biblioteca.service';
 import { Frase } from '../../../models/frase';
 import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-frases-inesqueciveis-editar',
   standalone: true,
-  imports: [ReactiveFormsModule ],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    RouterModule],
   templateUrl: './frases-inesqueciveis-editar.component.html',
   styleUrl: './frases-inesqueciveis-editar.component.css'
 })
@@ -23,7 +29,10 @@ export class FrasesInesqueciveisEditarComponent {
     dataCriacao: new FormControl<string | null>(null, Validators.required)
   });
 
-  constructor(private service: BibliotecaService) { }
+  constructor(
+    private service: BibliotecaService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.service.idSelecionadoFrase$.subscribe(id => {
@@ -80,6 +89,7 @@ export class FrasesInesqueciveisEditarComponent {
 
       console.log('Alterações salvas com sucesso!');
       this.form.reset();
+      this.router.navigate(['/frases-inesqueciveis-dashboard']);
     } catch (error) {
       console.error('Erro ao salvar as alterações:', error);
     }
