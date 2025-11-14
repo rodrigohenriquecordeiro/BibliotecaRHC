@@ -8,6 +8,7 @@ import { LoginComponent } from './componentes/login/login.component';
 import { NavbarComponent } from './componentes/navbar/navbar-menu/navbar.component';
 import { AuthGuard } from './auth.guard';
 import { FrasesInesqueciveisDashboardComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis-dashboard/frases-inesqueciveis-dashboard.component';
+import { FrasesInesqueciveisAdicionarComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis-adicionar/frases-inesqueciveis-adicionar.component';
 
 
 export const routes: Routes = [
@@ -27,7 +28,8 @@ export const routes: Routes = [
       { path: 'editar', component: EditarComponent },
       { path: 'lidos', component: LidosComponent },
       { path: 'projetos-de-leitura', component: ProjetosDeLeituraComponent },
-      { path: 'frases-inesqueciveis-dashboard', component: FrasesInesqueciveisDashboardComponent }
+      { path: 'frases-inesqueciveis-dashboard', component: FrasesInesqueciveisDashboardComponent },
+      { path: 'frases-inesqueciveis-adicionar', component: FrasesInesqueciveisAdicionarComponent}
     ]
   },
   { path: '**', redirectTo: 'login' }

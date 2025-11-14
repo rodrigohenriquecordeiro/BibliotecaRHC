@@ -1,30 +1,37 @@
-<div class="modal-backdrop-custom">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Adicionar Frase Inesquecível</h5>
-        <button type="button" class="btn-close" (click)="close()"></button>
-      </div>
-      <div class="modal-body">
-        <form class="row g-3" [formGroup]="form">
-          <div class="col-md-4">
-            <label for="escritor" class="form-label"><strong>Autor</strong></label>
-            <input type="text" class="form-control" id="escritor" formControlName="autor" />
-          </div>
-          <div class="col-8">
-            <label for="livro" class="form-label"><strong>Livro</strong></label>
-            <input type="text" class="form-control" id="livro" formControlName="livro" />
-          </div>
-          <div class="col-md-12">
-            <label for="frase" class="form-label"><strong>Frase</strong></label>
-            <textarea class="form-control" id="frase" formControlName="frase" rows="4"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="close()">Cancelar</button>
-        <button class="btn btn-primary" (click)="salvar()">Salvar</button>
-      </div>
+<div class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+
+      <h2 class="fw-normal bg-secondary mb-3 text-center">Adicionar Nova Frase</h2>
+      <hr class="mb-4">
+
+      <form [formGroup]="form">
+
+        <div class="mb-3">
+          <label for="frase" class="form-label w-100">Frase Inesquecível</label>
+          <textarea class="form-control" id="frase" rows="4" placeholder="Digite a frase..."
+            formControlName="frase"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="autor" class="form-label">Autor</label>
+          <input type="text" class="form-control" id="autor" placeholder="Digite o nome do autor"
+            formControlName="autor" />
+        </div>
+
+        <div class="mb-3">
+          <label for="livro" class="form-label">Nome do Livro</label>
+          <input type="text" class="form-control" id="livro" placeholder="Digite o nome do livro"
+            formControlName="nomeLivro" />
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <a class="btn bg-primary btn-lg ms-2" href="/frases-inesqueciveis-dashboard" role="button">Voltar</a>
+          <button type="button" class="btn bg-primary btn-lg ms-2" (click)="salvar()">Salvar</button>
+        </div>
+
+      </form>
+
     </div>
   </div>
 </div>

@@ -1,44 +1,65 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { BibliotecaService } from '../../../services/biblioteca/biblioteca.service';
+import { Frase } from '../../../models/frase';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-frases-inesqueciveis-adicionar',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   templateUrl: './frases-inesqueciveis-adicionar.component.html',
   styleUrl: './frases-inesqueciveis-adicionar.component.css'
 })
-export class FrasesInesqueciveisAdicionarComponent implements OnInit {
 
-  form!: FormGroup;
-  visible: boolean = false;
+export class FrasesInesqueciveisAdicionarComponent {
 
-  constructor(private fb: FormBuilder) { }
+  form = new FormGroup({
+    frase: new FormControl<string | null>(null, Validators.required),
+    autor: new FormControl<string | null>(null, Validators.required),
+    nomeLivro: new FormControl<string | null>(null, Validators.required),
+  });
 
-  ngOnInit(): void {
-    this.form = this.fb.group({
-      autor: ['', Validators.required],
-      livro: ['', Validators.required],
-      frase: ['', Validators.required]
-    });
-  }
+  constructor(
+    private service: BibliotecaService,
+    private router: Router
+  ) { }
 
-  close() {
-    console.log('Modal fechado.');
-    this.visible = false;
-  }
+  ngOnInit(): void { }
 
-  salvar() {
-    if (this.form.valid) {
-      console.log('Salvando:', this.form.value);
-      this.close(); 
-    } else {
+  async salvar(): Promise<void> {
+    this.form.markAllAsTouched();
+
+    if (this.form.invalid) {
       console.error('Formulário inválido.');
-      this.form.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.form.value;
+    const dataFormatada = new Date().toISOString().split('T')[0];
+
+    try {
+      const frase: Frase = {
+        id: 0,
+        frase: formValue.frase!,
+        autor: formValue.autor!,
+        nomeDoLivro: formValue.nomeLivro!,
+        dataCriacao: dataFormatada!
+      };
+
+      await firstValueFrom(this.service.criarFrase(frase));
+      this.form.reset();
+
+      this.router.navigate(['/frases-inesqueciveis-dashboard']);
+
+    } catch (error) {
+      console.error('Erro ao cadastrar frase:', error);
     }
   }
-}
+} 

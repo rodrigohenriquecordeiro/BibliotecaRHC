@@ -1,7 +1,8 @@
 <div class="container my-4">
   <h1 class="text-center h4 mb-3">Gerenciamento das Frases Inesquecíveis</h1>
   <div class="text-center mb-4">
-    <button class="btn btn-success" (click)="abrirModal()">
+    <button type="button" [routerLink]="['/frases-inesqueciveis-adicionar']"
+    class="btn btn-success">
       Adicionar Frase
     </button>
 

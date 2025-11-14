@@ -8,7 +8,7 @@ import { Frase } from '../../models/frase';
 export class BibliotecaService {
 
   private readonly API = 'https://localhost:7254/api/';
-  
+
   private idSelecionadoSource = new BehaviorSubject<number | null>(null);
   idSelecionado$ = this.idSelecionadoSource.asObservable();
 
@@ -28,7 +28,7 @@ export class BibliotecaService {
   }
 
   buscarPorCodigo(id: number): Observable<Livro> {
-      return this.http.get<Livro>(`${this.API}livros/obter-livro-por-id/${id}`, {
+    return this.http.get<Livro>(`${this.API}livros/obter-livro-por-id/${id}`, {
       headers: this.getAuthHeaders()
     });
   }
@@ -71,13 +71,24 @@ export class BibliotecaService {
   }
 
   listarFrases(): Observable<Frase[]> {
-      return this.http.get<Frase[]>(`${this.API}frases/obter-frases`, { 
-        headers: this.getAuthHeaders()
-      }).pipe(
-        catchError((error) => {
-          console.error('Erro ao listar frases:', error);
-          return throwError(() => error);
-        })
-      );
-    }
+    return this.http.get<Frase[]>(`${this.API}frases/obter-frases`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError((error) => {
+        console.error('Erro ao listar frases:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  criarFrase(frase: Frase): Observable<Frase> {
+    return this.http.post<Frase>(`${this.API}frases/adicionar-frase`, frase, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError((error) => {
+        console.error('Erro ao criar frase:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 }

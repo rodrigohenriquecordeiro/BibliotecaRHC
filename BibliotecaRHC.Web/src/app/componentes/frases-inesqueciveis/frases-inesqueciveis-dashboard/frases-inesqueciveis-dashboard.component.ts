@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FrasesInesqueciveisAdicionarComponent } from '../frases-inesqueciveis-adicionar/frases-inesqueciveis-adicionar.component';
 import { BibliotecaService } from '../../../services/biblioteca/biblioteca.service';
 import { Frase } from '../../../models/frase'; 
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-frases-inesqueciveis-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './frases-inesqueciveis-dashboard.component.html',
   styleUrl: './frases-inesqueciveis-dashboard.component.css'
 })
@@ -35,10 +36,5 @@ export class FrasesInesqueciveisDashboardComponent implements OnInit {
         console.error('Falha ao carregar frases no dashboard:', err);
       }
     });
-  }
-
-  abrirModal() {
-    this.adicionarModal.visible = true;
-    console.log('Abrindo modal...');
   }
 }
