@@ -41,9 +41,24 @@ namespace BibliotecaRHC.API.Domain
 
         public async Task<FrasesInesqueciveis> AdicionarFrase(FrasesInesqueciveis frase)
         {
+            FormataFrase(frase);
+
             _unityOfWork.FrasesInesqueciveisRepository.Add(frase);
             await _unityOfWork.CommitAsync();
             return frase;
+        }
+
+        private static void FormataFrase(FrasesInesqueciveis frase)
+        {
+            frase.Frase = frase.Frase!.Replace("\"", "").Trim();
+            if (!string.IsNullOrEmpty(frase.Frase))
+            {
+                if (frase.Frase[0] == '\'')
+                    frase.Frase = frase.Frase[1..].TrimStart();
+
+                if (frase.Frase.Length > 0 && frase.Frase[^1] == '\'')
+                    frase.Frase = frase.Frase[..^1].TrimEnd();
+            }
         }
 
         public async Task<FrasesInesqueciveis?> AtualizarFrase(FrasesInesqueciveis frase)
