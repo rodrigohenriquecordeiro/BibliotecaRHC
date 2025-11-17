@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Livro } from '../../../../models/livro';
 import { BibliotecaService } from '../../../../services/biblioteca/biblioteca.service';
 import { Router, RouterModule } from '@angular/router';
+import { Frase } from '../../../../models/frase';
 
 @Component({
   selector: 'app-minha-estante',
@@ -15,24 +16,27 @@ import { Router, RouterModule } from '@angular/router';
 export class MinhaEstanteComponent implements OnInit {
   livros: Livro[] = [];
   idLivrosSelecionados: number[] = [];
+  fraseDestaque: Frase | undefined = undefined;
 
   constructor(
     private service: BibliotecaService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.service.listar().subscribe({
       next: livros => {
         this.livros = livros;
       },
-      error: err => console.error('MinhaEstanteComponent: Erro ao buscar livros:', err)
+      error: err => console.error('Erro ao buscar livros:', err)
     });
+
+    this.GerarFraseAleatoria();
   }
 
   onSelecionarLivro(event: any, id: number) {
     if (event.target.checked) {
-      this.idLivrosSelecionados.push(id); 
+      this.idLivrosSelecionados.push(id);
     } else {
       this.idLivrosSelecionados = this.idLivrosSelecionados.filter(i => i !== id);
     }
@@ -50,25 +54,25 @@ export class MinhaEstanteComponent implements OnInit {
     }
 
     const idsParaApagar = [...this.idLivrosSelecionados];
-    
+
     const apagarLivro = (id: number) => {
-        return new Promise<void>((resolve, reject) => {
-            this.service.excluir(id).subscribe({
-                next: () => resolve(),
-                error: (err) => reject(err)
-            });
+      return new Promise<void>((resolve, reject) => {
+        this.service.excluir(id).subscribe({
+          next: () => resolve(),
+          error: (err) => reject(err)
         });
+      });
     };
 
     Promise.all(idsParaApagar.map(apagarLivro))
-        .then(() => {
-            this.livros = this.livros.filter(l => !idsParaApagar.includes(l.id));
-            this.idLivrosSelecionados = [];
-            console.log(`${idsParaApagar.length} livro(s) apagado(s) com sucesso.`);
-        })
-        .catch(err => {
-          console.error('Erro ao excluir um ou mais livros:', err);
-        });
+      .then(() => {
+        this.livros = this.livros.filter(l => !idsParaApagar.includes(l.id));
+        this.idLivrosSelecionados = [];
+        console.log(`${idsParaApagar.length} livro(s) apagado(s) com sucesso.`);
+      })
+      .catch(err => {
+        console.error('Erro ao excluir um ou mais livros:', err);
+      });
   }
 
   editarLivro() {
@@ -77,8 +81,32 @@ export class MinhaEstanteComponent implements OnInit {
       console.warn('Nenhum livro selecionado para edição.');
       return;
     }
-    
+
     this.service.setIdSelecionado(idParaEditar);
     this.router.navigate(['/editar']);
+  }
+
+  private GerarFraseAleatoria() {
+    this.service.listarFrases().subscribe({
+      next: (frases: Frase[]) => {
+        const tamanhoArray = frases.length;
+
+        if (tamanhoArray > 0) {
+          const indiceAleatorio = Math.floor(Math.random() * tamanhoArray);
+          this.fraseDestaque = frases[indiceAleatorio];
+
+          console.log(`Frase selecionada no Índice: ${indiceAleatorio} (ID: ${this.fraseDestaque.id})`);
+          console.log(this.fraseDestaque);
+        } else {
+          console.warn('A API não retornou nenhuma frase.');
+          this.fraseDestaque = undefined;
+        }
+      },
+      error: err => console.error('Erro ao buscar as Frases', err)
+    });
+  }
+
+  gerarIdAleatorio(tamanhoMaximo: number): number {
+    return Math.floor(Math.random() * tamanhoMaximo) + 1;
   }
 }
