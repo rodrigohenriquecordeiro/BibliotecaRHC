@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BibliotecaRHC.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250913205715_CriadoBanco")]
+    [Migration("20251117221525_CriadoBanco")]
     partial class CriadoBanco
     {
         /// <inheritdoc />
