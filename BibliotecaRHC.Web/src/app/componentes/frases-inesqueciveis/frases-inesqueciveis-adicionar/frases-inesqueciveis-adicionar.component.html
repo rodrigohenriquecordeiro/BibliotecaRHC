@@ -14,9 +14,19 @@
         </div>
 
         <div class="mb-3">
-          <label for="autor" class="form-label"><strong>Autor</strong></label>
-          <input type="text" class="form-control" id="autor" placeholder="Digite o nome do autor"
-            formControlName="autor" />
+          <label class="form-label"><strong>Autor</strong></label>
+
+          <select class="form-select mb-2" [value]="autorSelecionado" (change)="onAutorChange($event)">
+            <option value="" disabled>Selecione um autor...</option>
+
+            <option *ngFor="let autorNome of listaAutoresUnicos" [value]="autorNome">
+              {{ autorNome }}
+            </option>
+            <option value="novo">-- Cadastre um novo Autor --</option>
+          </select>
+
+          <input *ngIf="mostrarInputAutor" type="text" class="form-control mt-2"
+            placeholder="Digite o nome do autor aqui..." formControlName="autor" />
         </div>
 
         <div class="mb-3">
