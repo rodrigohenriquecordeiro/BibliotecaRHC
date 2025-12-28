@@ -94,9 +94,6 @@ export class MinhaEstanteComponent implements OnInit {
         if (tamanhoArray > 0) {
           const indiceAleatorio = Math.floor(Math.random() * tamanhoArray);
           this.fraseDestaque = frases[indiceAleatorio];
-
-          console.log(`Frase selecionada no Índice: ${indiceAleatorio} (ID: ${this.fraseDestaque.id})`);
-          console.log(this.fraseDestaque);
         } else {
           console.warn('A API não retornou nenhuma frase.');
           this.fraseDestaque = undefined;

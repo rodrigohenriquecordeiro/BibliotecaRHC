@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { BibliotecaService } from '../../../services/biblioteca/biblioteca.service';
 import { Frase } from '../../../models/frase';
 import { firstValueFrom } from 'rxjs';
+import e from 'express';
 
 @Component({
   selector: 'app-frases-inesqueciveis-adicionar',
@@ -29,6 +30,10 @@ export class FrasesInesqueciveisAdicionarComponent implements OnInit {
   mostrarInputAutor: boolean = false;
   autorSelecionado: string = ''; 
 
+  listaLivrosUnicos: string[] = [];
+  mostrarInputLivro: boolean = false;
+  livroSelecionado: string = ''; 
+
   constructor(
     private service: BibliotecaService,
     private router: Router
@@ -39,6 +44,9 @@ export class FrasesInesqueciveisAdicionarComponent implements OnInit {
       next: (todosOsLivros) => {
         const autoresDuplicados = todosOsLivros.map(livro => livro.autor).filter(a => !!a);
         this.listaAutoresUnicos = [...new Set(autoresDuplicados)].sort();
+
+        const livrosDuplicados = todosOsLivros.map(livro => livro.nomeDoLivro).filter(a => !!a);
+        this.listaLivrosUnicos = [...new Set(livrosDuplicados)].sort();
       },
       error: (err) => {
         console.error('Falha ao carregar os autores', err);
@@ -51,7 +59,6 @@ export class FrasesInesqueciveisAdicionarComponent implements OnInit {
     const valor = selectElement.value;
 
     this.autorSelecionado = valor;
-    console.log('autorSelecionado 1: ' + this.autorSelecionado);
 
     if (valor === 'novo') {
       this.mostrarInputAutor = true;
@@ -60,6 +67,22 @@ export class FrasesInesqueciveisAdicionarComponent implements OnInit {
     } else {
       this.mostrarInputAutor = false;
       this.form.get('autor')?.setValue(valor); 
+    }
+  }
+
+  onLivroChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const valor = selectElement.value;
+
+    this.livroSelecionado = valor;
+
+    if (valor === 'novo') {
+      this.mostrarInputLivro = true;
+      this.form.get('nomeLivro')?.setValue(''); 
+      this.form.get('nomeLivro')?.enable();
+    } else {
+      this.mostrarInputLivro = false;
+      this.form.get('nomeLivro')?.setValue(valor); 
     }
   }
 
@@ -90,6 +113,9 @@ export class FrasesInesqueciveisAdicionarComponent implements OnInit {
       // Reseta visualmente
       this.autorSelecionado = '';
       this.mostrarInputAutor = false;
+
+      this.livroSelecionado = '';
+      this.mostrarInputLivro = false;
 
       this.router.navigate(['/frases-inesqueciveis-dashboard']);
     } catch (error) {
