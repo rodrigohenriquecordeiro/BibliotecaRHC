@@ -6,6 +6,8 @@ import { BibliotecaService } from '../../../services/biblioteca/biblioteca.servi
 import { Frase } from '../../../models/frase';
 import { firstValueFrom } from 'rxjs';
 import e from 'express';
+import { Autor } from '../../../models/autor';
+import { Livro } from '../../../models/livro';
 
 @Component({
   selector: 'app-frases-inesqueciveis-adicionar',
@@ -22,8 +24,8 @@ export class FrasesInesqueciveisAdicionarComponent implements OnInit {
 
   form = new FormGroup({
     frase: new FormControl<string | null>(null, Validators.required),
-    autor: new FormControl<string | null>(null, Validators.required),
-    nomeLivro: new FormControl<string | null>(null, Validators.required),
+    autor: new FormControl<Autor | null>(null, Validators.required),
+    livro: new FormControl<Livro | null>(null, Validators.required),
   });
 
   listaAutoresUnicos: string[] = [];
@@ -42,7 +44,7 @@ export class FrasesInesqueciveisAdicionarComponent implements OnInit {
   ngOnInit(): void {
     this.service.listar().subscribe({
       next: (todosOsLivros) => {
-        const autoresDuplicados = todosOsLivros.map(livro => livro.autor).filter(a => !!a);
+        const autoresDuplicados = todosOsLivros.map(livro => livro.autor.nomeDoAutor).filter(a => !!a);
         this.listaAutoresUnicos = [...new Set(autoresDuplicados)].sort();
 
         const livrosDuplicados = todosOsLivros.map(livro => livro.nomeDoLivro).filter(a => !!a);
@@ -62,11 +64,11 @@ export class FrasesInesqueciveisAdicionarComponent implements OnInit {
 
     if (valor === 'novo') {
       this.mostrarInputAutor = true;
-      this.form.get('autor')?.setValue(''); 
-      this.form.get('autor')?.enable();
+      this.form.get('autor.nomeDoAutor')?.setValue(''); 
+      this.form.get('autor.nomeDoAutor')?.enable();
     } else {
       this.mostrarInputAutor = false;
-      this.form.get('autor')?.setValue(valor); 
+      this.form.get('autor.nomeDoAutor')?.setValue(valor); 
     }
   }
 
@@ -78,11 +80,11 @@ export class FrasesInesqueciveisAdicionarComponent implements OnInit {
 
     if (valor === 'novo') {
       this.mostrarInputLivro = true;
-      this.form.get('nomeLivro')?.setValue(''); 
-      this.form.get('nomeLivro')?.enable();
+      this.form.get('livro.nomeLivro')?.setValue(''); 
+      this.form.get('livro.nomeLivro')?.enable();
     } else {
       this.mostrarInputLivro = false;
-      this.form.get('nomeLivro')?.setValue(valor); 
+      this.form.get('livro.nomeLivro')?.setValue(valor); 
     }
   }
 
@@ -102,7 +104,7 @@ export class FrasesInesqueciveisAdicionarComponent implements OnInit {
         id: 0,
         frase: formValue.frase!,
         autor: formValue.autor!,
-        nomeDoLivro: formValue.nomeLivro!,
+        nomeDoLivro: formValue.livro!,
         dataCriacao: dataFormatada!
       };
 

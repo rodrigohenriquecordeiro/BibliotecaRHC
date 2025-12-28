@@ -92,7 +92,7 @@ namespace BibliotecaRHC.API.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("BibliotecaRHC.API.Models.FrasesInesqueciveis", b =>
+            modelBuilder.Entity("BibliotecaRHC.API.Models.Autor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,27 +100,41 @@ namespace BibliotecaRHC.API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Autor")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                    b.Property<string>("NomeDoAutor")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Autor");
+                });
+
+            modelBuilder.Entity("BibliotecaRHC.API.Models.FraseInesquecivel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AutorId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Frase")
-                        .IsRequired()
-                        .HasMaxLength(65000)
                         .HasColumnType("longtext");
 
-                    b.Property<string>("NomeDoLivro")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("varchar(300)");
+                    b.Property<int?>("LivroId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("FrasesInesqueciveis");
+                    b.HasIndex("AutorId");
+
+                    b.HasIndex("LivroId");
+
+                    b.ToTable("FraseInesquecivel");
                 });
 
             modelBuilder.Entity("BibliotecaRHC.API.Models.Livro", b =>
@@ -136,10 +150,8 @@ namespace BibliotecaRHC.API.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
 
-                    b.Property<string>("Autor")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                    b.Property<int?>("AutorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ClassificacaoCatalografica")
                         .IsRequired()
@@ -171,7 +183,9 @@ namespace BibliotecaRHC.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Livros");
+                    b.HasIndex("AutorId");
+
+                    b.ToTable("Livro");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -306,6 +320,30 @@ namespace BibliotecaRHC.API.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("BibliotecaRHC.API.Models.FraseInesquecivel", b =>
+                {
+                    b.HasOne("BibliotecaRHC.API.Models.Autor", "Autor")
+                        .WithMany("FrasesInesqueciveis")
+                        .HasForeignKey("AutorId");
+
+                    b.HasOne("BibliotecaRHC.API.Models.Livro", "Livro")
+                        .WithMany("FrasesInesqueciveis")
+                        .HasForeignKey("LivroId");
+
+                    b.Navigation("Autor");
+
+                    b.Navigation("Livro");
+                });
+
+            modelBuilder.Entity("BibliotecaRHC.API.Models.Livro", b =>
+                {
+                    b.HasOne("BibliotecaRHC.API.Models.Autor", "Autor")
+                        .WithMany("Livros")
+                        .HasForeignKey("AutorId");
+
+                    b.Navigation("Autor");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -355,6 +393,18 @@ namespace BibliotecaRHC.API.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BibliotecaRHC.API.Models.Autor", b =>
+                {
+                    b.Navigation("FrasesInesqueciveis");
+
+                    b.Navigation("Livros");
+                });
+
+            modelBuilder.Entity("BibliotecaRHC.API.Models.Livro", b =>
+                {
+                    b.Navigation("FrasesInesqueciveis");
                 });
 #pragma warning restore 612, 618
         }

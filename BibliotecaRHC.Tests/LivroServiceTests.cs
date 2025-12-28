@@ -26,7 +26,7 @@ public class LivroServiceTests
     public async Task ObterLivros_DeveChamarRepositorio()
     {
         // Arrange
-        var livros = new List<Livro> { new() { Id = 1, Autor = "Teste" } };
+        var livros = new List<Livro> { new() { Id = 1, Autor = new Autor { NomeDoAutor = "Teste" } } };
         _mockRepo.Setup(r => r.GetAllAsync()).ReturnsAsync(livros);
 
         // Act
@@ -41,7 +41,7 @@ public class LivroServiceTests
     public async Task ObterLivroPorId_DeveRetornarLivroCorreto()
     {
         // Arrange
-        var livroEsperado = new Livro { Id = 1, Autor = "Autor Teste" };
+        var livroEsperado = new Livro { Id = 1, Autor = new Autor { NomeDoAutor = "Autor Teste" } };
         _mockRepo.Setup(r => r.GetByIDAsync(1)).ReturnsAsync(livroEsperado);
 
         // Act
@@ -49,7 +49,7 @@ public class LivroServiceTests
 
         // Assert
         Assert.NotNull(resultado);
-        Assert.Equal("Autor Teste", resultado!.Autor);
+        Assert.Equal("Autor Teste", resultado!.Autor!.NomeDoAutor);
         _mockRepo.Verify(r => r.GetByIDAsync(1), Times.Once);
     }
 
@@ -71,22 +71,22 @@ public class LivroServiceTests
     public async Task AdicionarLivro_DeveChamarAdd()
     {
         // Arrange
-        var livro = new Livro { Id = 1, Autor = "Autor Novo", NomeDoLivro = "Livro Novo" };
+        var livro = new Livro { Id = 1, Autor = new Autor { NomeDoAutor = "Autor Novo" }, NomeDoLivro = "Livro Novo" };
 
         // Act
         _mockRepo.Setup(r => r.Add(It.IsAny<Livro>())).Verifiable();
         await _service.AdicionarLivroAsync(livro);
 
         // Assert
-        _mockRepo.Verify(r => r.Add(It.Is<Livro>(l => l.Id == 1 && l.Autor == "Autor Novo")), Times.Once);
+        _mockRepo.Verify(r => r.Add(It.Is<Livro>(l => l.Id == 1 && l.Autor!.NomeDoAutor == "Autor Novo")), Times.Once);
     }
 
     [Fact]
     public async Task AtualizarLivro_DeveChamarUpdate_QuandoLivroExistir()
     {
         // Arrange
-        var livroExistente = new Livro { Id = 1, Autor = "Original" };
-        var livroAtualizado = new Livro { Id = 1, Autor = "Atualizado" };
+        var livroExistente = new Livro { Id = 1, Autor = new Autor { NomeDoAutor = "Original" } };
+        var livroAtualizado = new Livro { Id = 1, Autor = new Autor { NomeDoAutor = "Atualizado" } };
 
         _mockRepo.Setup(r => r.GetByIDAsync(1)).ReturnsAsync(livroExistente);
         _mockRepo.Setup(r => r.Update(It.IsAny<Livro>())).Verifiable();
@@ -95,14 +95,14 @@ public class LivroServiceTests
         await _service.AtualizarLivro(livroAtualizado);
 
         // Assert
-        _mockRepo.Verify(r => r.Update(It.Is<Livro>(l => l.Autor == "Atualizado")), Times.Once);
+        _mockRepo.Verify(r => r.Update(It.Is<Livro>(l => l.Autor!.NomeDoAutor == "Atualizado")), Times.Once);
     }
 
     [Fact]
     public async Task AtualizarLivro_NaoChamaUpdate_SeLivroNaoExistir()
     {
         // Arrange
-        var livro = new Livro { Id = 1, Autor = "Teste" };
+        var livro = new Livro { Id = 1, Autor = new Autor { NomeDoAutor = "Teste" } };
         _mockRepo.Setup(r => r.GetByIDAsync(1)).ReturnsAsync((Livro?)null);
 
         // Act
@@ -116,7 +116,7 @@ public class LivroServiceTests
     public async Task RemoverLivro_DeveChamarRemove_SeLivroExistir()
     {
         // Arrange
-        var livro = new Livro { Id = 1, Autor = "Autor Teste" };
+        var livro = new Livro { Id = 1, Autor = new Autor { NomeDoAutor = "Autor Teste" } };
         _mockRepo.Setup(r => r.GetByIDAsync(1)).ReturnsAsync(livro);
         _mockRepo.Setup(r => r.Remove(It.IsAny<Livro>())).Verifiable();
 

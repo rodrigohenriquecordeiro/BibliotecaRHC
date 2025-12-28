@@ -14,7 +14,7 @@ public class UnityOfWork : IUnityOfWork
     }
 
     public ILivroRepository LivroRepository => _livroRepository ??= new LivroRepository(_context);
-    public IFrasesInesqueciveisRepository FrasesInesqueciveisRepository => _frasesInesqueciveisRepository ??= new FrasesInesqueciveisRepository(_context);
+    public IFrasesInesqueciveisRepository FrasesInesqueciveisRepository => _frasesInesqueciveisRepository ??= new FraseInesquecivelRepository(_context);
 
     public async Task<int> CommitAsync() => await _context.SaveChangesAsync();
 

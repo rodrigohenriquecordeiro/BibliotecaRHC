@@ -22,7 +22,7 @@
             <option *ngFor="let autorNome of listaAutoresUnicos" [value]="autorNome">
               {{ autorNome }}
             </option>
-            <option value="novo">-- Cadastre um novo Autor --</option>
+            <option value="novo">-- Digite o nome de um novo Autor --</option>
           </select>
 
           <input *ngIf="mostrarInputAutor" type="text" class="form-control mt-2"
@@ -38,7 +38,7 @@
             <option *ngFor="let nomeLivro of listaLivrosUnicos" [value]="nomeLivro">
               {{ nomeLivro }}
             </option>
-            <option value="novo">-- Digite o nome de um livro --</option>
+            <option value="novo">-- Digite o nome de um novo Livro --</option>
           </select>
 
           <input *ngIf="mostrarInputLivro" type="text" class="form-control mt-2"
