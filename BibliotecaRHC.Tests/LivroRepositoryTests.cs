@@ -17,10 +17,10 @@ public class LivroRepositoryTests
             new()
             {
                 Id = 1,
-                Autor = new Autor { NomeDoAutor = "Autor 1" },
+                Autor = "Autor 1",
                 NomeDoLivro = "Livro 1",
                 Editora = "Editora 1",
-                AnoDePublicacao = "2020",   
+                AnoDePublicacao = "2020",
                 NumeroDePaginas = 100,
                 ClassificacaoCatalografica = "Classificação 1",
                 Observacao = "Observação 1",
@@ -29,7 +29,7 @@ public class LivroRepositoryTests
             new()
             {
                 Id = 2,
-                Autor = new Autor { NomeDoAutor = "Autor 2" },
+                Autor = "Autor 2",
                 NomeDoLivro = "Livro 2",
                 Editora = "Editora 2",
                 AnoDePublicacao = "2021",
@@ -41,7 +41,7 @@ public class LivroRepositoryTests
             new()
             {
                 Id = 3,
-                Autor = new Autor { NomeDoAutor = "Autor 3" },
+                Autor = "Autor 3",
                 NomeDoLivro = "Livro 3",
                 Editora = "Editora 3",
                 AnoDePublicacao = "2022",
@@ -60,7 +60,7 @@ public class LivroRepositoryTests
 
         if (comDados)
         {
-            context.Livro!.AddRange(ListaDeLivros);
+            context.Livros!.AddRange(ListaDeLivros);
             context.SaveChanges();
         }
 
@@ -108,7 +108,7 @@ public class LivroRepositoryTests
 
         // Assert
         Assert.NotNull(resultado);
-        Assert.Equal(autorEsperado, resultado!.Autor!.NomeDoAutor);
+        Assert.Equal(autorEsperado, resultado!.Autor);
     }
 
     [Fact]
@@ -131,7 +131,7 @@ public class LivroRepositoryTests
         var (repository, context) = CriarRepositorioComContexto(comDados: false);
         var novoLivro = new Livro
         {
-            Autor = new Autor { NomeDoAutor = "Autor Novo" },
+            Autor = "Autor Novo",
             NomeDoLivro = "Livro Novo",
             Editora = "Editora Nova",
             AnoDePublicacao = "2023",
@@ -159,12 +159,12 @@ public class LivroRepositoryTests
         Assert.NotNull(livro);
 
         // Act
-        livro!.Autor = new Autor { NomeDoAutor = "Autor Atualizado" };
+        livro!.Autor = "Autor Atualizado";
         repository.Update(livro);
         var livroAtualizado = await repository.GetByIDAsync(1);
 
         // Assert
-        Assert.Equal("Autor Atualizado", livroAtualizado!.Autor!.NomeDoAutor);
+        Assert.Equal("Autor Atualizado", livroAtualizado!.Autor);
     }
 
     [Fact]
@@ -172,7 +172,7 @@ public class LivroRepositoryTests
     {
         // Arrange
         var repository = CriarRepositorio(comDados: false);
-        var livroInexistente = new Livro { Id = 999, Autor = new Autor { NomeDoAutor = "Autor Inexistente" } };
+        var livroInexistente = new Livro { Id = 999, Autor = "Autor Inexistente" };
 
         // Act
         var exception = Assert.Throws<InvalidOperationException>(() =>
@@ -245,7 +245,7 @@ public class LivroRepositoryTests
 
         if (comDados)
         {
-            context.Livro!.AddRange(ListaDeLivros);
+            context.Livros!.AddRange(ListaDeLivros);
             context.SaveChanges();
         }
 

@@ -3,18 +3,18 @@ using BibliotecaRHC.API.Repositories;
 
 namespace BibliotecaRHC.API.Domain
 {
-    public class FraseInesquecivelService: IFrasesInesqueciveisService
+    public class FrasesInesqueciveisService: IFrasesInesqueciveisService
     {
         private readonly IUnityOfWork _unityOfWork;
-        private readonly ILogger<FraseInesquecivelService> _logger;
+        private readonly ILogger<FrasesInesqueciveisService> _logger;
 
-        public FraseInesquecivelService(IUnityOfWork unityOfWork, ILogger<FraseInesquecivelService> logger)
+        public FrasesInesqueciveisService(IUnityOfWork unityOfWork, ILogger<FrasesInesqueciveisService> logger)
         {
             _unityOfWork = unityOfWork;
             _logger = logger;
         }
 
-        public async Task<IEnumerable<FraseInesquecivel>> ObterTodasAsFrases()
+        public async Task<IEnumerable<FrasesInesqueciveis>> ObterTodasAsFrases()
         {
             var frases = await _unityOfWork.FrasesInesqueciveisRepository.GetAllAsync();
 
@@ -27,7 +27,7 @@ namespace BibliotecaRHC.API.Domain
             return frases;
         }
 
-        public async Task<FraseInesquecivel?> ObterFrasePorId(int id)
+        public async Task<FrasesInesqueciveis?> ObterFrasePorId(int id)
         {
             var frase = await _unityOfWork.FrasesInesqueciveisRepository.GetByIDAsync(id);
 
@@ -39,7 +39,7 @@ namespace BibliotecaRHC.API.Domain
             return frase;
         }
 
-        public async Task<FraseInesquecivel> AdicionarFrase(FraseInesquecivel frase)
+        public async Task<FrasesInesqueciveis> AdicionarFrase(FrasesInesqueciveis frase)
         {
             FormataFrase(frase);
 
@@ -48,7 +48,7 @@ namespace BibliotecaRHC.API.Domain
             return frase;
         }
 
-        private static void FormataFrase(FraseInesquecivel frase)
+        private static void FormataFrase(FrasesInesqueciveis frase)
         {
             frase.Frase = frase.Frase!.Replace("\"", "").Trim();
             if (!string.IsNullOrEmpty(frase.Frase))
@@ -61,7 +61,7 @@ namespace BibliotecaRHC.API.Domain
             }
         }
 
-        public async Task<FraseInesquecivel?> AtualizarFrase(FraseInesquecivel frase)
+        public async Task<FrasesInesqueciveis?> AtualizarFrase(FrasesInesqueciveis frase)
         {
             var fraseQueSeraAlterada = await _unityOfWork.FrasesInesqueciveisRepository.GetByIDAsync(frase.Id);
 
@@ -75,7 +75,7 @@ namespace BibliotecaRHC.API.Domain
             await _unityOfWork.CommitAsync();
             return frase;
         }
-        public async Task<FraseInesquecivel?> RemoverFrase(int id)
+        public async Task<FrasesInesqueciveis?> RemoverFrase(int id)
         {
             var fraseInesquecivel = await _unityOfWork.FrasesInesqueciveisRepository.GetByIDAsync(id);
 
@@ -90,17 +90,17 @@ namespace BibliotecaRHC.API.Domain
             return fraseInesquecivel;
         }
 
-        public async Task<FraseInesquecivel?> ObterFraseAleatoria()
+        public async Task<FrasesInesqueciveis?> ObterFraseAleatoria()
         {
             var todasFrasesAleatorias = await _unityOfWork.FrasesInesqueciveisRepository.GetAllAsync();
 
             if (!todasFrasesAleatorias.Any())
             {
-                FraseInesquecivel frase = new()
+                FrasesInesqueciveis frase = new()
                 {
                     Id = 1,
                     Frase = "Um leitor vive mil vidas antes de morrer. O homem que nunca lê vive apenas uma.",
-                    Autor = new Autor { NomeDoAutor = "George R. R. Martin" },
+                    Autor = "George R. R. Martin",
                     DataCriacao = DateTime.Now,
                 };
 
@@ -116,11 +116,11 @@ namespace BibliotecaRHC.API.Domain
 
     public interface IFrasesInesqueciveisService
     {
-        Task<IEnumerable<FraseInesquecivel>> ObterTodasAsFrases();
-        Task<FraseInesquecivel?> ObterFrasePorId(int id);
-        Task<FraseInesquecivel> AdicionarFrase(FraseInesquecivel frase);
-        Task<FraseInesquecivel?> AtualizarFrase(FraseInesquecivel frase);
-        Task<FraseInesquecivel?> RemoverFrase(int id);
-        Task<FraseInesquecivel?> ObterFraseAleatoria();
+        Task<IEnumerable<FrasesInesqueciveis>> ObterTodasAsFrases();
+        Task<FrasesInesqueciveis?> ObterFrasePorId(int id);
+        Task<FrasesInesqueciveis> AdicionarFrase(FrasesInesqueciveis frase);
+        Task<FrasesInesqueciveis?> AtualizarFrase(FrasesInesqueciveis frase);
+        Task<FrasesInesqueciveis?> RemoverFrase(int id);
+        Task<FrasesInesqueciveis?> ObterFraseAleatoria();
     }
 }

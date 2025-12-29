@@ -3,22 +3,30 @@ using System.Text;
 
 namespace BibliotecaRHC.API.Models;
 
-public class Autor
+public class FrasesInesqueciveis
 {
     public int Id { get; set; }
-    
-    public string? NomeDoAutor { get; set; }
 
-    public ICollection<Livro> Livros { get; set; } = [];
+    [Required(ErrorMessage = "Obrigatório colocar a Frase")]
+    [StringLength(65000, ErrorMessage = "Número de caracteres excede o permitido")]
+    public string? Frase { get; set; }
 
-    public ICollection<FraseInesquecivel> FrasesInesqueciveis { get; set; } = [];
+    [Required(ErrorMessage = "Obrigatório colocar o Autor")]
+    [StringLength(200, ErrorMessage = "Permitido no máximo 200 caracteres")]
+    public string? Autor { get; set; }
+
+    [Required(ErrorMessage = "Obrigatório colocar o Livro")]
+    [StringLength(300, ErrorMessage = "Permitido no máximo 300 caracteres")]
+    public string? NomeDoLivro { get; set; }
+
+    public DateTime DataCriacao { get; set; } = DateTime.Now;
 
     public void ValidaClasse()
     {
         ValidationContext context = new(this, serviceProvider: null, items: null);
         List<ValidationResult> results = [];
-
         bool isValid = Validator.TryValidateObject(this, context, results, true);
+
         if (isValid == false)
         {
             StringBuilder sbrErrors = new();
@@ -26,7 +34,6 @@ public class Autor
             {
                 sbrErrors.AppendLine(validationResult.ErrorMessage);
             }
-
             throw new ValidationException(sbrErrors.ToString());
         }
     }

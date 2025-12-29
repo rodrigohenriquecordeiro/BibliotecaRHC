@@ -7,18 +7,18 @@ namespace BibliotecaRHC.API.Controllers;
 
 [ApiController]
 [Route("api/frases")]
-public class FraseInesquecivelController : ControllerBase
+public class FrasesInesqueciveisController : ControllerBase
 {
     private readonly IFrasesInesqueciveisService _service;
 
-    public FraseInesquecivelController(IFrasesInesqueciveisService service)
+    public FrasesInesqueciveisController(IFrasesInesqueciveisService service)
     {
         _service = service;
     }
 
     [Authorize]
     [HttpPost("adicionar-frase")]
-    public async Task<IActionResult> Post([FromBody] FraseInesquecivel frase)
+    public async Task<IActionResult> Post([FromBody] FrasesInesqueciveis frase)
     {
         var novaFrase = await _service.AdicionarFrase(frase);
         return CreatedAtAction(nameof(GetById), new { id = novaFrase.Id }, novaFrase);
@@ -39,7 +39,7 @@ public class FraseInesquecivelController : ControllerBase
 
     [Authorize]
     [HttpPut("atualizar-frase/{id}")]
-    public async Task<IActionResult> Put(int id, [FromBody] FraseInesquecivel frase)
+    public async Task<IActionResult> Put(int id, [FromBody] FrasesInesqueciveis frase)
     {
         if (id != frase.Id)
             return BadRequest("ID da frase não corresponde ao ID fornecido na URL.");

@@ -6,7 +6,6 @@ import { firstValueFrom } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Autor } from '../../../models/autor';
 
 @Component({
   selector: 'app-editar',
@@ -26,7 +25,7 @@ export class EditarComponent {
   form = new FormGroup({
     codigoDoLivro: new FormControl<number | null>(null, Validators.required),
     nomeDoLivro: new FormControl<string | null>(null, Validators.required),
-    autor: new FormControl<Autor | null>(null, Validators.required),
+    autor: new FormControl<string | null>(null, Validators.required),
     editora: new FormControl<string | null>(null, Validators.required),
     numeroDePaginas: new FormControl<number | null>(null, Validators.required),
     anoDePublicacao: new FormControl<number | null>(null, Validators.required),

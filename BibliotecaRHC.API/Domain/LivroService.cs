@@ -16,25 +16,24 @@ public class LivroService : ILivroService
 
     public async Task<IEnumerable<Livro>> ObterTodosOsLivros()
     {
-        var livros = await _unityOfWork.LivroRepository.ObterLivroCompleto();
+        var livros = await _unityOfWork.LivroRepository.GetAllAsync();
 
         if (!livros.Any())
         {
             _logger.LogInformation("Nenhum livro encontrado.");
-            return [];
+            return Enumerable.Empty<Livro>();
         }
 
         return livros;
     }
 
-    public async Task<IEnumerable<Livro>> ObterLivroPorId(int id)
+    public async Task<Livro?> ObterLivroPorId(int id)
     {
-        var livro = await _unityOfWork.LivroRepository.ObterLivroPorID(id);
+        var livro = await _unityOfWork.LivroRepository.GetByIDAsync(id);
 
-        if (!livro.Any())
+        if (livro == null)
         {
             _logger.LogWarning($"Livro com ID {id} não encontrado.");
-            return [];
         }
 
         return livro;
@@ -87,7 +86,7 @@ public class LivroService : ILivroService
 public interface ILivroService
 {
     Task<IEnumerable<Livro>> ObterTodosOsLivros();
-    Task<IEnumerable<Livro>> ObterLivroPorId(int livroId);
+    Task<Livro?> ObterLivroPorId(int id);
     Task<Livro> AdicionarLivroAsync(Livro livro);
     Task<Livro?> AtualizarLivro(Livro livro);
     Task<Livro?> RemoverLivro(int id);

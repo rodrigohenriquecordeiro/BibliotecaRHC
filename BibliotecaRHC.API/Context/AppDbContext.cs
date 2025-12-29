@@ -6,9 +6,8 @@ namespace BibliotecaRHC.API.Context;
 
 public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
-    public DbSet<Livro>? Livro { get; set; }
-    public DbSet<FraseInesquecivel>? FraseInesquecivel { get; set; }
-    public DbSet<Autor>? Autor { get; set; }
+    public DbSet<Livro>? Livros { get; set; }
+    public DbSet<FrasesInesqueciveis>? FrasesInesqueciveis { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {

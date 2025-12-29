@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace BibliotecaRHC.API.Controllers;
 
 [ApiController]
-[Route("api/livro")]
-public class LivroController : ControllerBase
+[Route("api/livros")]
+public class LivrosController : ControllerBase
 {
     private readonly ILivroService _service;
 
-    public LivroController(ILivroService service)
+    public LivrosController(ILivroService service)
     {
         _service = service;
     }

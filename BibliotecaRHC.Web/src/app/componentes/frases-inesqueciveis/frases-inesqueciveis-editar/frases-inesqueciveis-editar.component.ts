@@ -6,8 +6,6 @@ import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Autor } from '../../../models/autor';
-import { Livro } from '../../../models/livro';
 
 @Component({
   selector: 'app-frases-inesqueciveis-editar',
@@ -26,8 +24,8 @@ export class FrasesInesqueciveisEditarComponent {
   form = new FormGroup({
     id: new FormControl<number | null>(null, Validators.required),
     frase: new FormControl<string | null>(null, Validators.required),
-    autor: new FormControl<Autor | null>(null, Validators.required),
-    livro: new FormControl<Livro | null>(null, Validators.required),
+    autor: new FormControl<string | null>(null, Validators.required),
+    nomeDoLivro: new FormControl<string | null>(null, Validators.required),
     dataCriacao: new FormControl<string | null>(null, Validators.required)
   });
 
@@ -65,7 +63,7 @@ export class FrasesInesqueciveisEditarComponent {
       id: frase.id,
       frase: frase.frase,
       autor: frase.autor,
-      livro: frase.nomeDoLivro,
+      nomeDoLivro: frase.nomeDoLivro,
       dataCriacao: frase.dataCriacao
     })
   }
@@ -83,7 +81,7 @@ export class FrasesInesqueciveisEditarComponent {
         id: formValue.id!,
         frase: formValue.frase!,
         autor: formValue.autor!,
-        nomeDoLivro: formValue.livro!,
+        nomeDoLivro: formValue.nomeDoLivro!,
         dataCriacao: formValue.dataCriacao!
       };
 

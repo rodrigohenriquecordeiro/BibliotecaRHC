@@ -25,31 +25,31 @@ export class BibliotecaService {
   }
 
   listar(): Observable<Livro[]> {
-    return this.http.get<Livro[]>(`${this.API}livro/obter-livros`, {
+    return this.http.get<Livro[]>(`${this.API}livros/obter-livros`, {
       headers: this.getAuthHeaders()
     });
   }
 
   buscarPorCodigo(id: number): Observable<Livro> {
-    return this.http.get<Livro>(`${this.API}livro/obter-livro-por-id/${id}`, {
+    return this.http.get<Livro>(`${this.API}livros/obter-livro-por-id/${id}`, {
       headers: this.getAuthHeaders()
     });
   }
 
   criar(livro: Livro): Observable<Livro> {
-    return this.http.post<Livro>(`${this.API}livro/adicionar-livro`, livro, {
+    return this.http.post<Livro>(`${this.API}livros/adicionar-livro`, livro, {
       headers: this.getAuthHeaders()
     });
   }
 
   editar(livro: Livro): Observable<Livro> {
-    return this.http.put<Livro>(`${this.API}livro/atualizar-livro/${livro.id}`, livro, {
+    return this.http.put<Livro>(`${this.API}livros/atualizar-livro/${livro.id}`, livro, {
       headers: this.getAuthHeaders()
     });
   }
 
   excluir(id: number): Observable<Livro> {
-    return this.http.delete<Livro>(`${this.API}livro/remover-livro/${id}`, {
+    return this.http.delete<Livro>(`${this.API}livros/remover-livro/${id}`, {
       headers: this.getAuthHeaders()
     }).pipe(
       catchError((error) => {
@@ -60,7 +60,7 @@ export class BibliotecaService {
   }
 
   obterCodigoProximoLivro(): Observable<number> {
-    return this.http.get<number>(`${this.API}livro/obter-codigo-proximo-livro`, {
+    return this.http.get<number>(`${this.API}livros/obter-codigo-proximo-livro`, {
       headers: this.getAuthHeaders()
     });
   }

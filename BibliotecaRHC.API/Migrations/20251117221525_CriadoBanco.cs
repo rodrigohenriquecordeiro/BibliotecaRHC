@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BibliotecaRHC.API.Migrations
 {
     /// <inheritdoc />
-    public partial class CriaBanco : Migration
+    public partial class CriadoBanco : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -73,17 +73,50 @@ namespace BibliotecaRHC.API.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Autor",
+                name: "FrasesInesqueciveis",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NomeDoAutor = table.Column<string>(type: "longtext", nullable: true)
+                    Frase = table.Column<string>(type: "longtext", maxLength: 65000, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Autor = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NomeDoLivro = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DataCriacao = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FrasesInesqueciveis", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Livros",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Autor = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NomeDoLivro = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Editora = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AnoDePublicacao = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NumeroDePaginas = table.Column<int>(type: "int", nullable: false),
+                    ClassificacaoCatalografica = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Observacao = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DataDeAquisicao = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Autor", x => x.Id);
+                    table.PrimaryKey("PK_Livros", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -214,66 +247,6 @@ namespace BibliotecaRHC.API.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
-                name: "Livro",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    AutorId = table.Column<int>(type: "int", nullable: true),
-                    NomeDoLivro = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Editora = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    AnoDePublicacao = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    NumeroDePaginas = table.Column<int>(type: "int", nullable: false),
-                    ClassificacaoCatalografica = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Observacao = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DataDeAquisicao = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Livro", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Livro_Autor_AutorId",
-                        column: x => x.AutorId,
-                        principalTable: "Autor",
-                        principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "FraseInesquecivel",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Frase = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    AutorId = table.Column<int>(type: "int", nullable: true),
-                    LivroId = table.Column<int>(type: "int", nullable: true),
-                    DataCriacao = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FraseInesquecivel", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_FraseInesquecivel_Autor_AutorId",
-                        column: x => x.AutorId,
-                        principalTable: "Autor",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_FraseInesquecivel_Livro_LivroId",
-                        column: x => x.LivroId,
-                        principalTable: "Livro",
-                        principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -310,21 +283,6 @@ namespace BibliotecaRHC.API.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FraseInesquecivel_AutorId",
-                table: "FraseInesquecivel",
-                column: "AutorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FraseInesquecivel_LivroId",
-                table: "FraseInesquecivel",
-                column: "LivroId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Livro_AutorId",
-                table: "Livro",
-                column: "AutorId");
         }
 
         /// <inheritdoc />
@@ -346,19 +304,16 @@ namespace BibliotecaRHC.API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "FraseInesquecivel");
+                name: "FrasesInesqueciveis");
+
+            migrationBuilder.DropTable(
+                name: "Livros");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Livro");
-
-            migrationBuilder.DropTable(
-                name: "Autor");
         }
     }
 }

@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using BibliotecaRHC.API.Context;
 using BibliotecaRHC.API.Domain;
 using BibliotecaRHC.API.Models;
@@ -14,11 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-});
-
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
@@ -92,8 +87,8 @@ builder.Services.AddScoped<IUnityOfWork, UnityOfWork>();
 builder.Services.AddScoped<ILivroRepository, LivroRepository>();
 builder.Services.AddScoped<ILivroService, LivroService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IFrasesInesqueciveisRepository, FraseInesquecivelRepository>();
-builder.Services.AddScoped<IFrasesInesqueciveisService, FraseInesquecivelService>();
+builder.Services.AddScoped<IFrasesInesqueciveisRepository, FrasesInesqueciveisRepository>();
+builder.Services.AddScoped<IFrasesInesqueciveisService, FrasesInesqueciveisService>();
 
 builder.Services.AddCors(options =>
 {

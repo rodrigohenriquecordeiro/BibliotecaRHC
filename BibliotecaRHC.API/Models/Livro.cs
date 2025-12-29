@@ -7,9 +7,9 @@ public class Livro
 {
     public int Id { get; set; }
 
-    public int? AutorId { get; set; }
-
-    public Autor? Autor { get; set; }
+    [Required(ErrorMessage = "Obrigatório colocar o Autor")]
+    [StringLength(200, ErrorMessage = "Permitido no máximo 200 caracteres")]
+    public string? Autor { get; set; }
 
     [Required(ErrorMessage = "Obrigatório colocar o Livro")]
     [StringLength(300, ErrorMessage = "Permitido no máximo 300 caracteres")]
@@ -38,8 +38,6 @@ public class Livro
 
     [Required(ErrorMessage = "Obrigatório colocar a Data de Aquisição")]
     public string? DataDeAquisicao { get; set; }
-
-    public ICollection<FraseInesquecivel> FrasesInesqueciveis { get; set; } = [];
 
     public void ValidaClasse()
     {
