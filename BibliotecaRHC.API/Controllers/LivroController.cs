@@ -7,11 +7,11 @@ namespace BibliotecaRHC.API.Controllers;
 
 [ApiController]
 [Route("api/livros")]
-public class LivrosController : ControllerBase
+public class LivroController : ControllerBase
 {
     private readonly ILivroService _service;
 
-    public LivrosController(ILivroService service)
+    public LivroController(ILivroService service)
     {
         _service = service;
     }

@@ -92,7 +92,7 @@ namespace BibliotecaRHC.API.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("BibliotecaRHC.API.Models.FrasesInesqueciveis", b =>
+            modelBuilder.Entity("BibliotecaRHC.API.Models.FraseInesquecivel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -120,7 +120,7 @@ namespace BibliotecaRHC.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FrasesInesqueciveis");
+                    b.ToTable("FraseInesquecivel");
                 });
 
             modelBuilder.Entity("BibliotecaRHC.API.Models.Livro", b =>
@@ -171,7 +171,7 @@ namespace BibliotecaRHC.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Livros");
+                    b.ToTable("Livro");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

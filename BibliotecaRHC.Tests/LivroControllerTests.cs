@@ -62,7 +62,7 @@ public class LivroControllerTests
         mockService.Setup(s => s.AdicionarLivroAsync(It.IsAny<Livro>()))
                    .ReturnsAsync(ListaDeLivros[0]);
 
-        var controller = new LivrosController(mockService.Object);
+        var controller = new LivroController(mockService.Object);
 
         // Act
         var resultado = await controller.Post(ListaDeLivros[0]);
@@ -83,7 +83,7 @@ public class LivroControllerTests
         mockService.Setup(s => s.ObterTodosOsLivros())
                    .ReturnsAsync(ListaDeLivros);
 
-        var controller = new LivrosController(mockService.Object);
+        var controller = new LivroController(mockService.Object);
 
         // Act
         var resultado = await controller.GetTodos();
@@ -102,7 +102,7 @@ public class LivroControllerTests
         mockService.Setup(s => s.ObterLivroPorId(1))
                    .ReturnsAsync(ListaDeLivros[0]);
 
-        var controller = new LivrosController(mockService.Object);
+        var controller = new LivroController(mockService.Object);
 
         // Act
         var resultado = await controller.GetById(1);
@@ -121,7 +121,7 @@ public class LivroControllerTests
         mockService.Setup(s => s.ObterLivroPorId(999))
                    .ReturnsAsync((Livro?)null);
 
-        var controller = new LivrosController(mockService.Object);
+        var controller = new LivroController(mockService.Object);
 
         // Act
         var resultado = await controller.GetById(999);
@@ -139,7 +139,7 @@ public class LivroControllerTests
         mockService.Setup(s => s.AtualizarLivro(ListaDeLivros[0]))
                    .ReturnsAsync(ListaDeLivros[0]);
 
-        var controller = new LivrosController(mockService.Object);
+        var controller = new LivroController(mockService.Object);
 
         // Act
         var resultado = await controller.Put(1, ListaDeLivros[0]);
@@ -158,7 +158,7 @@ public class LivroControllerTests
         mockService.Setup(s => s.AtualizarLivro(It.IsAny<Livro>()))
                    .ReturnsAsync((Livro?)null);
 
-        var controller = new LivrosController(mockService.Object);
+        var controller = new LivroController(mockService.Object);
 
         // Act
         var resultado = await controller.Put(999, livroParaAtualizar); 
@@ -173,7 +173,7 @@ public class LivroControllerTests
         // Arrange
         var mockService = new Mock<ILivroService>();
         var livroParaAtualizar = new Livro { Id = 1, NomeDoLivro = "Livro Atualizado" };
-        var controller = new LivrosController(mockService.Object);
+        var controller = new LivroController(mockService.Object);
 
         // Act
         var resultado = await controller.Put(999, livroParaAtualizar);
@@ -190,7 +190,7 @@ public class LivroControllerTests
         mockService.Setup(s => s.RemoverLivro(1))
                    .ReturnsAsync(ListaDeLivros[0]);
 
-        var controller = new LivrosController(mockService.Object);
+        var controller = new LivroController(mockService.Object);
 
         // Act
         var resultado = await controller.Delete(1);
@@ -207,7 +207,7 @@ public class LivroControllerTests
         mockService.Setup(s => s.RemoverLivro(999))
                    .ReturnsAsync((Livro?)null);
 
-        var controller = new LivrosController(mockService.Object);
+        var controller = new LivroController(mockService.Object);
 
         // Act
         var resultado = await controller.Delete(999);
@@ -224,7 +224,7 @@ public class LivroControllerTests
         mockService.Setup(s => s.GeraCodigoProximoLivro())
                    .ReturnsAsync(4);
 
-        var controller = new LivrosController(mockService.Object);
+        var controller = new LivroController(mockService.Object);
         
         // Act
         var resultado = await controller.GetCodigoProximoLivro();

@@ -14,7 +14,7 @@ namespace BibliotecaRHC.API.Domain
             _logger = logger;
         }
 
-        public async Task<IEnumerable<FrasesInesqueciveis>> ObterTodasAsFrases()
+        public async Task<IEnumerable<FraseInesquecivel>> ObterTodasAsFrases()
         {
             var frases = await _unityOfWork.FrasesInesqueciveisRepository.GetAllAsync();
 
@@ -27,7 +27,7 @@ namespace BibliotecaRHC.API.Domain
             return frases;
         }
 
-        public async Task<FrasesInesqueciveis?> ObterFrasePorId(int id)
+        public async Task<FraseInesquecivel?> ObterFrasePorId(int id)
         {
             var frase = await _unityOfWork.FrasesInesqueciveisRepository.GetByIDAsync(id);
 
@@ -39,7 +39,7 @@ namespace BibliotecaRHC.API.Domain
             return frase;
         }
 
-        public async Task<FrasesInesqueciveis> AdicionarFrase(FrasesInesqueciveis frase)
+        public async Task<FraseInesquecivel> AdicionarFrase(FraseInesquecivel frase)
         {
             FormataFrase(frase);
 
@@ -48,7 +48,7 @@ namespace BibliotecaRHC.API.Domain
             return frase;
         }
 
-        private static void FormataFrase(FrasesInesqueciveis frase)
+        private static void FormataFrase(FraseInesquecivel frase)
         {
             frase.Frase = frase.Frase!.Replace("\"", "").Trim();
             if (!string.IsNullOrEmpty(frase.Frase))
@@ -61,7 +61,7 @@ namespace BibliotecaRHC.API.Domain
             }
         }
 
-        public async Task<FrasesInesqueciveis?> AtualizarFrase(FrasesInesqueciveis frase)
+        public async Task<FraseInesquecivel?> AtualizarFrase(FraseInesquecivel frase)
         {
             var fraseQueSeraAlterada = await _unityOfWork.FrasesInesqueciveisRepository.GetByIDAsync(frase.Id);
 
@@ -75,7 +75,7 @@ namespace BibliotecaRHC.API.Domain
             await _unityOfWork.CommitAsync();
             return frase;
         }
-        public async Task<FrasesInesqueciveis?> RemoverFrase(int id)
+        public async Task<FraseInesquecivel?> RemoverFrase(int id)
         {
             var fraseInesquecivel = await _unityOfWork.FrasesInesqueciveisRepository.GetByIDAsync(id);
 
@@ -90,13 +90,13 @@ namespace BibliotecaRHC.API.Domain
             return fraseInesquecivel;
         }
 
-        public async Task<FrasesInesqueciveis?> ObterFraseAleatoria()
+        public async Task<FraseInesquecivel?> ObterFraseAleatoria()
         {
             var todasFrasesAleatorias = await _unityOfWork.FrasesInesqueciveisRepository.GetAllAsync();
 
             if (!todasFrasesAleatorias.Any())
             {
-                FrasesInesqueciveis frase = new()
+                FraseInesquecivel frase = new()
                 {
                     Id = 1,
                     Frase = "Um leitor vive mil vidas antes de morrer. O homem que nunca lê vive apenas uma.",
@@ -116,11 +116,11 @@ namespace BibliotecaRHC.API.Domain
 
     public interface IFrasesInesqueciveisService
     {
-        Task<IEnumerable<FrasesInesqueciveis>> ObterTodasAsFrases();
-        Task<FrasesInesqueciveis?> ObterFrasePorId(int id);
-        Task<FrasesInesqueciveis> AdicionarFrase(FrasesInesqueciveis frase);
-        Task<FrasesInesqueciveis?> AtualizarFrase(FrasesInesqueciveis frase);
-        Task<FrasesInesqueciveis?> RemoverFrase(int id);
-        Task<FrasesInesqueciveis?> ObterFraseAleatoria();
+        Task<IEnumerable<FraseInesquecivel>> ObterTodasAsFrases();
+        Task<FraseInesquecivel?> ObterFrasePorId(int id);
+        Task<FraseInesquecivel> AdicionarFrase(FraseInesquecivel frase);
+        Task<FraseInesquecivel?> AtualizarFrase(FraseInesquecivel frase);
+        Task<FraseInesquecivel?> RemoverFrase(int id);
+        Task<FraseInesquecivel?> ObterFraseAleatoria();
     }
 }

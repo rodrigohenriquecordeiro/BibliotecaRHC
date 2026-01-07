@@ -87,7 +87,7 @@ builder.Services.AddScoped<IUnityOfWork, UnityOfWork>();
 builder.Services.AddScoped<ILivroRepository, LivroRepository>();
 builder.Services.AddScoped<ILivroService, LivroService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IFrasesInesqueciveisRepository, FrasesInesqueciveisRepository>();
+builder.Services.AddScoped<IFrasesInesqueciveisRepository, FraseInesquecivelRepository>();
 builder.Services.AddScoped<IFrasesInesqueciveisService, FrasesInesqueciveisService>();
 
 builder.Services.AddCors(options =>

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BibliotecaRHC.API.Migrations
 {
     /// <inheritdoc />
-    public partial class CriadoBanco : Migration
+    public partial class CriaBanco : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -73,7 +73,7 @@ namespace BibliotecaRHC.API.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "FrasesInesqueciveis",
+                name: "FraseInesquecivel",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -88,12 +88,12 @@ namespace BibliotecaRHC.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FrasesInesqueciveis", x => x.Id);
+                    table.PrimaryKey("PK_FraseInesquecivel", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Livros",
+                name: "Livro",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -116,7 +116,7 @@ namespace BibliotecaRHC.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Livros", x => x.Id);
+                    table.PrimaryKey("PK_Livro", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -304,10 +304,10 @@ namespace BibliotecaRHC.API.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "FrasesInesqueciveis");
+                name: "FraseInesquecivel");
 
             migrationBuilder.DropTable(
-                name: "Livros");
+                name: "Livro");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

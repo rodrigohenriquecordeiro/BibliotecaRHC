@@ -10,7 +10,7 @@ public class LivroRepository : Repository<Livro>, ILivroRepository
 
     public async Task<int> ObterCodigoUltimoLivroAsync()
     {
-        var ultimoLivro = await _context.Livros!
+        var ultimoLivro = await _context.Livro!
             .OrderByDescending(l => l.Id)
             .FirstOrDefaultAsync();
 

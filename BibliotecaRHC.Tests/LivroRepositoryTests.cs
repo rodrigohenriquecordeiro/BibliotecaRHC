@@ -60,7 +60,7 @@ public class LivroRepositoryTests
 
         if (comDados)
         {
-            context.Livros!.AddRange(ListaDeLivros);
+            context.Livro!.AddRange(ListaDeLivros);
             context.SaveChanges();
         }
 
@@ -245,7 +245,7 @@ public class LivroRepositoryTests
 
         if (comDados)
         {
-            context.Livros!.AddRange(ListaDeLivros);
+            context.Livro!.AddRange(ListaDeLivros);
             context.SaveChanges();
         }
 

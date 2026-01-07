@@ -3,7 +3,7 @@ using System.Text;
 
 namespace BibliotecaRHC.API.Models;
 
-public class FrasesInesqueciveis
+public class FraseInesquecivel
 {
     public int Id { get; set; }
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BibliotecaRHC.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251117221525_CriadoBanco")]
-    partial class CriadoBanco
+    [Migration("20260107214042_CriaBanco")]
+    partial class CriaBanco
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,7 +95,7 @@ namespace BibliotecaRHC.API.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("BibliotecaRHC.API.Models.FrasesInesqueciveis", b =>
+            modelBuilder.Entity("BibliotecaRHC.API.Models.FraseInesquecivel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -123,7 +123,7 @@ namespace BibliotecaRHC.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FrasesInesqueciveis");
+                    b.ToTable("FraseInesquecivel");
                 });
 
             modelBuilder.Entity("BibliotecaRHC.API.Models.Livro", b =>
@@ -174,7 +174,7 @@ namespace BibliotecaRHC.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Livros");
+                    b.ToTable("Livro");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
