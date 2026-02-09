@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace BibliotecaRHC.Tests
+namespace BibliotecaRHC.Tests.Services
 {
     public class TokenServiceTests
     {

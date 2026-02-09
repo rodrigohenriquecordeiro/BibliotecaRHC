@@ -4,7 +4,7 @@ using BibliotecaRHC.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-namespace BibliotecaRHC.Tests;
+namespace BibliotecaRHC.Tests.Controllers;
 
 public class LivroControllerTests
 {

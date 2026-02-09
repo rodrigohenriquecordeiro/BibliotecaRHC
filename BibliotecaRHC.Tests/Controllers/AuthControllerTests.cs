@@ -12,7 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace BibliotecaRHC.Tests;
+namespace BibliotecaRHC.Tests.Controllers;
 
 public class AuthControllerTests
 {
