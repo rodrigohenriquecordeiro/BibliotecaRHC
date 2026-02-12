@@ -1,3 +1,9 @@
 .bg-primary {
     background-color: #013750 !important;
 }
+
+.nav-link:hover {
+    font-size: 22px;
+    color: orange;
+    transition: color 0.3s ease;
+}
