@@ -8,8 +8,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OfficeOpenXml;
 
 var builder = WebApplication.CreateBuilder(args);
+
+ExcelPackage.License.SetNonCommercialPersonal("Rodrigo");
 
 // Add services to the container.
 
@@ -89,6 +92,7 @@ builder.Services.AddScoped<ILivroService, LivroService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IFrasesInesqueciveisRepository, FraseInesquecivelRepository>();
 builder.Services.AddScoped<IFrasesInesqueciveisService, FrasesInesqueciveisService>();
+builder.Services.AddScoped<IImportarPlanilha, ImportarPlanilhaService>();
 
 builder.Services.AddCors(options =>
 {

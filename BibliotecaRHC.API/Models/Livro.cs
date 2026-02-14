@@ -20,7 +20,7 @@ public class Livro
     public string? Editora { get; set; }
 
     [Required(ErrorMessage = "Obrigatório colocar o Ano de Publicação")]
-    [StringLength(10, ErrorMessage = "Permitido no máximo 10 caracteres")]
+    [StringLength(20, ErrorMessage = "Permitido no máximo 20 caracteres")]
     public string? AnoDePublicacao { get; set; }
 
     [Required(ErrorMessage = "Obrigatório colocar o Número de Páginas")]

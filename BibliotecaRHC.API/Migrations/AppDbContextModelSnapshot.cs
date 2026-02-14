@@ -133,8 +133,8 @@ namespace BibliotecaRHC.API.Migrations
 
                     b.Property<string>("AnoDePublicacao")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("Autor")
                         .IsRequired()

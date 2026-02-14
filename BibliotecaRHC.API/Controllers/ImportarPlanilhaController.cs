@@ -1,0 +1,29 @@
+﻿using BibliotecaRHC.API.Domain;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BibliotecaRHC.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class ImportarPlanilhaController : ControllerBase
+{
+    private readonly IImportarPlanilha _service;
+
+    public ImportarPlanilhaController(IImportarPlanilha service)
+    {
+        _service = service;
+    }
+
+    [HttpPost("importar")]
+    public async Task<IActionResult> ImportarExcel(IFormFile arquivo)
+    {
+        if (arquivo == null || arquivo.Length == 0)
+            return BadRequest("Envie um arquivo válido.");
+
+        if (!arquivo.FileName.EndsWith(".xlsx"))
+            return BadRequest("Apenas arquivos .xlsx são permitidos.");
+
+        await _service.ImportarPlanilhaAsync(arquivo);
+        return Ok();
+    }
+}
