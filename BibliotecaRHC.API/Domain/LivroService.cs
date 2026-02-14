@@ -41,9 +41,18 @@ public class LivroService : ILivroService
 
     public async Task<Livro> AdicionarLivroAsync(Livro livro)
     {
-        _unityOfWork.LivroRepository.Add(livro);
-        await _unityOfWork.CommitAsync();
-        return livro;
+        try
+        {
+            _unityOfWork.LivroRepository.Add(livro);
+            await _unityOfWork.CommitAsync();
+            return livro;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Erro ao salvar livro: {Mensagem}", e.Message);
+            _unityOfWork.LimparRastreador();
+            throw;
+        }
     }
 
     public async Task<Livro?> AtualizarLivro(Livro livro)

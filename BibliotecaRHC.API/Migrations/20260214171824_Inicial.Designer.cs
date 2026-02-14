@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BibliotecaRHC.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260107214042_CriaBanco")]
-    partial class CriaBanco
+    [Migration("20260214171824_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -136,8 +136,8 @@ namespace BibliotecaRHC.API.Migrations
 
                     b.Property<string>("AnoDePublicacao")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("Autor")
                         .IsRequired()
@@ -149,9 +149,9 @@ namespace BibliotecaRHC.API.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("DataDeAquisicao")
+                    b.Property<DateTime?>("DataDeAquisicao")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Editora")
                         .IsRequired()

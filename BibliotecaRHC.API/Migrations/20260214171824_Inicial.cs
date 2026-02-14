@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BibliotecaRHC.API.Migrations
 {
     /// <inheritdoc />
-    public partial class CriaBanco : Migration
+    public partial class Inicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -104,15 +104,14 @@ namespace BibliotecaRHC.API.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Editora = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    AnoDePublicacao = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                    AnoDePublicacao = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NumeroDePaginas = table.Column<int>(type: "int", nullable: false),
                     ClassificacaoCatalografica = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Observacao = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DataDeAquisicao = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    DataDeAquisicao = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -23,4 +23,9 @@ public class UnityOfWork : IUnityOfWork
         _context.Dispose();
         GC.SuppressFinalize(this);
     }
+
+    public void LimparRastreador()
+    {
+        _context.ChangeTracker.Clear();
+    }
 }

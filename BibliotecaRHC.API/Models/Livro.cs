@@ -37,7 +37,8 @@ public class Livro
     public string? Observacao { get; set; }
 
     [Required(ErrorMessage = "Obrigatório colocar a Data de Aquisição")]
-    public string? DataDeAquisicao { get; set; }
+    [DataType(DataType.Date)] 
+    public DateTime? DataDeAquisicao { get; set; }
 
     public void ValidaClasse()
     {

@@ -26,7 +26,7 @@ public class LivroRepositoryTests : BaseRepositoryTests<Livro>
                 NumeroDePaginas = 100, 
                 ClassificacaoCatalografica = "A1", 
                 Observacao = "Obs 1", 
-                DataDeAquisicao = DateTime.Now.ToString("dd/MM/yyyy") 
+                DataDeAquisicao = DateTime.Now 
             },
             new() 
             { 
@@ -38,7 +38,7 @@ public class LivroRepositoryTests : BaseRepositoryTests<Livro>
                 NumeroDePaginas = 200, 
                 ClassificacaoCatalografica = "A2", 
                 Observacao = "Obs 2", 
-                DataDeAquisicao = DateTime.Now.ToString("dd/MM/yyyy") 
+                DataDeAquisicao = DateTime.Now 
             },
             new() 
             { 
@@ -50,7 +50,7 @@ public class LivroRepositoryTests : BaseRepositoryTests<Livro>
                 NumeroDePaginas = 300, 
                 ClassificacaoCatalografica = "A3", 
                 Observacao = "Obs 3", 
-                DataDeAquisicao = DateTime.Now.ToString("dd/MM/yyyy") 
+                DataDeAquisicao = DateTime.Now 
             }
         ];
         #endregion
@@ -68,7 +68,7 @@ public class LivroRepositoryTests : BaseRepositoryTests<Livro>
             NumeroDePaginas = 150,
             ClassificacaoCatalografica = "New",
             Observacao = "New Obs",
-            DataDeAquisicao = DateTime.Now.ToString("dd/MM/yyyy")
+            DataDeAquisicao = DateTime.Now  
         };
     }
 

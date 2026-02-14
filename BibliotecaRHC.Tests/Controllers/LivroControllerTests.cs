@@ -24,7 +24,7 @@ public class LivroControllerTests
                 NumeroDePaginas = 100,
                 ClassificacaoCatalografica = "Classificação 1",
                 Observacao = "Observação 1",
-                DataDeAquisicao = DateTime.Now.ToString("dd/MM/yyyy")
+                DataDeAquisicao = DateTime.Now
             },
             new()
             {
@@ -36,7 +36,7 @@ public class LivroControllerTests
                 NumeroDePaginas = 200,
                 ClassificacaoCatalografica = "Classificação 2",
                 Observacao = "Observação 2",
-                DataDeAquisicao = DateTime.Now.ToString("dd/MM/yyyy")
+                DataDeAquisicao = DateTime.Now
             },
             new()
             {
@@ -48,7 +48,7 @@ public class LivroControllerTests
                 NumeroDePaginas = 300,
                 ClassificacaoCatalografica = "Classificação 3",
                 Observacao = "Observação 3",
-                DataDeAquisicao = DateTime.Now.ToString("dd/MM/yyyy") }
+                DataDeAquisicao = DateTime.Now }
         ];
         #endregion
     }

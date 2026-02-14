@@ -23,7 +23,17 @@ public class ImportarPlanilhaController : ControllerBase
         if (!arquivo.FileName.EndsWith(".xlsx"))
             return BadRequest("Apenas arquivos .xlsx são permitidos.");
 
-        await _service.ImportarPlanilhaAsync(arquivo);
-        return Ok();
+        List<string> erros = await _service.ImportarPlanilhaAsync(arquivo);
+
+        if (erros.Count > 0)
+        {
+            return BadRequest(new
+            {
+                Mensagem = "A importação foi concluída, mas algumas linhas falharam.",
+                Erros = erros
+            });
+        }
+
+        return Ok(new { Mensagem = "Todos os livros foram importados com sucesso!" });
     }
 }

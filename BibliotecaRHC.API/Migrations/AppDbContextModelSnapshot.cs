@@ -146,9 +146,9 @@ namespace BibliotecaRHC.API.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("DataDeAquisicao")
+                    b.Property<DateTime?>("DataDeAquisicao")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Editora")
                         .IsRequired()

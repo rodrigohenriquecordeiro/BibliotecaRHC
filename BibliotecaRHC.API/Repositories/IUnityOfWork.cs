@@ -1,4 +1,6 @@
-﻿namespace BibliotecaRHC.API.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BibliotecaRHC.API.Repositories;
 
 public interface IUnityOfWork : IDisposable
 {
@@ -6,4 +8,5 @@ public interface IUnityOfWork : IDisposable
     IFrasesInesqueciveisRepository FrasesInesqueciveisRepository { get; }
 
     Task<int> CommitAsync();
+    void LimparRastreador();
 }
