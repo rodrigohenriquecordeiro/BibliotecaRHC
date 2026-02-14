@@ -2,10 +2,16 @@
 {
 <div class="container text-center my-4">
   <h1 class="text-center h2 mb-3 large">Bem vindo a Biblioteca RHC</h1>  
+  
+  <div class="d-flex justify-content-center align-items-center gap-2">
+    <button type="button" [routerLink]="['/cadastrar']" class="btn btn-success btn-primary m-1" style="width: 150px;">
+      Cadastrar Livro
+    </button>
 
-  <button type="button" [routerLink]="['/cadastrar']" class="btn btn-success btn-primary mx-1" style="width: 100px;">
-      Cadastrar
-  </button>
+    <button type="button" [routerLink]="['/*']" class="btn btn-success btn-primary m-1" style="width: 150px;">
+        Importar Planilha
+    </button>
+  </div>
 
   <hr class="mb-4" />
 
