@@ -48,10 +48,12 @@ public class ImportarPlanilhaService : IImportarPlanilha
                     Autor = FormatarTexto(worksheet.Cells[row, 3].Value?.ToString()),
                     Editora = FormatarTexto(worksheet.Cells[row, 4].Value?.ToString()),
                     AnoDePublicacao = FormatarTexto(worksheet.Cells[row, 5].Value), 
-                    NumeroDePaginas = int.TryParse(worksheet.Cells[row, 6].Value?.ToString(), out int pags) ? pags : 0,
+                    NumeroDePaginas = FormatarInteiro(worksheet.Cells[row, 6].Value?.ToString()),
                     ClassificacaoCatalografica = FormatarTexto(worksheet.Cells[row, 7].Value?.ToString()),
                     Observacao = FormatarTexto(worksheet.Cells[row, 8].Value?.ToString()),
-                    DataDeAquisicao = dataAquisicao 
+                    DataDeAquisicao = dataAquisicao,
+                    Lido = FormatarBooleano(worksheet.Cells[row, 10].Value?.ToString()),
+                    AnoUltimaLeitura = FormatarInteiro(worksheet.Cells[row, 11].Value?.ToString())
                 };
 
                 await _livroService.AdicionarLivroAsync(livro);
@@ -105,6 +107,59 @@ public class ImportarPlanilhaService : IImportarPlanilha
 
         if (DateTime.TryParse(textoData, new CultureInfo("pt-BR"), DateTimeStyles.None, out DateTime dataConvertida))
             return dataConvertida;
+
+        return null; 
+    }
+
+    /// <summary>
+    /// Converte valores diversos (Sim, Yes, True, 1, boolean) para bool.
+    /// Padrão é false.
+    /// </summary>
+    private static bool FormatarBooleano(object? valorCelula)
+    {
+        if (valorCelula == null) 
+            return false;
+
+        if (valorCelula is bool valorBool)
+            return valorBool;
+
+        string texto = valorCelula.ToString()?.Trim() ?? string.Empty;
+        string[] valoresVerdadeiros = { "Sim", "S", "Yes", "Y", "True", "1" };
+
+        return valoresVerdadeiros.Contains(texto, StringComparer.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// Converte valor da célula para int?. Retorna null se vazio ou inválido.
+    /// Trata double do Excel e strings numéricas.
+    /// </summary>
+    private static int? FormatarInteiro(object? valorCelula)
+    {
+        if (valorCelula == null) 
+            return null;
+
+        if (valorCelula is double numeroDouble)
+        {
+            try
+            {
+                return Convert.ToInt32(numeroDouble);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        if (valorCelula is int numeroInt)
+            return numeroInt;
+
+        string texto = valorCelula.ToString()?.Trim() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(texto)) 
+            return null;
+
+        if (int.TryParse(texto, out int resultado))
+            return resultado;
 
         return null; 
     }

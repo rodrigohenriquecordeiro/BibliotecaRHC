@@ -101,7 +101,7 @@ export class EditarComponent {
         classificacaoCatalografica: formValue.classificacaoCatalografica!,
         observacao: formValue.observacao || '',
         lido: formValue.lido!,
-        anoUltimaLeitura: formValue.anoDePublicacao!
+        anoUltimaLeitura: formValue.anoUltimaLeitura!
       };
 
       await firstValueFrom(this.service.editar(livro));
