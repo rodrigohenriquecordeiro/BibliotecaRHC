@@ -1,15 +1,16 @@
 @if (livros.length == 0)
 {
 <div class="container text-center my-4">
-  <h1 class="text-center h2 mb-3 large">Bem vindo a Biblioteca RHC</h1>  
-  
+  <h1 class="text-center h2 mb-3 large">Bem vindo a Biblioteca RHC</h1>
+
   <div class="d-flex justify-content-center align-items-center gap-2">
     <button type="button" [routerLink]="['/cadastrar']" class="btn btn-success btn-primary m-1" style="width: 150px;">
       Cadastrar Livro
     </button>
 
-    <button type="button" [routerLink]="['/importar-planilha']" class="btn btn-success btn-primary m-1" style="width: 150px;">
-        Importar Planilha
+    <button type="button" [routerLink]="['/importar-planilha']" class="btn btn-success btn-primary m-1"
+      style="width: 150px;">
+      Importar Planilha
     </button>
   </div>
 
@@ -32,12 +33,12 @@
         Cadastrar
       </button>
 
-      <button type="button" [routerLink]="['/editar']" class="btn btn-primary mx-1"
-        (click)="editarLivro()" [disabled]="idLivrosSelecionados.length !== 1">
+      <button type="button" [routerLink]="['/editar']" class="btn btn-primary mx-1" (click)="editarLivro()"
+        [disabled]="idLivrosSelecionados.length !== 1">
         Editar
       </button>
 
-      <button type="button" class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#modalApagar" 
+      <button type="button" class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#modalApagar"
         [disabled]="idLivrosSelecionados.length === 0">
         Apagar
       </button>
@@ -65,9 +66,9 @@
   </div>
 
   <div class="table-responsive container-tabela mt-4" style="height: calc(100vh - 250px); overflow-y: auto;">
-    <table class="table table-hover w-100"> 
+    <table class="table table-hover w-100">
       <thead class="table-dark" style="position: sticky; top: 0; z-index: 1;">
-          <tr>
+        <tr>
           <th scope="col" class="text-center">#</th>
           <th scope="col" class="text-center">Código</th>
           <th scope="col">Livro</th>
@@ -102,6 +103,36 @@
         </tr>
       </tbody>
     </table>
+
+    <nav aria-label="Navegação de páginas de livros" *ngIf="livros.length > 0">
+      <ul class="pagination justify-content-center">
+
+        <li class="page-item" [class.disabled]="!temPaginaAnterior">
+          <button class="page-link" type="button" (click)="carregarLivros(paginaAtual - 1)">
+            <span aria-hidden="true">&laquo;</span>
+          </button>
+        </li>
+
+        <li class="page-item" 
+            *ngFor="let p of paginasVisiveis" 
+            [class.active]="p === paginaAtual"
+            [class.disabled]="p === '...'">
+          
+          <span *ngIf="p === '...'" class="page-link">...</span>
+
+          <button *ngIf="p !== '...'" class="page-link" type="button" (click)="carregarLivros($any(p))">
+            {{ p }}
+          </button>
+        </li>
+
+        <li class="page-item" [class.disabled]="!temProximaPagina">
+          <button class="page-link" type="button" (click)="carregarLivros(paginaAtual + 1)">
+            <span aria-hidden="true">&raquo;</span>
+          </button>
+        </li>
+
+      </ul>
+    </nav>
   </div>
 </div>
 }

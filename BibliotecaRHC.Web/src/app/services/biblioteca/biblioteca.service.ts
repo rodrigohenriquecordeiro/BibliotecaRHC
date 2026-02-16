@@ -1,6 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Livro } from '../../models/livro';
+import { LivrosPaginados } from '../../models/livrosPaginados';
 import { Frase } from '../../models/frase';
 import { catchError, Observable, throwError, BehaviorSubject } from 'rxjs';
 
@@ -29,6 +30,15 @@ export class BibliotecaService {
       headers: this.getAuthHeaders()
     });
   }
+
+  listarPaginados(pagina: number = 1): Observable<LivrosPaginados> {
+  const params = new HttpParams().set('paginaAtual', pagina.toString());
+
+  return this.http.get<LivrosPaginados>(`${this.API}livros/obter-livros-paginados`, {
+    headers: this.getAuthHeaders(),
+    params: params 
+  });
+}
 
   buscarPorCodigo(id: number): Observable<Livro> {
     return this.http.get<Livro>(`${this.API}livros/obter-livro-por-id/${id}`, {

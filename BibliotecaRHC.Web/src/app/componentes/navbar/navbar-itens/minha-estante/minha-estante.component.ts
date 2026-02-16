@@ -18,6 +18,10 @@ export class MinhaEstanteComponent implements OnInit {
   livros: Livro[] = [];
   idLivrosSelecionados: number[] = [];
   fraseDestaque: Frase | undefined;
+  paginaAtual: number = 1;
+  totalPaginas: number = 0;
+  temProximaPagina: boolean = false;
+  temPaginaAnterior: boolean = false;
 
   constructor(
     private service: BibliotecaService,
@@ -25,14 +29,64 @@ export class MinhaEstanteComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.service.listar().subscribe({
-      next: livros => {
-        this.livros = livros;
+    this.carregarLivros(1);
+    this.GerarFraseAleatoria();
+  }
+
+  carregarLivros(pagina: number): void {
+    console.log('Tentando carregar a página:', pagina);
+
+    if (pagina < 1 || (this.totalPaginas > 0 && pagina > this.totalPaginas)) {
+      return;
+    }
+
+    this.service.listarPaginados(pagina).subscribe({
+      next: (dados: any) => { 
+        this.livros = dados.livros || dados.Livros;
+        this.totalPaginas = dados.totalPaginas || dados.TotalPaginas;
+        this.temPaginaAnterior = dados.temPaginaAnterior || dados.TemPaginaAnterior;
+        this.temProximaPagina = dados.temProximaPagina || dados.TemProximaPagina;
+        
+        this.paginaAtual = pagina;
+        this.idLivrosSelecionados = [];
       },
       error: err => console.error('Erro ao buscar livros:', err)
     });
+  }
 
-    this.GerarFraseAleatoria();
+  get paginas(): number[] {
+    return Array(this.totalPaginas).fill(0).map((x, i) => i + 1);
+  }
+
+  get paginasVisiveis(): (number | string)[] {
+    const total = this.totalPaginas;
+    const atual = this.paginaAtual;
+    const delta = 2; 
+
+    if (total <= 7) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+
+    const lista: (number | string)[] = [];
+    const rangeInicio = Math.max(2, atual - delta);
+    const rangeFim = Math.min(total - 1, atual + delta);
+
+    lista.push(1);
+
+    if (rangeInicio > 2) {
+      lista.push('...');
+    }
+
+    for (let i = rangeInicio; i <= rangeFim; i++) {
+      lista.push(i);
+    }
+
+    if (rangeFim < total - 1) {
+      lista.push('...');
+    }
+
+    lista.push(total);
+    return lista;
   }
 
   onSelecionarLivro(event: any, id: number) {
