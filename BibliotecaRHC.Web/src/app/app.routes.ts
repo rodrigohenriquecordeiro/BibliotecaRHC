@@ -10,6 +10,7 @@ import { AuthGuard } from './auth.guard';
 import { FrasesInesqueciveisDashboardComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis-dashboard/frases-inesqueciveis-dashboard.component';
 import { FrasesInesqueciveisAdicionarComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis-adicionar/frases-inesqueciveis-adicionar.component';
 import { FrasesInesqueciveisEditarComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis-editar/frases-inesqueciveis-editar.component';
+import { ImportarPlanilhaComponent } from './componentes/navbar/navbar-itens/importar-planilha/importar-planilha.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -30,7 +31,8 @@ export const routes: Routes = [
       { path: 'projetos-de-leitura', component: ProjetosDeLeituraComponent },
       { path: 'frases-inesqueciveis-dashboard', component: FrasesInesqueciveisDashboardComponent },
       { path: 'frases-inesqueciveis-adicionar', component: FrasesInesqueciveisAdicionarComponent},
-      { path: 'frases-inesqueciveis-editar', component: FrasesInesqueciveisEditarComponent}
+      { path: 'frases-inesqueciveis-editar', component: FrasesInesqueciveisEditarComponent},
+      { path: 'importar-planilha', component: ImportarPlanilhaComponent}
     ]
   },
   { path: '**', redirectTo: 'login' }
