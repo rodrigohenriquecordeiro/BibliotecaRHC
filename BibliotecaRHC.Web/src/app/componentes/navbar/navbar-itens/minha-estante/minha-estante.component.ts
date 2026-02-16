@@ -5,7 +5,7 @@ import { Livro } from '../../../../models/livro';
 import { BibliotecaService } from '../../../../services/biblioteca/biblioteca.service';
 import { Router, RouterModule } from '@angular/router';
 import { Frase } from '../../../../models/frase';
-import { SimNaoPipe } from '../pipes/sim-nao.pipe';
+import { SimNaoPipe } from '../../../../pipes/sim-nao.pipe';
 
 @Component({
   selector: 'app-minha-estante',

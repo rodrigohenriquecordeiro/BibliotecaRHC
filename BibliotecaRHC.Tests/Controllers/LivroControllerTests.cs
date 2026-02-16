@@ -25,7 +25,8 @@ public class LivroControllerTests
                 ClassificacaoCatalografica = "Classificação 1",
                 Observacao = "Observação 1",
                 DataDeAquisicao = DateTime.Now,
-                Lido = false
+                Lido = false,
+                AnoUltimaLeitura = 2025
             },
             new()
             {
@@ -38,7 +39,8 @@ public class LivroControllerTests
                 ClassificacaoCatalografica = "Classificação 2",
                 Observacao = "Observação 2",
                 DataDeAquisicao = DateTime.Now,
-                Lido = false
+                Lido = false,
+                AnoUltimaLeitura = 2025
             },
             new()
             {
@@ -51,7 +53,8 @@ public class LivroControllerTests
                 ClassificacaoCatalografica = "Classificação 3",
                 Observacao = "Observação 3",
                 DataDeAquisicao = DateTime.Now , 
-                Lido = false
+                Lido = false,
+                AnoUltimaLeitura = 2025
             }
         ];
         #endregion

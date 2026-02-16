@@ -9,4 +9,5 @@ export interface Livro {
     observacao: string;
     dataDeAquisicao: string;
     lido: boolean;
+    anoUltimaLeitura: number;
 }

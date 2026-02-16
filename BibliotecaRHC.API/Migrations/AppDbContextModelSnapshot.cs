@@ -136,6 +136,9 @@ namespace BibliotecaRHC.API.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
+                    b.Property<int?>("AnoUltimaLeitura")
+                        .HasColumnType("int");
+
                     b.Property<string>("Autor")
                         .IsRequired()
                         .HasMaxLength(200)

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BibliotecaRHC.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260216171239_Inicial")]
+    [Migration("20260216181145_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -138,6 +138,9 @@ namespace BibliotecaRHC.API.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
+
+                    b.Property<int?>("AnoUltimaLeitura")
+                        .HasColumnType("int");
 
                     b.Property<string>("Autor")
                         .IsRequired()

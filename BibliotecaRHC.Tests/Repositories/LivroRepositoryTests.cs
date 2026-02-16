@@ -27,7 +27,8 @@ public class LivroRepositoryTests : BaseRepositoryTests<Livro>
                 ClassificacaoCatalografica = "A1", 
                 Observacao = "Obs 1", 
                 DataDeAquisicao = DateTime.Now,
-                Lido = false
+                Lido = false,
+                AnoUltimaLeitura = 2025
             },
             new() 
             { 
@@ -40,7 +41,8 @@ public class LivroRepositoryTests : BaseRepositoryTests<Livro>
                 ClassificacaoCatalografica = "A2", 
                 Observacao = "Obs 2", 
                 DataDeAquisicao = DateTime.Now,
-                Lido = false
+                Lido = false,
+                AnoUltimaLeitura = 2025
             },
             new() 
             { 
@@ -53,7 +55,8 @@ public class LivroRepositoryTests : BaseRepositoryTests<Livro>
                 ClassificacaoCatalografica = "A3", 
                 Observacao = "Obs 3", 
                 DataDeAquisicao = DateTime.Now,
-                Lido = false
+                Lido = false,
+                AnoUltimaLeitura = 2025
             }
         ];
         #endregion
@@ -72,7 +75,8 @@ public class LivroRepositoryTests : BaseRepositoryTests<Livro>
             ClassificacaoCatalografica = "New",
             Observacao = "New Obs",
             DataDeAquisicao = DateTime.Now,
-            Lido = false
+            Lido = false,
+            AnoUltimaLeitura = 2025
         };
     }
 

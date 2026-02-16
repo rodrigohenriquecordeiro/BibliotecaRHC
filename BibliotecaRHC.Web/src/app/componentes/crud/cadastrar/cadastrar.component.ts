@@ -24,10 +24,11 @@ export class CadastrarComponent {
     dataDeAquisicao: new FormControl<string | null>(null, Validators.required),
     classificacaoCatalografica: new FormControl<string | null>(null, Validators.required),
     observacao: new FormControl<string | null>(null),
-    lido: new FormControl<boolean | null>(null, Validators.required)
+    lido: new FormControl<boolean | null>(null, Validators.required),
+    anoUltimaLeitura: new FormControl<number | null>(null, Validators.required)
   });
 
-   constructor(
+  constructor(
     private service: BibliotecaService,
     private router: Router
   ) { }
@@ -36,11 +37,24 @@ export class CadastrarComponent {
     try {
       const proximoCodigo = await firstValueFrom(this.service.obterCodigoProximoLivro());
       const codigoLivro = Number(proximoCodigo);
-  
+
       this.form.get('codigoDoLivro')?.setValue(codigoLivro);
     } catch (error) {
       console.error('Erro ao buscar o código do livro:', error);
     }
+
+    this.ControlaExibicaoCampoLido();
+  }
+
+  private ControlaExibicaoCampoLido() {
+    this.form.get('lido')?.valueChanges.subscribe(isLido => {
+      if (!isLido) {
+        this.form.get('anoUltimaLeitura')?.reset();
+        this.form.get('anoUltimaLeitura')?.clearValidators();
+      } else {
+      }
+      this.form.get('anoUltimaLeitura')?.updateValueAndValidity();
+    });
   }
 
   async cadastrar(): Promise<void> {
@@ -52,7 +66,7 @@ export class CadastrarComponent {
     try {
       const proximoCodigo = await firstValueFrom(this.service.obterCodigoProximoLivro());
       const codigoLivro = Number(proximoCodigo);
-      
+
       this.form.get('codigoDoLivro')?.setValue(codigoLivro);
       const formValue = this.form.value;
 
@@ -72,7 +86,8 @@ export class CadastrarComponent {
         dataDeAquisicao: dataFormatada!,
         classificacaoCatalografica: formValue.classificacaoCatalografica!,
         observacao: formValue.observacao || '',
-        lido: formValue.lido!
+        lido: formValue.lido!,
+        anoUltimaLeitura: formValue.anoUltimaLeitura!
       };
 
       await firstValueFrom(this.service.criar(livro));

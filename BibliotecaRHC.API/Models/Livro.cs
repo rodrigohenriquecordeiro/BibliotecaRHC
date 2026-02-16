@@ -43,6 +43,8 @@ public class Livro
 
     public bool Lido { get; set; } = false;
 
+    public int? AnoUltimaLeitura { get; set; }
+
     public void ValidaClasse()
     {
         ValidationContext context = new(this, serviceProvider: null, items: null);
