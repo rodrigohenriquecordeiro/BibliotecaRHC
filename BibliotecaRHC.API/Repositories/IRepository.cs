@@ -1,4 +1,6 @@
-﻿namespace BibliotecaRHC.API.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BibliotecaRHC.API.Repositories;
 
 public interface IRepository<T> where T : class
 {
@@ -7,4 +9,5 @@ public interface IRepository<T> where T : class
     void Add(T entity);
     void Update(T entity);
     void Remove(T entity);
+    Task<int> CountAsync();
 }

@@ -16,9 +16,21 @@ public class LivroRepository : Repository<Livro>, ILivroRepository
 
         return ultimoLivro?.Id ?? 0;
     }
+
+    public async Task<IEnumerable<Livro>> ObterLivrosPaginados(int paginaAtual, int tamanhoPagina)
+    {
+        var livros = await _context.Livro!
+            .OrderBy(l => l.Id)
+            .Skip((paginaAtual - 1) * tamanhoPagina)
+            .Take(tamanhoPagina)
+            .ToListAsync();
+
+        return livros;
+    }
 }
 
 public interface ILivroRepository : IRepository<Livro>
 {
     Task<int> ObterCodigoUltimoLivroAsync();
+    Task<IEnumerable<Livro>> ObterLivrosPaginados(int paginaAtual, int tamanhoPagina);
 }

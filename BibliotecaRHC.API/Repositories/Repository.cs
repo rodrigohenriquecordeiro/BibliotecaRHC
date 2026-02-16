@@ -37,4 +37,9 @@ public class Repository<T> : IRepository<T> where T : class
         _dbSet.Remove(entity);
         _context.SaveChanges();
     }
+
+    public async Task<int> CountAsync()
+    {
+        return await _context.Set<T>().CountAsync();
+    }
 }

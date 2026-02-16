@@ -29,11 +29,24 @@ public class LivroController : ControllerBase
     public async Task<IActionResult> GetTodos() => Ok(await _service.ObterTodosOsLivros());
 
     [Authorize]
+    [HttpGet("obter-livros-paginados")]
+    public async Task<IActionResult> GetLivrosPaginados([FromQuery] int paginaAtual = 1)
+    {
+        var livros = await _service.ObterTodosOsLivrosPaginados(paginaAtual);
+        if (livros == null) 
+            return NotFound();
+        
+        return Ok(livros);
+    }
+
+    [Authorize]
     [HttpGet("obter-livro-por-id/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var livro = await _service.ObterLivroPorId(id);
-        if (livro == null) return NotFound();
+        if (livro == null) 
+            return NotFound();
+        
         return Ok(livro);
     }
 
@@ -56,7 +69,9 @@ public class LivroController : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         var removido = await _service.RemoverLivro(id);
-        if (removido == null) return NotFound();
+        if (removido == null) 
+            return NotFound();
+        
         return NoContent();
     }
 

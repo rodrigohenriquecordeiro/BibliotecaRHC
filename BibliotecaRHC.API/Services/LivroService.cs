@@ -21,10 +21,28 @@ public class LivroService : ILivroService
         if (!livros.Any())
         {
             _logger.LogInformation("Nenhum livro encontrado.");
-            return Enumerable.Empty<Livro>();
+            return [];
         }
 
         return livros;
+    }
+
+    public async Task<LivroPaginado> ObterTodosOsLivrosPaginados(int paginaAtual)
+    {
+        int tamanhoPagina = 10;
+        int totalLivrosGeral = await _unityOfWork.LivroRepository.CountAsync(); 
+
+        var livrosDaPagina = await _unityOfWork.LivroRepository.ObterLivrosPaginados(paginaAtual, tamanhoPagina);
+        int totalPaginas = (int)Math.Ceiling((double)totalLivrosGeral / tamanhoPagina);
+
+        return new LivroPaginado
+        {
+            Livros = livrosDaPagina,
+            TotalLivros = totalLivrosGeral,
+            TotalPaginas = totalPaginas,
+            TemPaginaAnterior = paginaAtual > 1,
+            TemProximaPagina = paginaAtual < totalPaginas,
+        };
     }
 
     public async Task<Livro?> ObterLivroPorId(int id)
@@ -95,6 +113,7 @@ public class LivroService : ILivroService
 public interface ILivroService
 {
     Task<IEnumerable<Livro>> ObterTodosOsLivros();
+    Task<LivroPaginado> ObterTodosOsLivrosPaginados(int paginaAtual);
     Task<Livro?> ObterLivroPorId(int id);
     Task<Livro> AdicionarLivroAsync(Livro livro);
     Task<Livro?> AtualizarLivro(Livro livro);
