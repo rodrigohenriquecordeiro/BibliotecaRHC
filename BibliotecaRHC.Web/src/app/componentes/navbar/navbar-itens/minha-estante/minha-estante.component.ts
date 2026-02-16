@@ -16,7 +16,7 @@ import { Frase } from '../../../../models/frase';
 export class MinhaEstanteComponent implements OnInit {
   livros: Livro[] = [];
   idLivrosSelecionados: number[] = [];
-  fraseDestaque: Frase | undefined = undefined;
+  fraseDestaque: Frase | undefined;
 
   constructor(
     private service: BibliotecaService,
@@ -86,20 +86,14 @@ export class MinhaEstanteComponent implements OnInit {
     this.router.navigate(['/editar']);
   }
 
-  private GerarFraseAleatoria() {
-    this.service.listarFrases().subscribe({
-      next: (frases: Frase[]) => {
-        const tamanhoArray = frases.length;
-
-        if (tamanhoArray > 0) {
-          const indiceAleatorio = Math.floor(Math.random() * tamanhoArray);
-          this.fraseDestaque = frases[indiceAleatorio];
-        } else {
-          console.warn('A API não retornou nenhuma frase.');
-          this.fraseDestaque = undefined;
-        }
+  private GerarFraseAleatoria(): void {
+    this.service.oterFraseAleatoria().subscribe({
+      next: (listaFrases) => {
+        this.fraseDestaque = listaFrases;
       },
-      error: err => console.error('Erro ao buscar as Frases', err)
+      error: (err) => {
+        console.error('Falha ao carregar frases no dashboard:', err);
+      }
     });
   }
 

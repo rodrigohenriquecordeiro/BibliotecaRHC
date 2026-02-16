@@ -118,6 +118,12 @@ export class BibliotecaService {
     );
   }
 
+  oterFraseAleatoria(): Observable<Frase> {
+    return this.http.get<Frase>(`${this.API}frases/obter-frase-aleatoria`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
   setIdSelecionadoFrase(id: number): void {
     this.idSelecionadoFraseSource.next(id);
   }
