@@ -21,7 +21,7 @@
 </div>
 } @else {
 <div>
-  <div class="d-flex justify-content-between align-items-center my-4 ms-4 mb-0">
+  <div class="d-flex justify-content-between align-items-center my-4 ms-4 mb-4">
 
     <p class="mb-0">
       "<em>{{ fraseDestaque?.frase }}</em>". <strong>{{ fraseDestaque?.autor }}</strong>
@@ -64,10 +64,10 @@
     </div>
   </div>
 
-  <div class="table-responsive">
-    <table class="table my-4 ms-4 table-hover" style="table-layout: auto; width: 100%;">
-      <thead class="table-dark">
-        <tr>
+  <div class="table-responsive container-tabela mt-4" style="height: calc(100vh - 250px); overflow-y: auto;">
+    <table class="table table-hover w-100"> 
+      <thead class="table-dark" style="position: sticky; top: 0; z-index: 1;">
+          <tr>
           <th scope="col" class="text-center">#</th>
           <th scope="col" class="text-center">Código</th>
           <th scope="col">Livro</th>

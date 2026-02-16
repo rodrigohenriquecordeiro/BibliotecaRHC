@@ -17,3 +17,19 @@ td, th {
 .text-wrap {
     white-space: normal; 
 }
+
+.container-tabela {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  background-color: white;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #212529 !important; 
+  color: white;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+}
