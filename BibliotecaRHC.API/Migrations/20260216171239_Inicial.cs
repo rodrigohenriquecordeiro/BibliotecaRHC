@@ -111,7 +111,8 @@ namespace BibliotecaRHC.API.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Observacao = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DataDeAquisicao = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    DataDeAquisicao = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Lido = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {

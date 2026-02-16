@@ -8,4 +8,5 @@ export interface Livro {
     classificacaoCatalografica: string;
     observacao: string;
     dataDeAquisicao: string;
+    lido: boolean;
 }

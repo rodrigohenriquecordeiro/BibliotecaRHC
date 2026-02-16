@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BibliotecaRHC.API.Models;
 
@@ -39,6 +40,8 @@ public class Livro
     [Required(ErrorMessage = "Obrigatório colocar a Data de Aquisição")]
     [DataType(DataType.Date)] 
     public DateTime? DataDeAquisicao { get; set; }
+
+    public bool Lido { get; set; } = false;
 
     public void ValidaClasse()
     {

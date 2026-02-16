@@ -31,7 +31,8 @@ export class EditarComponent {
     anoDePublicacao: new FormControl<number | null>(null, Validators.required),
     dataDeAquisicao: new FormControl<string | null>(null, Validators.required),
     classificacaoCatalografica: new FormControl<string | null>(null, Validators.required),
-    observacao: new FormControl<string | null>(null)
+    observacao: new FormControl<string | null>(null),
+    lido: new FormControl<boolean | null>(null, Validators.required)
   });
 
   constructor(
@@ -73,7 +74,8 @@ export class EditarComponent {
       anoDePublicacao: Number(livro.anoDePublicacao),
       dataDeAquisicao: livro.dataDeAquisicao,
       classificacaoCatalografica: livro.classificacaoCatalografica,
-      observacao: livro.observacao
+      observacao: livro.observacao,
+      lido: livro.lido!
     });
   }
 
@@ -95,7 +97,8 @@ export class EditarComponent {
         anoDePublicacao: formValue.anoDePublicacao!.toString(),
         dataDeAquisicao: formValue.dataDeAquisicao!,
         classificacaoCatalografica: formValue.classificacaoCatalografica!,
-        observacao: formValue.observacao || ''
+        observacao: formValue.observacao || '',
+        lido: formValue.lido!
       };
 
       await firstValueFrom(this.service.editar(livro));

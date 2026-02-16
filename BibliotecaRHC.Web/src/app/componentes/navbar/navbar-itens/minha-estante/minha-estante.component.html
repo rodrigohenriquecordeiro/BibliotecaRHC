@@ -78,6 +78,7 @@
           <th scope="col" class="text-center">Aquisição</th>
           <th scope="col">Classificação</th>
           <th scope="col">Observação</th>
+          <th scope="col">Lido</th>
         </tr>
       </thead>
       <tbody class="table-group-divider">
@@ -95,6 +96,7 @@
           <td class="text-center">{{ livro.dataDeAquisicao | date:'dd/MM/yyyy' }}</td>
           <td class="text-wrap">{{livro.classificacaoCatalografica}}</td>
           <td class="text-wrap">{{livro.observacao}}</td>
+          <td class="text-wrap">{{livro.lido | simNao}}</td>
         </tr>
       </tbody>
     </table>

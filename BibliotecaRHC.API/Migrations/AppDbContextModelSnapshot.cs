@@ -155,6 +155,9 @@ namespace BibliotecaRHC.API.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<bool>("Lido")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("NomeDoLivro")
                         .IsRequired()
                         .HasMaxLength(300)

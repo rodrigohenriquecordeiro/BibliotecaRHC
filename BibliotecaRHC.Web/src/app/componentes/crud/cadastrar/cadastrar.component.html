@@ -41,6 +41,19 @@
                 <label for="observacao" class="form-label"><strong>Observação</strong></label>
                 <input type="text" class="form-control" id="observacao" formControlName="observacao" placeholder="Digite uma observação">
             </div>
+            <div class="col-md-12">
+                <div class="form-check form-switch d-flex align-items-center ps-0">
+                    <label class="form-check-label me-3" for="switchLido">
+                        <strong>Você já leu o Livro?</strong>
+                    </label>
+                    <input 
+                        class="form-check-input ms-0" 
+                        type="checkbox" 
+                        role="switch" 
+                        id="switchLido" 
+                        formControlName="lido">
+                </div>
+            </div>
         </form>
     </div>
 

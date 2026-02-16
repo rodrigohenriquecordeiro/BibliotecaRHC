@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BibliotecaRHC.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260214172838_Inicial")]
+    [Migration("20260216171239_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -157,6 +157,9 @@ namespace BibliotecaRHC.API.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<bool>("Lido")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("NomeDoLivro")
                         .IsRequired()

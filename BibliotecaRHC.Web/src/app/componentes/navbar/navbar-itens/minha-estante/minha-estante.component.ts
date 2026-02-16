@@ -5,11 +5,12 @@ import { Livro } from '../../../../models/livro';
 import { BibliotecaService } from '../../../../services/biblioteca/biblioteca.service';
 import { Router, RouterModule } from '@angular/router';
 import { Frase } from '../../../../models/frase';
+import { SimNaoPipe } from '../pipes/sim-nao.pipe';
 
 @Component({
   selector: 'app-minha-estante',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule],
+  imports: [FormsModule, CommonModule, RouterModule, SimNaoPipe],
   templateUrl: './minha-estante.component.html',
   styleUrl: './minha-estante.component.css'
 })
