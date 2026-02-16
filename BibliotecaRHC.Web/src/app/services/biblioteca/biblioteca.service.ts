@@ -125,4 +125,10 @@ export class BibliotecaService {
   limparFraseSelecionado(): void {
     this.idSelecionadoFraseSource.next(null);
   }
+
+  importarPlanilha(arquivo: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('arquivo', arquivo);
+    return this.http.post(`${this.API}importar-planilha/importar-excel`, formData);
+  }
 }

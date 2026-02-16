@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BibliotecaRHC.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/importar-planilha")]
 public class ImportarPlanilhaController : ControllerBase
 {
     private readonly IImportarPlanilha _service;
@@ -14,7 +14,7 @@ public class ImportarPlanilhaController : ControllerBase
         _service = service;
     }
 
-    [HttpPost("importar")]
+    [HttpPost("importar-excel")]
     public async Task<IActionResult> ImportarExcel(IFormFile arquivo)
     {
         if (arquivo == null || arquivo.Length == 0)
