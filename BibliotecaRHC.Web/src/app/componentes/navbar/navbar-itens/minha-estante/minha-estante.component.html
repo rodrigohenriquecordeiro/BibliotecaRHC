@@ -27,17 +27,17 @@
       "<em>{{ fraseDestaque?.frase }}</em>". <strong>{{ fraseDestaque?.autor }}</strong>
     </p>
 
-    <div>
-      <button type="button" [routerLink]="['/cadastrar']" class="btn btn-primary mx-1" style="width: 100px;">
+    <div class="d-flex flex-column flex-md-row gap-1 justify-content-center">
+      <button type="button" [routerLink]="['/cadastrar']" class="btn btn-primary mx-1">
         Cadastrar
       </button>
 
-      <button type="button" [routerLink]="['/editar']" class="btn btn-primary mx-1" style="width: 100px;"
+      <button type="button" [routerLink]="['/editar']" class="btn btn-primary mx-1"
         (click)="editarLivro()" [disabled]="idLivrosSelecionados.length !== 1">
         Editar
       </button>
 
-      <button type="button" class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#modalApagar"
+      <button type="button" class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#modalApagar" 
         [disabled]="idLivrosSelecionados.length === 0">
         Apagar
       </button>
