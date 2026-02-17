@@ -1,6 +1,6 @@
-﻿using BibliotecaRHC.API.Domain;
-using BibliotecaRHC.API.Models;
+﻿using BibliotecaRHC.API.Models;
 using BibliotecaRHC.API.Repositories;
+using BibliotecaRHC.API.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
 

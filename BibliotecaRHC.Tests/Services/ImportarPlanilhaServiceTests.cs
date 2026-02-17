@@ -2,8 +2,8 @@
 using OfficeOpenXml;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using BibliotecaRHC.API.Domain;
 using BibliotecaRHC.API.Models;
+using BibliotecaRHC.API.Services;
 
 namespace BibliotecaRHC.Tests.Domain;
 

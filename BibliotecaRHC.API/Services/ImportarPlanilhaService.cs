@@ -1,8 +1,8 @@
 ﻿using OfficeOpenXml;
 using BibliotecaRHC.API.Models;
-using System.Globalization; 
+using System.Globalization;
 
-namespace BibliotecaRHC.API.Domain;
+namespace BibliotecaRHC.API.Services;
 
 public class ImportarPlanilhaService : IImportarPlanilha
 {

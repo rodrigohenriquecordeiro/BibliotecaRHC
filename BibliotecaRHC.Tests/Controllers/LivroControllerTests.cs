@@ -1,6 +1,6 @@
 ﻿using BibliotecaRHC.API.Controllers;
-using BibliotecaRHC.API.Domain;
 using BibliotecaRHC.API.Models;
+using BibliotecaRHC.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 

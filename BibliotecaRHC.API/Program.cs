@@ -1,5 +1,4 @@
 using BibliotecaRHC.API.Context;
-using BibliotecaRHC.API.Domain;
 using BibliotecaRHC.API.Models;
 using BibliotecaRHC.API.Repositories;
 using BibliotecaRHC.API.Services;

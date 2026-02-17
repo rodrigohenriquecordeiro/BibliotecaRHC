@@ -1,7 +1,7 @@
 ﻿using BibliotecaRHC.API.Models;
 using BibliotecaRHC.API.Repositories;
 
-namespace BibliotecaRHC.API.Domain
+namespace BibliotecaRHC.API.Services
 {
     public class FrasesInesqueciveisService: IFrasesInesqueciveisService
     {

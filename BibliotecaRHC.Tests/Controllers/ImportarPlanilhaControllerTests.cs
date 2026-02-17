@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using BibliotecaRHC.API.Controllers;
-using BibliotecaRHC.API.Domain;
+using BibliotecaRHC.API.Services;
 
 namespace BibliotecaRHC.Tests.Controllers;
 

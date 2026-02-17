@@ -1,5 +1,5 @@
-﻿using BibliotecaRHC.API.Domain;
-using BibliotecaRHC.API.Models;
+﻿using BibliotecaRHC.API.Models;
+using BibliotecaRHC.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

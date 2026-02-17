@@ -1,5 +1,5 @@
-﻿using BibliotecaRHC.API.Domain;
-using BibliotecaRHC.API.Models;
+﻿using BibliotecaRHC.API.Models;
+using BibliotecaRHC.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,6 +48,17 @@ public class LivroController : ControllerBase
             return NotFound();
         
         return Ok(livro);
+    }
+
+    [Authorize]
+    [HttpGet("filtra-dashboard")]
+    public async Task<IActionResult> GetLivrosFiltrados([FromQuery] string campo, string valor)
+    {
+        var livros = await _service.ObterLivrosFiltrados(campo, valor);
+        if (livros == null)
+            return NotFound();
+
+        return Ok(livros);
     }
 
     [Authorize]

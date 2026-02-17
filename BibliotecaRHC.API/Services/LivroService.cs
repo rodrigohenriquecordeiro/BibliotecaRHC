@@ -1,7 +1,7 @@
 ﻿using BibliotecaRHC.API.Models;
 using BibliotecaRHC.API.Repositories;
 
-namespace BibliotecaRHC.API.Domain;
+namespace BibliotecaRHC.API.Services;
 
 public class LivroService : ILivroService
 {
@@ -56,6 +56,8 @@ public class LivroService : ILivroService
 
         return livro;
     }
+
+    public async Task<IEnumerable<Livro>> ObterLivrosFiltrados(string campo, string valor) => await _unityOfWork.LivroRepository.ObterLivrosFiltrados(campo, valor);
 
     public async Task<Livro> AdicionarLivroAsync(Livro livro)
     {
@@ -115,6 +117,7 @@ public interface ILivroService
     Task<IEnumerable<Livro>> ObterTodosOsLivros();
     Task<LivroPaginado> ObterTodosOsLivrosPaginados(int paginaAtual);
     Task<Livro?> ObterLivroPorId(int id);
+    Task<IEnumerable<Livro>> ObterLivrosFiltrados(string campo, string valor);
     Task<Livro> AdicionarLivroAsync(Livro livro);
     Task<Livro?> AtualizarLivro(Livro livro);
     Task<Livro?> RemoverLivro(int id);
