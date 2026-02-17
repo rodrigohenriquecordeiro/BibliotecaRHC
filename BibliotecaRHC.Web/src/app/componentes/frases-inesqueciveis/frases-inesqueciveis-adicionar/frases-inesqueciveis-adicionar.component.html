@@ -17,12 +17,13 @@
           <label class="form-label"><strong>Autor</strong></label>
 
           <select class="form-select mb-2" [value]="autorSelecionado" (change)="onAutorChange($event)">
+            <option value="novo">-- Cadastre um novo Autor --</option>
+            
             <option value="" disabled>Selecione um autor...</option>
 
             <option *ngFor="let autorNome of listaAutoresUnicos" [value]="autorNome">
               {{ autorNome }}
             </option>
-            <option value="novo">-- Cadastre um novo Autor --</option>
           </select>
 
           <input *ngIf="mostrarInputAutor" type="text" class="form-control mt-2"
@@ -33,12 +34,13 @@
           <label for="livro" class="form-label"><strong>Nome do Livro</strong></label>
           
           <select class="form-select mb-2" [value]="livroSelecionado" (change)="onLivroChange($event)">
+            <option value="novo">-- Digite o nome de um livro --</option>
+            
             <option value="" disabled>Selecione um livro...</option>
 
             <option *ngFor="let nomeLivro of listaLivrosUnicos" [value]="nomeLivro">
               {{ nomeLivro }}
             </option>
-            <option value="novo">-- Digite o nome de um livro --</option>
           </select>
 
           <input *ngIf="mostrarInputLivro" type="text" class="form-control mt-2"
