@@ -7,3 +7,47 @@
     color: orange;
     transition: color 0.3s ease;
 }
+
+:host {
+  --borda-escura: rgba(0, 0, 0, 0.25);
+  --fundo-escuro: rgba(0, 0, 0, 0.1);
+  --texto-branco: #ffffff;
+}
+
+.btn-inset {
+  border-color: var(--borda-escura) !important;
+  color: rgba(255, 255, 255, 0.9);
+  transition: all 0.2s ease;
+}
+
+.btn-inset:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #fff;
+  border-color: var(--borda-escura) !important;
+}
+
+.input-inset {
+  background-color: var(--fundo-escuro) !important; 
+  border-color: var(--borda-escura) !important;
+  color: var(--texto-branco) !important;
+  border-left: none;
+  border-right: none;
+}
+
+.input-inset::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important; 
+}
+
+.input-inset:focus {
+  background-color: rgba(0, 0, 0, 0.2) !important; 
+  box-shadow: none !important;
+  border-color: var(--borda-escura) !important;
+}
+
+.input-group .btn-inset {
+  z-index: 2;
+}
+
+.dropdown-item {
+  cursor: pointer; 
+}

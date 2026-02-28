@@ -32,13 +32,23 @@ export class BibliotecaService {
   }
 
   listarPaginados(pagina: number = 1): Observable<LivrosPaginados> {
-  const params = new HttpParams().set('paginaAtual', pagina.toString());
+    const params = new HttpParams().set('paginaAtual', pagina.toString());
 
-  return this.http.get<LivrosPaginados>(`${this.API}livros/obter-livros-paginados`, {
-    headers: this.getAuthHeaders(),
-    params: params 
-  });
-}
+    return this.http.get<LivrosPaginados>(`${this.API}livros/obter-livros-paginados`, {
+      headers: this.getAuthHeaders(),
+      params: params
+    });
+  }
+
+  listarFiltrados(campo: string, valor: string): Observable<Livro[]> {
+    const params = new HttpParams().set('campo', campo.toString())
+                                   .set('valor', valor.toString());
+
+    return this.http.get<Livro[]>(`${this.API}livros/filtra-dashboard`, {
+      headers: this.getAuthHeaders(),
+      params: params
+    });                                
+  }
 
   buscarPorCodigo(id: number): Observable<Livro> {
     return this.http.get<Livro>(`${this.API}livros/obter-livro-por-id/${id}`, {
