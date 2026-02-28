@@ -29,7 +29,7 @@
 
       <div class="d-flex align-items-center gap-3 ms-auto mt-3 mt-lg-0">
 
-        <form class="d-flex m-0" role="search">
+        <form class="d-flex m-0" role="search" (submit)="pesquisar(inputBusca.value); $event.preventDefault()">
           <div class="input-group">
 
             <button class="btn btn-inset dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,7 +51,7 @@
             </ul>
 
             <input #inputBusca type="search" class="form-control input-inset" [placeholder]="placeHolderFiltro"
-              aria-label="Pesquisar" style="min-width: 500px;">
+              aria-label="Pesquisar">
 
             <button class="btn btn-inset" type="submit">
               <i class="bi bi-search"></i> Pesquisar

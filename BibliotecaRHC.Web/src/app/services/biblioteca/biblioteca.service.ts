@@ -4,6 +4,7 @@ import { Livro } from '../../models/livro';
 import { LivrosPaginados } from '../../models/livrosPaginados';
 import { Frase } from '../../models/frase';
 import { catchError, Observable, throwError, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class BibliotecaService {
@@ -31,23 +32,36 @@ export class BibliotecaService {
     });
   }
 
-  listarPaginados(pagina: number = 1): Observable<LivrosPaginados> {
-    const params = new HttpParams().set('paginaAtual', pagina.toString());
+  listarLivros(pagina: number = 1, campo: string = '', valor: string = ''): Observable<LivrosPaginados> {
 
-    return this.http.get<LivrosPaginados>(`${this.API}livros/obter-livros-paginados`, {
-      headers: this.getAuthHeaders(),
-      params: params
-    });
-  }
+    if (valor && valor.trim() !== '') {
+      const params = new HttpParams()
+        .set('campo', campo)
+        .set('valor', valor);
 
-  listarFiltrados(campo: string, valor: string): Observable<Livro[]> {
-    const params = new HttpParams().set('campo', campo.toString())
-                                   .set('valor', valor.toString());
+      return this.http.get<Livro[]>(`${this.API}livros/filtra-dashboard`, {
+        headers: this.getAuthHeaders(),
+        params: params
+      }).pipe(
+        map((livrosFiltrados: Livro[]) => {
+          return {
+            Livros: livrosFiltrados,
+            TotalLivros: livrosFiltrados.length, 
+            TotalPaginas: 1,                     
+            TemPaginaAnterior: false,
+            TemProximaPagina: false
+          } as LivrosPaginados;
+        })
+      );
 
-    return this.http.get<Livro[]>(`${this.API}livros/filtra-dashboard`, {
-      headers: this.getAuthHeaders(),
-      params: params
-    });                                
+    } else {
+      const params = new HttpParams().set('paginaAtual', pagina.toString());
+
+      return this.http.get<LivrosPaginados>(`${this.API}livros/obter-livros-paginados`, {
+        headers: this.getAuthHeaders(),
+        params: params
+      });
+    }
   }
 
   buscarPorCodigo(id: number): Observable<Livro> {

@@ -1,10 +1,12 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FiltroService } from '../../../services/filtro/filtro.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
-  standalone: true, 
+  standalone: true,
   imports: [RouterModule, CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
@@ -15,7 +17,9 @@ export class NavbarComponent implements AfterViewInit {
 
   filtroSelecionado: string = 'Livro';
   placeHolderFiltro: string = 'Selecione um filtro';
-  
+
+  private inscricaoFiltro!: Subscription;
+
   private readonly placeholders: Record<string, string> = {
     'Livro': 'Digite um livro',
     'Autor': 'Digite um autor',
@@ -29,7 +33,23 @@ export class NavbarComponent implements AfterViewInit {
     'Observação': 'Digite uma observação'
   };
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private filtroService: FiltroService) { }
+
+  ngOnInit() {
+    this.inscricaoFiltro = this.filtroService.filtroAtual$.subscribe(filtro => {
+      if (filtro.termo === '' && this.inputBusca) {
+        this.inputBusca.nativeElement.value = '';
+        this.filtroSelecionado = 'Livro';
+        this.placeHolderFiltro = this.placeholders['Livro'];
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.inscricaoFiltro) this.inscricaoFiltro.unsubscribe();
+  }
 
   ngAfterViewInit() {
     this.inputBusca?.nativeElement?.focus();
@@ -44,5 +64,15 @@ export class NavbarComponent implements AfterViewInit {
   logout() {
     localStorage.removeItem('usuarioLogado');
     this.router.navigate(['/login']);
+  }
+
+  pesquisar(termo: string) {
+    let campoParaAPI = this.filtroSelecionado;
+
+    if (campoParaAPI === 'Livro') {
+      campoParaAPI = 'NomeDoLivro';
+    }
+
+    this.filtroService.atualizarFiltro(campoParaAPI, termo);
   }
 }

@@ -6,6 +6,9 @@ import { BibliotecaService } from '../../../../services/biblioteca/biblioteca.se
 import { Router, RouterModule } from '@angular/router';
 import { Frase } from '../../../../models/frase';
 import { SimNaoPipe } from '../../../../pipes/sim-nao.pipe';
+import { Subscription } from 'rxjs';
+import { FiltroService } from '../../../../services/filtro/filtro.service'
+import { LivrosPaginados } from '../../../../models/livrosPaginados';
 
 @Component({
   selector: 'app-minha-estante',
@@ -17,40 +20,60 @@ import { SimNaoPipe } from '../../../../pipes/sim-nao.pipe';
 export class MinhaEstanteComponent implements OnInit {
   livros: Livro[] = [];
   idLivrosSelecionados: number[] = [];
+
   fraseDestaque: Frase | undefined;
+
   paginaAtual: number = 1;
   totalPaginas: number = 0;
   temProximaPagina: boolean = false;
   temPaginaAnterior: boolean = false;
 
+  private inscricaoFiltro!: Subscription;
+  campoFiltroAtual: string = 'nomeDoLivro';
+  valorFiltroAtual: string = '';
+
   constructor(
     private service: BibliotecaService,
-    private router: Router
+    private router: Router,
+    private filtroService: FiltroService
   ) { }
 
   ngOnInit(): void {
-    this.carregarLivros(1);
+    this.inscricaoFiltro = this.filtroService.filtroAtual$.subscribe(filtro => {
+      this.campoFiltroAtual = filtro.tipo;
+      this.valorFiltroAtual = filtro.termo;
+      this.carregarLivros(1);
+    });
+
     this.GerarFraseAleatoria();
   }
 
-  carregarLivros(pagina: number): void {
-    console.log('Tentando carregar a página:', pagina);
+  ngOnDestroy(): void {
+    if (this.inscricaoFiltro) {
+      this.inscricaoFiltro.unsubscribe();
+    }
+  }
 
+  carregarLivros(pagina: number): void {
     if (pagina < 1 || (this.totalPaginas > 0 && pagina > this.totalPaginas)) {
       return;
     }
 
-    this.service.listarPaginados(pagina).subscribe({
-      next: (dados: any) => { 
-        this.livros = dados.livros || dados.Livros;
-        this.totalPaginas = dados.totalPaginas || dados.TotalPaginas;
-        this.temPaginaAnterior = dados.temPaginaAnterior || dados.TemPaginaAnterior;
-        this.temProximaPagina = dados.temProximaPagina || dados.TemProximaPagina;
-        
+    this.idLivrosSelecionados = [];
+
+    this.service.listarLivros(pagina, this.campoFiltroAtual, this.valorFiltroAtual).subscribe({
+      next: (dados: any) => {
+        this.livros = dados.Livros || dados.livros || [];
+        this.totalPaginas = Number(dados.TotalPaginas || dados.totalPaginas || 0);
+        this.temPaginaAnterior = Boolean(dados.TemPaginaAnterior || dados.temPaginaAnterior);
+        this.temProximaPagina = Boolean(dados.TemProximaPagina || dados.temProximaPagina);
+
         this.paginaAtual = pagina;
-        this.idLivrosSelecionados = [];
       },
-      error: err => console.error('Erro ao buscar livros:', err)
+      error: (err) => {
+        console.error('Erro ao buscar livros:', err);
+        this.livros = [];
+      }
     });
   }
 
@@ -61,7 +84,7 @@ export class MinhaEstanteComponent implements OnInit {
   get paginasVisiveis(): (number | string)[] {
     const total = this.totalPaginas;
     const atual = this.paginaAtual;
-    const delta = 2; 
+    const delta = 2;
 
     if (total <= 7) {
       return Array.from({ length: total }, (_, i) => i + 1);
@@ -103,7 +126,7 @@ export class MinhaEstanteComponent implements OnInit {
   }
 
   confirmarApagar() {
-    if (this.idLivrosSelecionados.length === 0) {
+    if (this.idLivrosSelecionados?.length === 0) {
       console.warn('Nenhum livro selecionado para exclusão.');
       return;
     }
@@ -154,5 +177,13 @@ export class MinhaEstanteComponent implements OnInit {
 
   gerarIdAleatorio(tamanhoMaximo: number): number {
     return Math.floor(Math.random() * tamanhoMaximo) + 1;
+  }
+
+  get temFiltroAtivo(): boolean {
+    return this.valorFiltroAtual !== undefined && this.valorFiltroAtual.trim() !== '';
+  }
+
+  limparFiltro() {
+    this.filtroService.atualizarFiltro('Livro', '');
   }
 }

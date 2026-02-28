@@ -1,5 +1,4 @@
-@if (livros.length == 0)
-{
+@if (livros.length === 0 && !temFiltroAtivo) {
 <div class="container text-center my-4">
   <h1 class="text-center h2 mb-3 large">Bem vindo a Biblioteca RHC</h1>
 
@@ -19,6 +18,19 @@
   <div class="alert alert-info w-80 text-center" role="alert">
     <span class="text-center mb-4">Nenhum livro foi adicionado ainda.</span>
   </div>
+</div>
+}
+@else if (livros.length === 0 && temFiltroAtivo) {
+<div class="container text-center my-5">
+  <i class="bi bi-search" style="font-size: 3rem; color: #6c757d;"></i>
+  <h3 class="mt-3 text-muted">Nenhum livro encontrado</h3>
+  <p class="text-secondary">
+    Não encontramos resultados na sua estante para o filtro <strong>{{ campoFiltroAtual }}</strong> com o termo
+    "<strong>{{ valorFiltroAtual }}</strong>".
+  </p>
+  <button class="btn btn-outline-primary mt-2" (click)="limparFiltro()">
+    <i class="bi bi-x-circle"></i> Limpar Filtro e Voltar
+  </button>
 </div>
 } @else {
 <div>
@@ -113,11 +125,9 @@
           </button>
         </li>
 
-        <li class="page-item" 
-            *ngFor="let p of paginasVisiveis" 
-            [class.active]="p === paginaAtual"
-            [class.disabled]="p === '...'">
-          
+        <li class="page-item" *ngFor="let p of paginasVisiveis" [class.active]="p === paginaAtual"
+          [class.disabled]="p === '...'">
+
           <span *ngIf="p === '...'" class="page-link">...</span>
 
           <button *ngIf="p !== '...'" class="page-link" type="button" (click)="carregarLivros($any(p))">
