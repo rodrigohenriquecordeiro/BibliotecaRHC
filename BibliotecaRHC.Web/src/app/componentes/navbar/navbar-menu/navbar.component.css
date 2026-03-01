@@ -65,6 +65,10 @@
     width: 100%; 
   }
 
+  .input-inset {
+    text-align: center;
+  }
+
   .mobile-stack {
     display: flex;
     flex-direction: column;

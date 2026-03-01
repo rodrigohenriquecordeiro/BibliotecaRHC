@@ -42,7 +42,7 @@ public class LivroRepository : Repository<Livro>, ILivroRepository
             "classificacaocatalografica" => query.Where(x => x.ClassificacaoCatalografica!.Equals(FormataString(valor))),
             "observacao" => query.Where(x => x.Observacao!.Contains(FormataString(valor))),
             "datadeaquisicao" => query.Where(x => x.DataDeAquisicao == DateTime.Parse(valor.Trim())),
-            "lido" => query.Where(x => x.Lido == bool.Parse(valor.Trim())),
+            "lido" => query.Where(x => x.Lido == FormataBool(valor)),
             "anoultimaleitura" => query.Where(x => x.AnoUltimaLeitura == int.Parse(valor.Trim())),
             _ => query
         };
@@ -51,6 +51,8 @@ public class LivroRepository : Repository<Livro>, ILivroRepository
     }
 
     private static string FormataString(string valor) => valor.Trim().ToLower();
+
+    private static bool FormataBool(string valor) => valor.Trim().ToLower().Equals("sim");
 }
 
 public interface ILivroRepository : IRepository<Livro>

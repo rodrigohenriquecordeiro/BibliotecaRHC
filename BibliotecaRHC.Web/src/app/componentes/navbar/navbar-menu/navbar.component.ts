@@ -16,7 +16,7 @@ export class NavbarComponent implements AfterViewInit {
   @ViewChild('inputBusca') inputBusca!: ElementRef;
 
   filtroSelecionado: string = 'Livro';
-  placeHolderFiltro: string = 'Selecione um filtro';
+  placeHolderFiltro: string = 'Selecione um filtro ou digite um livro';
 
   private inscricaoFiltro!: Subscription;
 
@@ -31,6 +31,19 @@ export class NavbarComponent implements AfterViewInit {
     'Você já leu?': 'Digite SIM ou NÃO',
     'Última leitura': 'Digite o ano da última leitura',
     'Observação': 'Digite uma observação'
+  };
+
+  private readonly camposParaAPI: Record<string, string> = {
+    'Livro': 'nomedolivro',
+    'Autor': 'autor',
+    'Editora': 'editora',
+    'Número de Páginas': 'numerodepaginas',
+    'Ano de Publicação': 'anodepublicacao',
+    'Data de Aquisição': 'datadeaquisicao',
+    'Classificação Catalográfica': 'classificacaocatalografica',
+    'Você já leu?': 'lido',
+    'Última leitura': 'anoultimaleitura',
+    'Observação': 'observacao'
   };
 
   constructor(
@@ -67,12 +80,7 @@ export class NavbarComponent implements AfterViewInit {
   }
 
   pesquisar(termo: string) {
-    let campoParaAPI = this.filtroSelecionado;
-
-    if (campoParaAPI === 'Livro') {
-      campoParaAPI = 'NomeDoLivro';
-    }
-
-    this.filtroService.atualizarFiltro(campoParaAPI, termo);
+    const campoAPI = this.camposParaAPI[this.filtroSelecionado];
+    this.filtroService.atualizarFiltro(campoAPI, termo);
   }
 }
