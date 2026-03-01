@@ -83,8 +83,6 @@ export class MinhaEstanteComponent implements OnInit {
         this.temProximaPagina = Boolean(dados.TemProximaPagina || dados.temProximaPagina);
         this.paginaAtual = pagina;
 
-        console.log('this.campoFiltroAtual', this.campoFiltroAtual);
-        console.log('this.campoAmigavelParaErro', this.campoAmigavelParaErro[this.campoFiltroAtual]);
         this.campoFiltroComErroAmigavel = this.campoAmigavelParaErro[this.campoFiltroAtual];
       },
       error: (err) => {

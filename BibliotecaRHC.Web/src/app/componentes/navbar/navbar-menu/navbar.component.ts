@@ -28,7 +28,7 @@ export class NavbarComponent implements AfterViewInit {
     'Ano de Publicação': 'Digite o ano de publicação',
     'Data de Aquisição': 'Digite a data de aquisição (dd/mm/aaaa)',
     'Classificação Catalográfica': 'Digite a classificação catalográfica',
-    'Você já leu?': 'Digite SIM ou NÃO',
+    'Você já leu?': 'Digite sim ou não',
     'Última leitura': 'Digite o ano da última leitura',
     'Observação': 'Digite uma observação'
   };

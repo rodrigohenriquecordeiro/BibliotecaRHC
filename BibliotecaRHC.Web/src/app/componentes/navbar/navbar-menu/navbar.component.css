@@ -52,11 +52,34 @@
   cursor: pointer; 
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1235px) {
   .container-busca-sair {
     width: 100%;
     max-width: 750px; 
-    justify-content: flex-end; 
+    justify-content: flex-end;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1234px) {
+  #navbarContent {
+    flex-wrap: wrap; 
+  }
+  
+  .navbar-nav {
+    flex-basis: 100%; 
+    margin-bottom: 5px !important; 
+  }
+
+  .container-busca-sair {
+    width: 100%; 
+    margin-left: 0 !important; 
+    justify-content: space-between !important; 
+  }
+
+  .container-busca-sair form {
+    flex-grow: 0 !important; 
+    width: 80%; 
+    max-width: 700px; 
   }
 }
 
