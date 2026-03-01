@@ -71,6 +71,7 @@ export class NavbarComponent implements AfterViewInit {
   mudarFiltro(novoValor: string) {
     this.filtroSelecionado = novoValor;
     this.placeHolderFiltro = this.placeholders[novoValor] || 'Selecione um filtro';
+    this.inputBusca.nativeElement.value = '';
     this.inputBusca.nativeElement.focus();
   }
 
