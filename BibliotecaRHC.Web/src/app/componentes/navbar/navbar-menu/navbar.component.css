@@ -51,3 +51,34 @@
 .dropdown-item {
   cursor: pointer; 
 }
+
+@media (min-width: 992px) {
+  .container-busca-sair {
+    width: 100%;
+    max-width: 750px; 
+    justify-content: flex-end; 
+  }
+}
+
+@media (max-width: 991.98px) {
+  .btn-sair {
+    width: 100%; 
+  }
+
+  .mobile-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; 
+  }
+
+  .mobile-stack > .btn, 
+  .mobile-stack > .form-control {
+    width: 100% !important;
+    border-radius: 6px !important; 
+  }
+
+  .mobile-stack .input-inset {
+    border-left: 1px solid var(--borda-escura) !important; 
+    border-right: 1px solid var(--borda-escura) !important;
+  }
+}

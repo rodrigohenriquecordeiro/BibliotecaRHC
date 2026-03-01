@@ -27,10 +27,11 @@
         </li>
       </ul>
 
-      <div class="d-flex align-items-center gap-3 ms-auto mt-3 mt-lg-0">
+      <div
+        class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-3 ms-lg-auto mt-3 mt-lg-0 container-busca-sair">
 
-        <form class="d-flex m-0" role="search" (submit)="pesquisar(inputBusca.value); $event.preventDefault()">
-          <div class="input-group">
+        <form class="d-flex m-0 w-100" role="search" (submit)="pesquisar(inputBusca.value); $event.preventDefault()">
+          <div class="input-group mobile-stack">
 
             <button class="btn btn-inset dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               {{ filtroSelecionado }}
@@ -60,7 +61,7 @@
           </div>
         </form>
 
-        <button class="btn btn-outline-danger" (click)="logout()">Sair</button>
+        <button class="btn btn-outline-danger btn-sair" (click)="logout()">Sair</button>
       </div>
     </div>
   </div>
