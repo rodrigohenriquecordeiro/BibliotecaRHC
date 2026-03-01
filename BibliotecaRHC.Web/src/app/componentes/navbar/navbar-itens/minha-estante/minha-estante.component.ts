@@ -31,6 +31,20 @@ export class MinhaEstanteComponent implements OnInit {
   private inscricaoFiltro!: Subscription;
   campoFiltroAtual: string = 'nomeDoLivro';
   valorFiltroAtual: string = '';
+  campoFiltroComErroAmigavel: string = '';
+
+   private readonly campoAmigavelParaErro: Record<string, string> = {
+    'nomedolivro': 'Livro',
+    'autor': 'Autor',
+    'editora': 'Editora',
+    'numerodepaginas': 'Némero de Páginas',
+    'anodepublicacao': 'Ano de Publicação',
+    'datadeaquisicao': 'Data de Aquisição',
+    'classificacaocatalografica': 'Classificação Catalográfica',
+    'lido': 'Você já leu?',
+    'anoultimaleitura': 'Última leitura',
+    'observacao': 'Observação'
+  };
 
   constructor(
     private service: BibliotecaService,
@@ -67,8 +81,11 @@ export class MinhaEstanteComponent implements OnInit {
         this.totalPaginas = Number(dados.TotalPaginas || dados.totalPaginas || 0);
         this.temPaginaAnterior = Boolean(dados.TemPaginaAnterior || dados.temPaginaAnterior);
         this.temProximaPagina = Boolean(dados.TemProximaPagina || dados.temProximaPagina);
-
         this.paginaAtual = pagina;
+
+        console.log('this.campoFiltroAtual', this.campoFiltroAtual);
+        console.log('this.campoAmigavelParaErro', this.campoAmigavelParaErro[this.campoFiltroAtual]);
+        this.campoFiltroComErroAmigavel = this.campoAmigavelParaErro[this.campoFiltroAtual];
       },
       error: (err) => {
         console.error('Erro ao buscar livros:', err);
