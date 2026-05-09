@@ -92,6 +92,10 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IFrasesInesqueciveisRepository, FraseInesquecivelRepository>();
 builder.Services.AddScoped<IFrasesInesqueciveisService, FrasesInesqueciveisService>();
 builder.Services.AddScoped<IImportarPlanilha, ImportarPlanilhaService>();
+builder.Services.AddScoped<IProjetoRepository, ProjetoRepository>();
+builder.Services.AddScoped<IProjetoService, ProjetoService>();
+builder.Services.AddScoped<ILivroProjetoRepository, LivroProjetoRepository>();
+builder.Services.AddScoped<ILivroProjetoService, LivroProjetoService>();
 
 builder.Services.AddCors(options =>
 {

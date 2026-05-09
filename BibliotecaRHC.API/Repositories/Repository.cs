@@ -1,4 +1,5 @@
-﻿using BibliotecaRHC.API.Context;
+﻿using System.Linq.Expressions;
+using BibliotecaRHC.API.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaRHC.API.Repositories;
@@ -38,8 +39,10 @@ public class Repository<T> : IRepository<T> where T : class
         _context.SaveChanges();
     }
 
-    public async Task<int> CountAsync()
-    {
-        return await _context.Set<T>().CountAsync();
-    }
+    public void RemoveRange(IEnumerable<T> entities) => _dbSet.RemoveRange(entities);
+
+    public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate) => await _dbSet.Where(predicate).ToListAsync();
+
+    public async Task<int> CountAsync() => await _context.Set<T>().CountAsync();
+    
 }

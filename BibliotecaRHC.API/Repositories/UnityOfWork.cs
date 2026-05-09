@@ -7,6 +7,8 @@ public class UnityOfWork : IUnityOfWork
     private readonly AppDbContext _context;
     private ILivroRepository? _livroRepository;
     private IFrasesInesqueciveisRepository? _frasesInesqueciveisRepository;
+    private IProjetoRepository? _projetoRepository;
+    private ILivroProjetoRepository? _livroProjetoRepository;
 
     public UnityOfWork(AppDbContext context)
     {
@@ -15,6 +17,8 @@ public class UnityOfWork : IUnityOfWork
 
     public ILivroRepository LivroRepository => _livroRepository ??= new LivroRepository(_context);
     public IFrasesInesqueciveisRepository FrasesInesqueciveisRepository => _frasesInesqueciveisRepository ??= new FraseInesquecivelRepository(_context);
+    public IProjetoRepository ProjetoRepository =>  _projetoRepository ??= new ProjetoRepository(_context);
+    public ILivroProjetoRepository LivroProjetoRepository => _livroProjetoRepository ??= new LivroProjetoRepository(_context);
 
     public async Task<int> CommitAsync() => await _context.SaveChangesAsync();
 
