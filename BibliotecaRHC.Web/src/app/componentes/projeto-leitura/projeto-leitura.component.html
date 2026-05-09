@@ -1,0 +1,82 @@
+<div class="container mt-4 mb-5" data-bs-theme="dark">
+  
+  <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+    <h2 class="text-white m-0"><i class="bi bi-journal-bookmark"></i> Meus Projetos de Leitura</h2>
+    <button class="btn btn-warning fw-bold">
+      <i class="bi bi-plus-lg"></i> Novo Projeto
+    </button>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-md-6 col-lg-4" *ngFor="let projeto of projetos">
+      <div class="card bg-card-escuro h-100 borda-customizada shadow-sm">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+          <h4 class="card-title text-white mb-3">{{ projeto.nome }}</h4>
+          <span class="badge bg-secondary mb-3">{{ projeto.livros.length }} Livros</span>
+          
+          <button class="btn btn-outline-light w-100" data-bs-toggle="modal" data-bs-target="#modalProjeto" (click)="abrirModalProjeto(projeto)">
+            Gerenciar Projeto
+          </button>
+        </div>
+        
+        <div class="card-footer bg-transparent border-top borda-customizada d-flex justify-content-between">
+          <button class="btn btn-sm btn-outline-warning" title="Editar Projeto"><i class="bi bi-pencil"></i> Editar</button>
+          <button class="btn btn-sm btn-outline-danger" title="Excluir Projeto"><i class="bi bi-trash"></i> Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal fade" id="modalProjeto" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+    <div class="modal-content bg-card-escuro text-white borda-customizada">
+      
+      <div class="modal-header border-bottom borda-customizada">
+        <h5 class="modal-title fw-bold text-warning">{{ projetoSelecionado?.nome }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-0">
+        <div class="p-4 text-center text-muted" *ngIf="projetoSelecionado?.livros?.length === 0">
+          Nenhum livro cadastrado neste projeto ainda.
+        </div>
+
+        <div class="list-group list-group-flush rounded-0">
+          <div class="list-group-item bg-transparent text-white border-bottom borda-customizada p-3" *ngFor="let livro of projetoSelecionado?.livros">
+            
+            <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
+              
+              <div class="flex-grow-1">
+                <h6 class="mb-1 fw-bold">{{ livro.nome }}</h6>
+                <small class="text-muted">Ano: {{ livro.ano }}</small>
+              </div>
+
+              <div class="form-check form-switch m-0 d-flex align-items-center gap-2">
+                <input class="form-check-input" type="checkbox" role="switch" [id]="'check_' + livro.id" [(ngModel)]="livro.lido">
+                <label class="form-check-label mb-0" [for]="'check_' + livro.id" [ngClass]="{'text-success fw-bold': livro.lido}">Lido</label>
+              </div>
+
+              <div class="input-data-container">
+                <input type="date" class="form-control form-control-sm bg-dark text-white input-data-custom" [(ngModel)]="livro.dataLeitura" [disabled]="!livro.lido">
+              </div>
+
+              <div class="d-flex gap-2 justify-content-end mt-2 mt-md-0">
+                <button class="btn btn-sm btn-outline-warning" title="Editar Livro"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger" title="Remover Livro"><i class="bi bi-trash"></i></button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer border-top borda-customizada d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Voltar</button>
+        <button type="button" class="btn btn-success"><i class="bi bi-plus-lg"></i> Adicionar Livro</button>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { MinhaEstanteComponent } from './componentes/navbar/navbar-itens/minha-estante/minha-estante.component';
 import { CadastrarComponent } from './componentes/crud/cadastrar/cadastrar.component';
 import { EditarComponent } from './componentes/crud/editar/editar.component';
-import { ProjetosDeLeituraComponent } from './componentes/navbar/navbar-itens/projetos-de-leitura/projetos-de-leitura.component';
+import { ProjetosLeituraComponent } from './componentes/projeto-leitura/projeto-leitura.component';
 import { LoginComponent } from './componentes/login/login.component';
 import { NavbarComponent } from './componentes/navbar/navbar-menu/navbar.component';
 import { AuthGuard } from './auth.guard';
@@ -24,9 +24,9 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'minha-estante', component: MinhaEstanteComponent },
+      { path: 'projeto-leitura', component: ProjetosLeituraComponent },
       { path: 'cadastrar', component: CadastrarComponent },
       { path: 'editar', component: EditarComponent },
-      { path: 'projetos-de-leitura', component: ProjetosDeLeituraComponent },
       { path: 'frases-inesqueciveis-dashboard', component: FrasesInesqueciveisDashboardComponent },
       { path: 'frases-inesqueciveis-adicionar', component: FrasesInesqueciveisAdicionarComponent},
       { path: 'frases-inesqueciveis-editar', component: FrasesInesqueciveisEditarComponent},
