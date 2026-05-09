@@ -1,7 +1,8 @@
 export interface LivroProjeto {
   id: number;
   nome: string;
-  ano: number;
+  anoDePublicacao: string;
   lido: boolean;
-  dataLeitura: string | null;
+  dataDeLeitura: string | null;
+  projetoId: number;
 }

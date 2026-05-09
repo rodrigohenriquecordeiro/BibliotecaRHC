@@ -3,8 +3,10 @@ import { Injectable } from '@angular/core';
 import { Livro } from '../../models/livro';
 import { LivrosPaginados } from '../../models/livrosPaginados';
 import { Frase } from '../../models/frase';
+import { Projeto } from '../../models/projeto';
 import { catchError, Observable, throwError, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { LivroProjeto } from '../../models/livroProjeto';
 
 @Injectable({ providedIn: 'root' })
 export class BibliotecaService {
@@ -16,6 +18,12 @@ export class BibliotecaService {
 
   private idSelecionadoFraseSource = new BehaviorSubject<number | null>(null);
   idSelecionadoFrase$ = this.idSelecionadoFraseSource.asObservable();
+
+  private idSelecionadoProjetoSource = new BehaviorSubject<number | null>(null);
+  idSelecionadoProjeto$ = this.idSelecionadoProjetoSource.asObservable();
+
+  private idSelecionadoLivroProjetoSource = new BehaviorSubject<number | null>(null);
+  idSelecionadoLivroProjeto$ = this.idSelecionadoLivroProjetoSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -46,8 +54,8 @@ export class BibliotecaService {
         map((livrosFiltrados: Livro[]) => {
           return {
             Livros: livrosFiltrados,
-            TotalLivros: livrosFiltrados.length, 
-            TotalPaginas: 1,                     
+            TotalLivros: livrosFiltrados.length,
+            TotalPaginas: 1,
             TemPaginaAnterior: false,
             TemProximaPagina: false
           } as LivrosPaginados;
@@ -171,4 +179,111 @@ export class BibliotecaService {
     formData.append('arquivo', arquivo);
     return this.http.post(`${this.API}importar-planilha/importar-excel`, formData);
   }
+
+  listaProjetos(): Observable<Projeto[]> {
+    return this.http.get<Projeto[]>(`${this.API}projetos/obter-projetos`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError((error) => {
+        console.error('Erro ao listar projetos:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  criarProjeto(projeto: Projeto): Observable<Projeto> {
+    return this.http.post<Projeto>(`${this.API}projetos/adicionar-projeto`, projeto, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError((error) => {
+        console.error('Erro ao criar projeto:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  buscarProjetoPorCodigo(id: number): Observable<Projeto> {
+    return this.http.get<Projeto>(`${this.API}projetos/obter-projeto-por-id/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  editarProjeto(projeto: Projeto): Observable<Projeto> {
+    return this.http.put<Projeto>(`${this.API}projetos/atualizar-projeto/${projeto.id}`, projeto, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  excluirProjeto(id: number): Observable<Projeto> {
+    return this.http.delete<Projeto>(`${this.API}projetos/remover-projeto/${id}`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError((error) => {
+        console.error('Erro ao excluir projeto:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  setIdSelecionadoProjeto(id: number): void {
+    this.idSelecionadoProjetoSource.next(id);
+  }
+
+  limparProjetoSelecionado(): void {
+    this.idSelecionadoProjetoSource.next(null);
+  }
+
+  listaLivrosNoProjetos(): Observable<LivroProjeto[]> {
+    return this.http.get<LivroProjeto[]>(`${this.API}livro-projeto/obter-livro-projeto`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError((error) => {
+        console.error('Erro ao listar livros no projeto:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  criarLivroNoProjeto(livroNoProjeto: LivroProjeto): Observable<LivroProjeto> {
+    return this.http.post<LivroProjeto>(`${this.API}livro-projeto/adicionar-livro-projeto`, livroNoProjeto, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError((error) => {
+        console.error('Erro ao criar livro no projeto:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  buscarLivroNoProjetoPorCodigo(id: number): Observable<LivroProjeto> {
+    return this.http.get<LivroProjeto>(`${this.API}livro-projeto/obter-livro-projeto-por-id/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  editarLivroNoProjeto(livroNoProjeto: LivroProjeto): Observable<LivroProjeto> {
+    return this.http.put<LivroProjeto>(`${this.API}livro-projeto/atualizar-livro-projeto/${livroNoProjeto.id}`, livroNoProjeto, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  excluirLivroNoProjeto(id: number): Observable<LivroProjeto> {
+    return this.http.delete<LivroProjeto>(`${this.API}livro-projeto/remover-livro-projeto/${id}`, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      catchError((error) => {
+        console.error('Erro ao excluir livro no projeto:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  setIdSelecionadoLivroProjeto(id: number): void {
+    this.idSelecionadoLivroProjetoSource.next(id);
+  }
+
+  limparLivroProjetoSelecionado(): void {
+    this.idSelecionadoLivroProjetoSource.next(null);
+  }
+
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BibliotecaRHC.API.Controllers;
 
 [ApiController]
-[Route("api/projeto")]
+[Route("api/projetos")]
 public class ProjetoController : Controller
 {
     private readonly IProjetoService _service;
@@ -25,7 +25,7 @@ public class ProjetoController : Controller
     }
 
     [Authorize]
-    [HttpGet("obter-projeto")]
+    [HttpGet("obter-projetos")]
     public async Task<IActionResult> GetTodos() => Ok(await _service.ObterTodosOsProjetos());
 
     [Authorize]

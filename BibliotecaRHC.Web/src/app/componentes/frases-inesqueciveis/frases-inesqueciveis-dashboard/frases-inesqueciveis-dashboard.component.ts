@@ -16,7 +16,7 @@ export class FrasesInesqueciveisDashboardComponent implements OnInit {
   frases: Frase[] = [];
   idFrasesSelecionadas: number[] = [];
 
-    constructor(
+  constructor(
     private service: BibliotecaService,
     private router: Router
   ) { }
@@ -45,8 +45,8 @@ export class FrasesInesqueciveisDashboardComponent implements OnInit {
   }
 
   onApagar(id: number): void {
-  	this.idFrasesSelecionadas = [id]; 
-  }
+    this.idFrasesSelecionadas = [id];
+  }
 
   confirmarApagar() {
     if (this.idFrasesSelecionadas.length === 0) {

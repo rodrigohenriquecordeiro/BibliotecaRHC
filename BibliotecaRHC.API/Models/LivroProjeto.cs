@@ -13,9 +13,11 @@ public class LivroProjeto
     [StringLength(20, ErrorMessage = "Permitido no máximo 20 caracteres")]
     public string? AnoDePublicacao { get; set; }
 
-    public bool Lido { get; set; } = false;
+    public bool? Lido { get; set; } = false;
 
-    public DateTime DataDeLeitura { get; set; }
+    public DateTime? DataDeLeitura { get; set; }
+
+    public int ProjetoId { get; set; }
 
     public void ValidaClasse()
     {

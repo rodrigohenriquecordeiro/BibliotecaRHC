@@ -1,8 +1,8 @@
 <div class="container mt-4 mb-5" data-bs-theme="dark">
-  
   <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
     <h2 class="text-white m-0"><i class="bi bi-journal-bookmark"></i> Meus Projetos de Leitura</h2>
-    <button class="btn btn-warning fw-bold" data-bs-toggle="modal" data-bs-target="#modalNovoProjeto" (click)="prepararNovoProjeto()">
+    <button class="btn btn-warning fw-bold" data-bs-toggle="modal" data-bs-target="#modalNovoProjeto"
+      (click)="prepararNovoProjeto()">
       <i class="bi bi-plus-lg"></i> Novo Projeto
     </button>
   </div>
@@ -12,18 +12,20 @@
       <div class="card bg-card-escuro h-100 borda-customizada shadow-sm">
         <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
           <h4 class="card-title text-white mb-3">{{ projeto.nome }}</h4>
-          <span class="badge bg-secondary mb-3">{{ projeto.livros.length }} Livros</span>
-          
-          <button class="btn btn-outline-light w-100" data-bs-toggle="modal" data-bs-target="#modalProjeto" (click)="abrirModalProjeto(projeto)">
+          <span class="badge bg-secondary mb-3">{{ projeto.livroProjetos.length || 0 }} Livros</span>
+          <button class="btn btn-outline-light w-100" data-bs-toggle="modal" data-bs-target="#modalProjeto"
+            (click)="abrirModalProjeto(projeto)">
             Gerenciar Projeto
           </button>
         </div>
-        
+
         <div class="card-footer bg-transparent border-top borda-customizada d-flex justify-content-between">
-          <button class="btn btn-sm btn-outline-warning" title="Editar Projeto" data-bs-toggle="modal" data-bs-target="#modalEditarProjeto" (click)="prepararEdicao(projeto)">
+          <button class="btn btn-sm btn-outline-warning" title="Editar Projeto" data-bs-toggle="modal"
+            data-bs-target="#modalEditarProjeto" (click)="prepararEdicao(projeto)">
             <i class="bi bi-pencil"></i> Editar
           </button>
-          <button class="btn btn-sm btn-outline-danger" title="Excluir Projeto" data-bs-toggle="modal" data-bs-target="#modalConfirmarExclusao" (click)="prepararExclusao(projeto)">
+          <button class="btn btn-sm btn-outline-danger" title="Excluir Projeto" data-bs-toggle="modal"
+            data-bs-target="#modalConfirmarExclusao" (click)="prepararExclusao(projeto)">
             <i class="bi bi-trash"></i> Excluir
           </button>
         </div>
@@ -36,47 +38,46 @@
 <div class="modal fade" id="modalProjeto" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
   <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
-      
       <div class="modal-header border-bottom borda-customizada">
         <h5 class="modal-title fw-bold text-warning">{{ projetoSelecionado?.nome }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <div class="modal-body p-0">
-        <div class="p-4 text-center text-muted" *ngIf="projetoSelecionado?.livros?.length === 0">
+        <div class="p-4 text-center text-muted" *ngIf="projetoSelecionado?.livroProjetos?.length === 0">
           Nenhum livro cadastrado neste projeto ainda.
         </div>
 
         <div class="list-group list-group-flush rounded-0">
-          <div class="list-group-item bg-transparent text-white border-bottom borda-customizada p-3 livro-item-hover" *ngFor="let livro of projetoSelecionado?.livros">
-            
+          <div class="list-group-item bg-transparent text-white border-bottom borda-customizada p-3 livro-item-hover"
+            *ngFor="let livro of projetoSelecionado?.livroProjetos">
             <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
-              
               <div class="flex-grow-1">
                 <h6 class="mb-1 fw-bold">{{ livro.nome }}</h6>
-                <small class="text-muted">Ano: {{ livro.ano }}</small>
+                <small class="text-muted">Ano: {{ livro.anoDePublicacao }}</small>
               </div>
-
               <div class="form-check form-switch m-0 d-flex align-items-center gap-2">
-                <input class="form-check-input" type="checkbox" role="switch" [id]="'check_' + livro.id" [(ngModel)]="livro.lido">
-                <label class="form-check-label mb-0" [for]="'check_' + livro.id" [ngClass]="{'text-success fw-bold': livro.lido}">
+                <input class="form-check-input" type="checkbox" role="switch" [id]="'check_' + livro.id"
+                  [(ngModel)]="livro.lido" (change)="alternarStatusLeitura(livro)">
+                <label class="form-check-label mb-0" [for]="'check_' + livro.id"
+                  [ngClass]="{'text-success fw-bold': livro.lido}">
                   {{ livro.lido ? 'Lido' : 'Não Lido' }}
                 </label>
               </div>
-
               <div class="input-data-container">
-                <input type="date" class="form-control form-control-sm bg-dark text-white input-data-custom" [(ngModel)]="livro.dataLeitura" [disabled]="!livro.lido">
+                <input type="date" class="form-control form-control-sm bg-dark text-white input-data-custom"
+                  [(ngModel)]="livro.dataDeLeitura" [disabled]="!livro.lido">
               </div>
-
               <div class="d-flex gap-2 justify-content-end mt-2 mt-md-0">
-                <button class="btn btn-sm btn-outline-warning" title="Editar Livro" data-bs-toggle="modal" data-bs-target="#modalEditarLivro" (click)="prepararEdicaoLivro(livro)">
+                <button class="btn btn-sm btn-outline-warning" title="Editar Livro" data-bs-toggle="modal"
+                  data-bs-target="#modalEditarLivro" (click)="prepararEdicaoLivro(livro)">
                   <i class="bi bi-pencil"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" title="Remover Livro" data-bs-toggle="modal" data-bs-target="#modalConfirmarExclusaoLivro" (click)="prepararExclusaoLivro(livro)">
+                <button class="btn btn-sm btn-outline-danger" title="Remover Livro" data-bs-toggle="modal"
+                  data-bs-target="#modalConfirmarExclusaoLivro" (click)="prepararExclusaoLivro(livro)">
                   <i class="bi bi-trash"></i>
                 </button>
               </div>
-
             </div>
           </div>
         </div>
@@ -84,17 +85,11 @@
 
       <div class="modal-footer border-top borda-customizada d-flex justify-content-between">
         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Voltar</button>
-        <button
-  type="button"
-  class="btn btn-success"
-  data-bs-toggle="modal"
-  data-bs-target="#modalAdicionarLivro"
-  (click)="prepararNovoLivro()"
->
-  <i class="bi bi-plus-lg"></i> Adicionar Livro
-</button>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdicionarLivro"
+          (click)="prepararNovoLivro()">
+          <i class="bi bi-plus-lg"></i> Adicionar Livro
+        </button>
       </div>
-
     </div>
   </div>
 </div>
@@ -109,33 +104,21 @@
       <div class="modal-body p-4">
         <div class="mb-3">
           <label for="nomeNovoProjeto" class="form-label">Nome do Projeto</label>
-          <input type="text" class="form-control bg-dark text-white border-secondary" id="nomeNovoProjeto" placeholder="Ex: Clássicos da Literatura" [(ngModel)]="novoProjetoNome">
+          <input type="text" class="form-control bg-dark text-white border-secondary" id="nomeNovoProjeto"
+            placeholder="Ex: Clássicos da Literatura" [(ngModel)]="novoProjetoNome">
         </div>
-      </div>
-      <div class="modal-footer border-top borda-customizada">
-        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" (click)="salvarNovoProjeto()" [disabled]="!novoProjetoNome.trim()">Salvar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="modalEditarProjeto" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content bg-card-escuro text-white borda-customizada">
-      <div class="modal-header border-bottom borda-customizada">
-        <h5 class="modal-title fw-bold text-warning">Editar Projeto</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body p-4">
         <div class="mb-3">
-          <label for="nomeEditarProjeto" class="form-label">Nome do Projeto</label>
-          <input type="text" class="form-control bg-dark text-white border-secondary" id="nomeEditarProjeto" [(ngModel)]="nomeProjetoEdicao">
+          <label for="dataCriacaoProjeto" class="form-label">Data de Criação do Projeto</label>
+          <input type="date" class="form-control bg-dark text-white border-secondary" id="dataCriacaoProjeto"
+            [(ngModel)]="novoProjetoData">
         </div>
       </div>
-      <div class="modal-footer border-top borda-customizada">
-        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" (click)="salvarEdicao()" [disabled]="!nomeProjetoEdicao.trim()">Salvar Alterações</button>
+      <div class="modal-footer border-top borda-customizada d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Voltar</button>
+        <button type="button" class="btn btn-success" (click)="salvarNovoProjeto()"
+          [disabled]="!novoProjetoNome.trim() || !novoProjetoData">
+          <i class="bi bi-save"></i> Salvar Projeto
+        </button>
       </div>
     </div>
   </div>
@@ -150,78 +133,48 @@
       </div>
       <div class="modal-body p-4 text-center">
         <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
-        <p class="mt-3 mb-0">Tem certeza que deseja excluir o projeto <strong>{{ projetoParaExclusao?.nome }}</strong>?</p>
+        <p class="mt-3 mb-0">Tem certeza que deseja excluir o projeto <strong>{{ projetoParaExclusao?.nome }}</strong>?
+        </p>
         <p class="text-muted small">Esta ação não poderá ser desfeita e todos os livros dentro dele serão removidos.</p>
       </div>
       <div class="modal-footer border-top borda-customizada d-flex justify-content-center">
         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="confirmarExclusao()">Sim, Excluir</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="confirmarExclusao()">Sim,
+          Excluir</button>
       </div>
     </div>
   </div>
 </div>
 
-<div
-  class="modal fade"
-  id="modalAdicionarLivro"
-  tabindex="-1"
-  aria-hidden="true"
-  data-bs-theme="dark"
->
+<div class="modal fade" id="modalAdicionarLivro" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
 
       <div class="modal-header border-bottom borda-customizada">
         <h5 class="modal-title fw-bold text-success">Adicionar Livro</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          data-bs-toggle="modal"
-          data-bs-target="#modalProjeto"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" data-bs-toggle="modal"
+          data-bs-target="#modalProjeto"></button>
       </div>
 
       <div class="modal-body p-4">
         <div class="mb-3">
           <label class="form-label">Nome do Livro</label>
-          <input
-            type="text"
-            class="form-control bg-dark text-white border-secondary"
-            [(ngModel)]="novoLivroNome"
-          />
+          <input type="text" class="form-control bg-dark text-white border-secondary" [(ngModel)]="novoLivroNome" />
         </div>
 
         <div class="mb-3">
           <label class="form-label">Ano de Publicação</label>
-          <input
-            type="number"
-            class="form-control bg-dark text-white border-secondary"
-            [(ngModel)]="novoLivroAno"
-          />
+          <input type="text" class="form-control bg-dark text-white border-secondary" [(ngModel)]="novoLivroAno" />
         </div>
       </div>
 
       <div class="modal-footer border-top borda-customizada">
-        <button
-          type="button"
-          class="btn btn-outline-light"
-          data-bs-dismiss="modal"
-          data-bs-toggle="modal"
-          data-bs-target="#modalProjeto"
-        >
+        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal" data-bs-toggle="modal"
+          data-bs-target="#modalProjeto">
           Voltar
         </button>
 
-        <button
-          type="button"
-          class="btn btn-success"
-          data-bs-dismiss="modal"
-          data-bs-toggle="modal"
-          data-bs-target="#modalProjeto"
-          (click)="adicionarLivro()"
-          [disabled]="!novoLivroNome.trim()"
-        >
+        <button type="button" class="btn btn-success" (click)="adicionarLivro()" [disabled]="!novoLivroNome.trim()">
           Salvar
         </button>
       </div>
@@ -240,16 +193,21 @@
       <div class="modal-body p-4">
         <div class="mb-3">
           <label for="nomeLivroEdicao" class="form-label">Nome do Livro</label>
-          <input type="text" class="form-control bg-dark text-white border-secondary" id="nomeLivroEdicao" [(ngModel)]="livroEmEdicaoNome">
+          <input type="text" class="form-control bg-dark text-white border-secondary" id="nomeLivroEdicao"
+            [(ngModel)]="livroEmEdicaoNome">
         </div>
         <div class="mb-3">
           <label for="anoLivroEdicao" class="form-label">Ano de Publicação</label>
-          <input type="number" class="form-control bg-dark text-white border-secondary" id="anoLivroEdicao" [(ngModel)]="livroEmEdicaoAno">
+          <input type="number" class="form-control bg-dark text-white border-secondary" id="anoLivroEdicao"
+            [(ngModel)]="livroEmEdicaoAno">
         </div>
       </div>
       <div class="modal-footer border-top borda-customizada">
-        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalProjeto">Voltar</button>
-        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalProjeto" (click)="salvarEdicaoLivro()" [disabled]="!livroEmEdicaoNome.trim()">Salvar</button>
+        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal" data-bs-toggle="modal"
+          data-bs-target="#modalProjeto">Voltar</button>
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" data-bs-toggle="modal"
+          data-bs-target="#modalProjeto" (click)="salvarEdicaoLivro()"
+          [disabled]="!livroEmEdicaoNome.trim()">Salvar</button>
       </div>
     </div>
   </div>
@@ -268,8 +226,10 @@
         <p class="text-muted small">Esta ação não poderá ser desfeita.</p>
       </div>
       <div class="modal-footer border-top borda-customizada d-flex justify-content-center">
-        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalProjeto">Cancelar</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalProjeto" (click)="confirmarExclusaoLivro()">Sim, Excluir</button>
+        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal" data-bs-toggle="modal"
+          data-bs-target="#modalProjeto">Cancelar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" data-bs-toggle="modal"
+          data-bs-target="#modalProjeto" (click)="confirmarExclusaoLivro()">Sim, Excluir</button>
       </div>
     </div>
   </div>

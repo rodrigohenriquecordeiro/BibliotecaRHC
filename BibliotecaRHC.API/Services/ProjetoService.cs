@@ -16,7 +16,7 @@ public class ProjetoService : IProjetoService
 
     public async Task<IEnumerable<Projeto>> ObterTodosOsProjetos()
     {
-        var projetos = await _unityOfWork.ProjetoRepository.GetAllAsync();
+        var projetos = await _unityOfWork.ProjetoRepository.GetAllWithLivros();
 
         if (!projetos.Any())
         {

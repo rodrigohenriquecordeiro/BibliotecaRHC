@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Projeto } from '../../models/projeto';
 import { LivroProjeto } from '../../models/livroProjeto';
+import { BibliotecaService } from '../../services/biblioteca/biblioteca.service';
 
+declare var bootstrap: any;
 @Component({
   selector: 'app-projetos-leitura',
   standalone: true,
@@ -11,38 +13,43 @@ import { LivroProjeto } from '../../models/livroProjeto';
   templateUrl: './projeto-leitura.component.html',
   styleUrls: ['./projeto-leitura.component.css']
 })
-export class ProjetosLeituraComponent {
-  projetos: Projeto[] = [
-    {
-      id: 1, nome: 'Sherlock Holmes', livros: [
-        { id: 101, nome: 'Um Estudo em Vermelho', ano: 1887, lido: true, dataLeitura: '2024-01-15' },
-        { id: 102, nome: 'O Signo dos Quatro', ano: 1890, lido: false, dataLeitura: null }
-      ]
-    },
-    { id: 2, nome: 'Bíblia King James', livros: [] },
-    { id: 3, nome: 'Viagens com Júlio Verne', livros: [] },
-    { id: 4, nome: 'Detetive Norueguês Harry Hole', livros: [] },
-    { id: 5, nome: 'Presentes da Deh', livros: [] },
-    {
-      id: 6, nome: 'Clube do Livro', livros: [
-        { id: 601, nome: 'História do Olho', ano: 1928, lido: true, dataLeitura: '2026-05-09' }
-      ]
-    },
-  ];
+export class ProjetosLeituraComponent implements OnInit {
+  projetos: Projeto[] = [];
+  idProjetoSelecionado: number[] = [];
 
   projetoSelecionado: Projeto | null = null;
   novoProjetoNome: string = '';
+  novoProjetoData: string = '';
   projetoParaEdicao: Projeto | null = null;
   nomeProjetoEdicao: string = '';
   projetoParaExclusao: Projeto | null = null;
 
   livroParaEdicao: LivroProjeto | null = null;
   livroEmEdicaoNome: string = '';
-  livroEmEdicaoAno: number = 0;
+  livroEmEdicaoAno: string = '';
   livroParaExclusao: LivroProjeto | null = null;
 
   novoLivroNome: string = '';
-  novoLivroAno: number = new Date().getFullYear();
+  novoLivroAno: string = '';
+
+  constructor(
+    private service: BibliotecaService,
+  ) { }
+
+  ngOnInit(): void {
+    this.carregarProjetos();
+  }
+
+  carregarProjetos(): void {
+    this.service.listaProjetos().subscribe({
+      next: (listaProjetos) => {
+        this.projetos = listaProjetos;
+      },
+      error: (err) => {
+        console.error('Falha ao carregar projetos:', err);
+      }
+    });
+  }
 
   abrirModalProjeto(projeto: Projeto) {
     this.projetoSelecionado = projeto;
@@ -50,17 +57,41 @@ export class ProjetosLeituraComponent {
 
   prepararNovoProjeto() {
     this.novoProjetoNome = '';
+    this.novoProjetoData = '';
   }
 
   salvarNovoProjeto() {
-    if (this.novoProjetoNome.trim()) {
-      const novoId = this.projetos.length > 0 ? Math.max(...this.projetos.map(p => p.id)) + 1 : 1;
-      this.projetos.push({
-        id: novoId,
+    if (this.novoProjetoNome.trim() && this.novoProjetoData) {
+
+      const novoProjeto: any = {
+        id: 0,
         nome: this.novoProjetoNome,
+        dataCriacao: this.novoProjetoData,
         livros: []
+      };
+
+      this.service.criarProjeto(novoProjeto).subscribe({
+        next: (projetoCriado) => {
+          this.projetos.push(projetoCriado);
+          this.novoProjetoNome = '';
+          this.novoProjetoData = '';
+
+          const modalNovoEl = document.getElementById('modalNovoProjeto');
+          if (modalNovoEl) {
+            const modalNovo = bootstrap.Modal.getInstance(modalNovoEl);
+            if (modalNovo) modalNovo.hide();
+          }
+
+          this.abrirModalProjeto(projetoCriado);
+
+          const modalProjEl = document.getElementById('modalProjeto');
+          if (modalProjEl) {
+            const modalProj = new bootstrap.Modal(modalProjEl);
+            modalProj.show();
+          }
+        },
+        error: (err) => console.error('Erro ao criar projeto:', err)
       });
-      this.novoProjetoNome = '';
     }
   }
 
@@ -71,8 +102,15 @@ export class ProjetosLeituraComponent {
 
   salvarEdicao() {
     if (this.projetoParaEdicao && this.nomeProjetoEdicao.trim()) {
-      this.projetoParaEdicao.nome = this.nomeProjetoEdicao;
-      this.projetoParaEdicao = null;
+      const projetoAtualizado = { ...this.projetoParaEdicao, nome: this.nomeProjetoEdicao };
+
+      this.service.editarProjeto(projetoAtualizado).subscribe({
+        next: (res) => {
+          this.projetoParaEdicao!.nome = this.nomeProjetoEdicao;
+          this.projetoParaEdicao = null;
+        },
+        error: (err) => console.error('Erro ao editar projeto:', err)
+      });
     }
   }
 
@@ -82,44 +120,92 @@ export class ProjetosLeituraComponent {
 
   confirmarExclusao() {
     if (this.projetoParaExclusao) {
-      this.projetos = this.projetos.filter(p => p.id !== this.projetoParaExclusao!.id);
-      this.projetoParaExclusao = null;
+      this.service.excluirProjeto(this.projetoParaExclusao.id).subscribe({
+        next: () => {
+          this.projetos = this.projetos.filter(p => p.id !== this.projetoParaExclusao!.id);
+          this.projetoParaExclusao = null;
+        },
+        error: (err) => console.error('Erro ao excluir projeto:', err)
+      });
     }
   }
 
   prepararNovoLivro() {
     this.novoLivroNome = '';
-    this.novoLivroAno = new Date().getFullYear();
+    this.novoLivroAno = '';
   }
+
 
   adicionarLivro() {
     if (this.projetoSelecionado && this.novoLivroNome.trim()) {
-      const novoId = Date.now();
 
-      this.projetoSelecionado.livros.push({
-        id: novoId,
+      const novoLivro: LivroProjeto = {
+        id: 0,
         nome: this.novoLivroNome,
-        ano: this.novoLivroAno,
+        anoDePublicacao: this.novoLivroAno ? this.novoLivroAno.toString() : '',
         lido: false,
-        dataLeitura: null
-      });
+        dataDeLeitura: null,
+        projetoId: this.projetoSelecionado.id
+      };
 
-      this.novoLivroNome = '';
-      this.novoLivroAno = new Date().getFullYear();
+      console.log('this.projetoSelecionado.id ', this.projetoSelecionado.id);
+
+      this.service.criarLivroNoProjeto(novoLivro).subscribe({
+        next: (livroCriado) => {
+          if (!this.projetoSelecionado!.livroProjetos) {
+            this.projetoSelecionado!.livroProjetos = [];
+          }
+
+          this.projetoSelecionado!.livroProjetos.push(livroCriado);
+
+          const index = this.projetos.findIndex(p => p.id === this.projetoSelecionado!.id);
+          if (index !== -1) {
+            this.projetos[index].livroProjetos = [...this.projetoSelecionado!.livroProjetos];
+          }
+
+          this.prepararNovoLivro();
+
+          const modalAddEl = document.getElementById('modalAdicionarLivro');
+          const modalProjEl = document.getElementById('modalProjeto');
+
+          if (modalAddEl && modalProjEl) {
+            const modalAdd = bootstrap.Modal.getInstance(modalAddEl);
+            modalAdd?.hide();
+
+            const modalProj = new bootstrap.Modal(modalProjEl);
+            modalProj.show();
+          }
+        },
+        error: (err) => {
+          console.error('Erro ao persistir novo livro:', err);
+          alert('Erro ao salvar o livro. Verifique a conexão com o servidor.');
+        }
+      });
     }
   }
 
   prepararEdicaoLivro(livro: LivroProjeto) {
     this.livroParaEdicao = livro;
     this.livroEmEdicaoNome = livro.nome;
-    this.livroEmEdicaoAno = livro.ano;
+    this.livroEmEdicaoAno = livro.anoDePublicacao;
   }
 
   salvarEdicaoLivro() {
     if (this.livroParaEdicao && this.livroEmEdicaoNome.trim()) {
-      this.livroParaEdicao.nome = this.livroEmEdicaoNome;
-      this.livroParaEdicao.ano = this.livroEmEdicaoAno;
-      this.livroParaEdicao = null;
+      const livroAtualizado: LivroProjeto = {
+        ...this.livroParaEdicao,
+        nome: this.livroEmEdicaoNome,
+        anoDePublicacao: this.livroEmEdicaoAno ? this.livroEmEdicaoAno.toString() : '' 
+      };
+
+      this.service.editarLivroNoProjeto(livroAtualizado).subscribe({
+        next: (res) => {
+          this.livroParaEdicao!.nome = this.livroEmEdicaoNome;
+          this.livroParaEdicao!.anoDePublicacao = this.livroEmEdicaoAno;
+          this.livroParaEdicao = null;
+        },
+        error: (err) => console.error('Erro ao atualizar livro:', err)
+      });
     }
   }
 
@@ -129,8 +215,31 @@ export class ProjetosLeituraComponent {
 
   confirmarExclusaoLivro() {
     if (this.projetoSelecionado && this.livroParaExclusao) {
-      this.projetoSelecionado.livros = this.projetoSelecionado.livros.filter(l => l.id !== this.livroParaExclusao!.id);
-      this.livroParaExclusao = null;
+      this.service.excluirLivroNoProjeto(this.livroParaExclusao.id).subscribe({
+        next: () => {
+          this.projetoSelecionado!.livroProjetos = this.projetoSelecionado!.livroProjetos.filter(
+            l => l.id !== this.livroParaExclusao!.id
+          );
+
+          const index = this.projetos.findIndex(p => p.id === this.projetoSelecionado!.id);
+          if (index !== -1) {
+            this.projetos[index].livroProjetos = [...this.projetoSelecionado!.livroProjetos];
+          }
+
+          this.livroParaExclusao = null;
+        }
+      });
     }
+  }
+
+  alternarStatusLeitura(livro: LivroProjeto) {
+    if (!livro.lido) livro.dataDeLeitura = null;
+
+    this.service.editarLivroNoProjeto(livro).subscribe({
+      error: (err) => {
+        console.error('Erro ao atualizar status:', err);
+        livro.lido = !livro.lido;
+      }
+    });
   }
 }
