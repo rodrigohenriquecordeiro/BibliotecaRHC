@@ -1,20 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface LivroProjeto {
-  id: number;
-  nome: string;
-  ano: number;
-  lido: boolean;
-  dataLeitura: string | null;
-}
-
-interface Projeto {
-  id: number;
-  nome: string;
-  livros: LivroProjeto[];
-}
+import { Projeto } from '../../models/projeto';
+import { LivroProjeto } from '../../models/livroProjeto';
 
 @Component({
   selector: 'app-projetos-leitura',
