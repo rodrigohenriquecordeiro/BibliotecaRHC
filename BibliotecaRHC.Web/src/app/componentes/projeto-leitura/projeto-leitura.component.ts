@@ -43,11 +43,18 @@ export class ProjetosLeituraComponent implements OnInit {
   carregarProjetos(): void {
     this.service.listaProjetos().subscribe({
       next: (listaProjetos) => {
+        listaProjetos.forEach(projeto => {
+          if (projeto.livroProjetos) {
+            projeto.livroProjetos.forEach(livro => {
+              if (livro.dataDeLeitura) {
+                livro.dataDeLeitura = livro.dataDeLeitura.split('T')[0];
+              }
+            });
+          }
+        });
         this.projetos = listaProjetos;
       },
-      error: (err) => {
-        console.error('Falha ao carregar projetos:', err);
-      }
+      error: (err) => console.error('Falha ao carregar projetos:', err)
     });
   }
 
@@ -195,7 +202,7 @@ export class ProjetosLeituraComponent implements OnInit {
       const livroAtualizado: LivroProjeto = {
         ...this.livroParaEdicao,
         nome: this.livroEmEdicaoNome,
-        anoDePublicacao: this.livroEmEdicaoAno ? this.livroEmEdicaoAno.toString() : '' 
+        anoDePublicacao: this.livroEmEdicaoAno ? this.livroEmEdicaoAno.toString() : ''
       };
 
       this.service.editarLivroNoProjeto(livroAtualizado).subscribe({
@@ -233,12 +240,29 @@ export class ProjetosLeituraComponent implements OnInit {
   }
 
   alternarStatusLeitura(livro: LivroProjeto) {
-    if (!livro.lido) livro.dataDeLeitura = null;
+    if (!livro.lido) {
+      livro.dataDeLeitura = null;
+    } else if (!livro.dataDeLeitura) {
+      livro.dataDeLeitura = new Date().toISOString().split('T')[0];
+    }
 
+    this.persistirAlteracaoLivro(livro);
+  }
+
+  salvarDataLeitura(livro: LivroProjeto) {
+    if (livro.lido) {
+      this.persistirAlteracaoLivro(livro);
+    }
+  }
+
+  persistirAlteracaoLivro(livro: LivroProjeto) {
     this.service.editarLivroNoProjeto(livro).subscribe({
+      next: () => {
+        console.log('Livro atualizado com sucesso');
+      },
       error: (err) => {
-        console.error('Erro ao atualizar status:', err);
-        livro.lido = !livro.lido;
+        console.error('Erro ao atualizar livro:', err);
+        alert('Não foi possível salvar a alteração.');
       }
     });
   }
