@@ -39,8 +39,54 @@ export class ProjetosLeituraComponent {
   ];
 
   projetoSelecionado: Projeto | null = null;
+  
+  novoProjetoNome: string = '';
+  
+  projetoParaEdicao: Projeto | null = null;
+  nomeProjetoEdicao: string = '';
+  
+  projetoParaExclusao: Projeto | null = null;
 
   abrirModalProjeto(projeto: Projeto) {
     this.projetoSelecionado = projeto;
+  }
+
+  prepararNovoProjeto() {
+    this.novoProjetoNome = '';
+  }
+
+  salvarNovoProjeto() {
+    if (this.novoProjetoNome.trim()) {
+      const novoId = this.projetos.length > 0 ? Math.max(...this.projetos.map(p => p.id)) + 1 : 1;
+      this.projetos.push({
+        id: novoId,
+        nome: this.novoProjetoNome,
+        livros: []
+      });
+      this.novoProjetoNome = '';
+    }
+  }
+
+  prepararEdicao(projeto: Projeto) {
+    this.projetoParaEdicao = projeto;
+    this.nomeProjetoEdicao = projeto.nome; 
+  }
+
+  salvarEdicao() {
+    if (this.projetoParaEdicao && this.nomeProjetoEdicao.trim()) {
+      this.projetoParaEdicao.nome = this.nomeProjetoEdicao;
+      this.projetoParaEdicao = null;
+    }
+  }
+
+  prepararExclusao(projeto: Projeto) {
+    this.projetoParaExclusao = projeto;
+  }
+
+  confirmarExclusao() {
+    if (this.projetoParaExclusao) {
+      this.projetos = this.projetos.filter(p => p.id !== this.projetoParaExclusao!.id);
+      this.projetoParaExclusao = null;
+    }
   }
 }
