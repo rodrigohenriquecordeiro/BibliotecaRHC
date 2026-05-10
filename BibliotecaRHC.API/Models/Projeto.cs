@@ -14,6 +14,8 @@ public class Projeto
 
     public DateTime? DataCriacao { get; set; }
 
+    public ProjetoStatus ProjetoStatus { get; set; }
+
     public void ValidaClasse()
     {
         ValidationContext context = new(this, serviceProvider: null, items: null);

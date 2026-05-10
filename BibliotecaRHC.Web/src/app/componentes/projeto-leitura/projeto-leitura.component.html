@@ -1,59 +1,81 @@
+<!-- #region Listagem de Projetos -->
 <div class="container mt-4 mb-5" data-bs-theme="dark">
   <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
-    <h2 class="text-white m-0"><i class="bi bi-journal-bookmark"></i> Meus Projetos de Leitura</h2>
-    <button class="btn btn-warning fw-bold" data-bs-toggle="modal" data-bs-target="#modalNovoProjeto"
+    <h2 class="text-white m-0"><i class="bi text-warning"></i> Meus Projetos de Leitura</h2>
+    <button class="btn btn-warning fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNovoProjeto"
       (click)="prepararNovoProjeto()">
-      <i class="bi bi-plus-lg"></i> Novo Projeto
+      <i class="bi bi-plus-circle-fill me-1"></i> Novo Projeto
     </button>
   </div>
 
   <div class="row g-4">
     <div class="col-12 col-md-6 col-lg-4" *ngFor="let projeto of projetos">
-      <div class="card bg-card-escuro h-100 borda-customizada shadow-sm">
+      <div class="card bg-card-escuro h-100 borda-customizada shadow border-secondary">
         <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
-          <h4 class="card-title text-white mb-3">{{ projeto.nome }}</h4>
-          <span class="badge bg-secondary mb-3">{{ projeto.livroProjetos.length || 0 }} Livros</span>
-          <button class="btn btn-outline-light w-100" data-bs-toggle="modal" data-bs-target="#modalProjeto"
+          <h4 class="card-title text-white mb-2 fw-semibold">{{ projeto.nome }}</h4>
+          <span class="badge bg-dark border border-secondary mb-3 px-3 py-2 text-light rounded-pill">
+            <i class="bi bi-book me-1"></i> {{ projeto.livroProjetos.length || 0 }} Livros
+          </span>
+          <button class="btn btn-outline-light w-100 fw-bold" data-bs-toggle="modal" data-bs-target="#modalProjeto"
             (click)="abrirModalProjeto(projeto)">
-            Gerenciar Projeto
+            <i class="bi bi-gear-fill me-1"></i> Gerenciar Projeto
           </button>
         </div>
 
-        <div class="card-footer bg-transparent border-top borda-customizada d-flex justify-content-between">
-          <button class="btn btn-sm btn-outline-warning" title="Editar Projeto" data-bs-toggle="modal"
-            data-bs-target="#modalEditarProjeto" (click)="prepararEdicao(projeto)">
-            <i class="bi bi-pencil"></i> Editar
-          </button>
-          <button class="btn btn-sm btn-outline-danger" title="Excluir Projeto" data-bs-toggle="modal"
-            data-bs-target="#modalConfirmarExclusao" (click)="prepararExclusao(projeto)">
-            <i class="bi bi-trash"></i> Excluir
-          </button>
+        <div
+          class="card-footer bg-transparent border-top border-secondary d-flex justify-content-between align-items-center py-3">
+          <span class="badge px-2 py-2" [ngClass]="{
+            'bg-secondary': projeto.projetoStatus == 0,
+            'bg-primary': projeto.projetoStatus == 1,
+            'bg-success': projeto.projetoStatus == 2,
+            'bg-danger': projeto.projetoStatus == 3
+          }">
+            Status: {{ obterDescricaoStatus(projeto.projetoStatus) }}
+          </span>
+
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-outline-warning" title="Editar Projeto" data-bs-toggle="modal"
+              data-bs-target="#modalEditarProjeto" (click)="prepararEdicao(projeto)">
+              <i class="bi bi-pencil-fill"></i>
+            </button>
+
+            <button class="btn btn-sm btn-outline-danger" title="Excluir Projeto" data-bs-toggle="modal"
+              data-bs-target="#modalConfirmarExclusao" (click)="prepararExclusao(projeto)">
+              <i class="bi bi-trash-fill"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+<!-- #endregion -->
 
+<!-- #region Gerenciar Projeto e Lista de Livros -->
 <div class="modal fade" id="modalProjeto" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
   <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
-      <div class="modal-header border-bottom borda-customizada">
-        <h5 class="modal-title fw-bold text-warning">{{ projetoSelecionado?.nome }}</h5>
+      <div class="modal-header border-bottom border-secondary">
+        <h5 class="modal-title fw-bold text-warning"><i class="bi bi-journal-text me-2"></i>{{ projetoSelecionado?.nome
+          }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <div class="modal-body p-0">
-        <div class="p-4 text-center text-muted" *ngIf="projetoSelecionado?.livroProjetos?.length === 0">
+        <div class="p-5 text-center text-muted" *ngIf="projetoSelecionado?.livroProjetos?.length === 0">
+          <i class="bi bi-inbox fs-1 d-block mb-2"></i>
           Nenhum livro cadastrado neste projeto ainda.
         </div>
 
+        <!-- Lista de Livros-->
         <div class="list-group list-group-flush rounded-0">
-          <div class="list-group-item bg-transparent text-white border-bottom borda-customizada p-3 livro-item-hover"
+          <div class="list-group-item bg-transparent text-white border-bottom border-secondary p-3 livro-item-hover"
             *ngFor="let livro of projetoSelecionado?.livroProjetos">
             <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
               <div class="flex-grow-1">
                 <h6 class="mb-1 fw-bold">{{ livro.nome }}</h6>
-                <small class="text-muted">Ano: {{ livro.anoDePublicacao }}</small>
+                <small class="text-muted"><i class="bi bi-calendar-event me-1"></i>Ano: {{ livro.anoDePublicacao
+                  }}</small>
               </div>
               <div class="form-check form-switch m-0 d-flex align-items-center gap-2">
                 <input class="form-check-input" type="checkbox" role="switch" [id]="'check_' + livro.id"
@@ -64,7 +86,8 @@
                 </label>
               </div>
               <div class="input-data-container">
-                <input type="date" class="form-control form-control-sm bg-dark text-white input-data-custom"
+                <input type="date"
+                  class="form-control form-control-sm bg-dark text-white input-data-custom border-secondary"
                   [(ngModel)]="livro.dataDeLeitura" [disabled]="!livro.lido" (change)="salvarDataLeitura(livro)">
               </div>
               <div class="d-flex gap-2 justify-content-end mt-2 mt-md-0">
@@ -72,12 +95,10 @@
                   (click)="persistirAlteracaoLivro(livro)">
                   <i class="bi bi-check-lg"></i>
                 </button>
-
                 <button class="btn btn-sm btn-outline-warning" title="Editar Livro" data-bs-toggle="modal"
                   data-bs-target="#modalEditarLivro" (click)="prepararEdicaoLivro(livro)">
                   <i class="bi bi-pencil"></i>
                 </button>
-
                 <button class="btn btn-sm btn-outline-danger" title="Remover Livro" data-bs-toggle="modal"
                   data-bs-target="#modalConfirmarExclusaoLivro" (click)="prepararExclusaoLivro(livro)">
                   <i class="bi bi-trash"></i>
@@ -88,41 +109,53 @@
         </div>
       </div>
 
-      <div class="modal-footer border-top borda-customizada d-flex justify-content-between">
+      <div class="modal-footer border-top border-secondary d-flex justify-content-between">
         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Voltar</button>
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdicionarLivro"
-          (click)="prepararNovoLivro()">
+        <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal"
+          data-bs-target="#modalAdicionarLivro" (click)="prepararNovoLivro()">
           <i class="bi bi-plus-lg"></i> Adicionar Livro
         </button>
       </div>
     </div>
   </div>
 </div>
+<!-- #endregion -->
 
+<!-- #region Novo Projeto -->
 <div class="modal fade" id="modalNovoProjeto" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
-      <div class="modal-header border-bottom borda-customizada">
+      <div class="modal-header border-bottom border-secondary">
         <h5 class="modal-title fw-bold text-warning">Criar Novo Projeto</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <div class="modal-body p-4">
         <div class="mb-3">
-          <label for="nomeNovoProjeto" class="form-label">Nome do Projeto</label>
+          <label for="nomeNovoProjeto" class="form-label text-light">Nome do Projeto</label>
           <input type="text" class="form-control bg-dark text-white border-secondary" id="nomeNovoProjeto"
             placeholder="Ex: Clássicos da Literatura" [(ngModel)]="novoProjetoNome">
         </div>
         <div class="mb-3">
-          <label for="dataCriacaoProjeto" class="form-label">Data de Criação do Projeto</label>
+          <label for="dataCriacaoProjeto" class="form-label text-light">Data de Criação do Projeto</label>
           <input type="date" class="form-control bg-dark text-white border-secondary" id="dataCriacaoProjeto"
             [(ngModel)]="novoProjetoData">
         </div>
+        <div class="mb-3">
+          <label for="statusNovoProjeto" class="form-label text-light">Status Inicial</label>
+          <select class="form-select bg-dark text-white border-secondary" id="statusNovoProjeto"
+            [(ngModel)]="novoProjetoStatus">
+            <option [ngValue]="0">Não Iniciado</option>
+            <option [ngValue]="1">Andamento</option>
+            <option [ngValue]="2">Finalizado</option>
+            <option [ngValue]="3">Abandonado</option>
+          </select>
+        </div>
       </div>
 
-      <div class="modal-footer border-top borda-customizada d-flex justify-content-between">
+      <div class="modal-footer border-top border-secondary d-flex justify-content-between">
         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Voltar</button>
-        <button type="button" class="btn btn-success" (click)="salvarNovoProjeto()"
+        <button type="button" class="btn btn-success fw-bold" (click)="salvarNovoProjeto()"
           [disabled]="!novoProjetoNome.trim() || !novoProjetoData">
           <i class="bi bi-save"></i> Salvar Projeto
         </button>
@@ -130,36 +163,50 @@
     </div>
   </div>
 </div>
+<!-- #endregion -->
 
+<!-- #region Editar Projeto -->
 <div class="modal fade" id="modalEditarProjeto" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
-      <div class="modal-header border-bottom borda-customizada">
+      <div class="modal-header border-bottom border-secondary">
         <h5 class="modal-title fw-bold text-warning">Editar Projeto</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <div class="modal-body p-4">
         <div class="mb-3">
-          <label class="form-label">Nome do Projeto</label>
+          <label class="form-label text-light">Nome do Projeto</label>
           <input type="text" class="form-control bg-dark text-white border-secondary" [(ngModel)]="nomeProjetoEdicao">
         </div>
         <div class="mb-3">
-          <label class="form-label">Data de Criação do Projeto</label>
+          <label class="form-label text-light">Data de Criação do Projeto</label>
           <input type="date" class="form-control bg-dark text-white border-secondary" [(ngModel)]="dataProjetoEdicao">
+        </div>
+        <div class="mb-3">
+          <label class="form-label text-light">Status do Projeto</label>
+          <select class="form-select bg-dark text-white border-secondary" [(ngModel)]="statusProjetoEdicao">
+            <option [ngValue]="0">Não Iniciado</option>
+            <option [ngValue]="1">Andamento</option>
+            <option [ngValue]="2">Finalizado</option>
+            <option [ngValue]="3">Abandonado</option>
+          </select>
         </div>
       </div>
 
-      <div class="modal-footer border-top borda-customizada d-flex justify-content-between">
+      <div class="modal-footer border-top border-secondary d-flex justify-content-between">
         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-warning fw-bold" (click)="salvarEdicao()" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-warning fw-bold text-dark" (click)="salvarEdicao()"
+          data-bs-dismiss="modal">
           <i class="bi bi-pencil-square"></i> Salvar Alterações
         </button>
       </div>
     </div>
   </div>
 </div>
+<!-- #endregion -->
 
+<!-- #region Excluir Projeto -->
 <div class="modal fade" id="modalConfirmarExclusao" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
@@ -183,7 +230,9 @@
     </div>
   </div>
 </div>
+<!-- #endregion -->
 
+<!-- #region Adicionar Livro -->
 <div class="modal fade" id="modalAdicionarLivro" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
@@ -220,7 +269,9 @@
     </div>
   </div>
 </div>
+<!-- #endregion -->
 
+<!-- #region Editar Livro -->
 <div class="modal fade" id="modalEditarLivro" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
@@ -250,7 +301,9 @@
     </div>
   </div>
 </div>
+<!-- #endregion -->
 
+<!-- #region Excluir Livro -->
 <div class="modal fade" id="modalConfirmarExclusaoLivro" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
@@ -273,3 +326,4 @@
     </div>
   </div>
 </div>
+<!-- #endregion -->

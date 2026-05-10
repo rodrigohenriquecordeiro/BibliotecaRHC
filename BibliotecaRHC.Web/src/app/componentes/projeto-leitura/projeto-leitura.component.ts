@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Projeto } from '../../models/projeto';
 import { LivroProjeto } from '../../models/livroProjeto';
 import { BibliotecaService } from '../../services/biblioteca/biblioteca.service';
+import { ProjetoStatus } from '../../models/projetoStatus';
 
 declare var bootstrap: any;
 @Component({
@@ -20,9 +21,13 @@ export class ProjetosLeituraComponent implements OnInit {
   projetoSelecionado: Projeto | null = null;
   novoProjetoNome: string = '';
   novoProjetoData: string = '';
+  novoProjetoStatus: ProjetoStatus = ProjetoStatus.NaoIniciado;
+  
   projetoParaEdicao: Projeto | null = null;
   nomeProjetoEdicao: string = '';
   dataProjetoEdicao!: Date;
+  statusProjetoEdicao: ProjetoStatus = ProjetoStatus.NaoIniciado;
+  
   projetoParaExclusao: Projeto | null = null;
 
   livroParaEdicao: LivroProjeto | null = null;
@@ -66,6 +71,17 @@ export class ProjetosLeituraComponent implements OnInit {
   prepararNovoProjeto() {
     this.novoProjetoNome = '';
     this.novoProjetoData = '';
+    this.novoProjetoStatus = ProjetoStatus.NaoIniciado;
+  }
+
+  obterDescricaoStatus(status: number): string {
+    switch (Number(status)) {
+      case 0: return 'Não Iniciado';
+      case 1: return 'Andamento';
+      case 2: return 'Finalizado';
+      case 3: return 'Abandonado';
+      default: return 'Não Iniciado';
+    }
   }
 
   salvarNovoProjeto() {
@@ -75,7 +91,8 @@ export class ProjetosLeituraComponent implements OnInit {
         id: 0,
         nome: this.novoProjetoNome,
         dataCriacao: this.novoProjetoData,
-        livros: []
+        livros: [],
+        projetoStatus: this.novoProjetoStatus 
       };
 
       this.service.criarProjeto(novoProjeto).subscribe({
@@ -83,6 +100,7 @@ export class ProjetosLeituraComponent implements OnInit {
           this.projetos.push(projetoCriado);
           this.novoProjetoNome = '';
           this.novoProjetoData = '';
+          this.novoProjetoStatus = ProjetoStatus.NaoIniciado;
 
           const modalNovoEl = document.getElementById('modalNovoProjeto');
           if (modalNovoEl) {
@@ -107,16 +125,23 @@ export class ProjetosLeituraComponent implements OnInit {
     this.projetoParaEdicao = projeto;
     this.nomeProjetoEdicao = projeto.nome;
     this.dataProjetoEdicao = projeto.dataCriacao;
-  }
+    this.statusProjetoEdicao = projeto.projetoStatus ?? ProjetoStatus.NaoIniciado; 
+}
 
   salvarEdicao() {
     if (this.projetoParaEdicao && this.nomeProjetoEdicao.trim()) {
-      const projetoAtualizado = { ...this.projetoParaEdicao, nome: this.nomeProjetoEdicao, dataCriacao: this.dataProjetoEdicao };
+      const projetoAtualizado = { 
+        ...this.projetoParaEdicao, 
+        nome: this.nomeProjetoEdicao, 
+        dataCriacao: this.dataProjetoEdicao,
+        projetoStatus: this.statusProjetoEdicao 
+      };
 
       this.service.editarProjeto(projetoAtualizado).subscribe({
         next: (res) => {
           this.projetoParaEdicao!.nome = this.nomeProjetoEdicao;
           this.projetoParaEdicao!.dataCriacao = this.dataProjetoEdicao;
+          this.projetoParaEdicao!.projetoStatus = this.statusProjetoEdicao;
           this.projetoParaEdicao = null;
         },
         error: (err) => console.error('Erro ao editar projeto:', err)
@@ -143,8 +168,8 @@ export class ProjetosLeituraComponent implements OnInit {
   prepararNovoLivro() {
     this.novoLivroNome = '';
     this.novoLivroAno = '';
+    this.novoProjetoStatus = ProjetoStatus.NaoIniciado;
   }
-
 
   adicionarLivro() {
     if (this.projetoSelecionado && this.novoLivroNome.trim()) {
@@ -157,8 +182,6 @@ export class ProjetosLeituraComponent implements OnInit {
         dataDeLeitura: null,
         projetoId: this.projetoSelecionado.id
       };
-
-      console.log('this.projetoSelecionado.id ', this.projetoSelecionado.id);
 
       this.service.criarLivroNoProjeto(novoLivro).subscribe({
         next: (livroCriado) => {
