@@ -106,6 +106,7 @@
         <h5 class="modal-title fw-bold text-warning">Criar Novo Projeto</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
       <div class="modal-body p-4">
         <div class="mb-3">
           <label for="nomeNovoProjeto" class="form-label">Nome do Projeto</label>
@@ -118,6 +119,7 @@
             [(ngModel)]="novoProjetoData">
         </div>
       </div>
+
       <div class="modal-footer border-top borda-customizada d-flex justify-content-between">
         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Voltar</button>
         <button type="button" class="btn btn-success" (click)="salvarNovoProjeto()"
@@ -134,16 +136,25 @@
     <div class="modal-content bg-card-escuro text-white borda-customizada">
       <div class="modal-header border-bottom borda-customizada">
         <h5 class="modal-title fw-bold text-warning">Editar Projeto</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
       <div class="modal-body p-4">
-        <label class="form-label">Nome do Projeto</label>
-        <input type="text" class="form-control bg-dark text-white" [(ngModel)]="nomeProjetoEdicao">
+        <div class="mb-3">
+          <label class="form-label">Nome do Projeto</label>
+          <input type="text" class="form-control bg-dark text-white border-secondary" [(ngModel)]="nomeProjetoEdicao">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Data de Criação do Projeto</label>
+          <input type="date" class="form-control bg-dark text-white border-secondary" [(ngModel)]="dataProjetoEdicao">
+        </div>
       </div>
-      <div class="modal-footer border-top borda-customizada">
+
+      <div class="modal-footer border-top borda-customizada d-flex justify-content-between">
         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-warning" (click)="salvarEdicao()" data-bs-dismiss="modal">Salvar
-          Alterações</button>
+        <button type="button" class="btn btn-warning fw-bold" (click)="salvarEdicao()" data-bs-dismiss="modal">
+          <i class="bi bi-pencil-square"></i> Salvar Alterações
+        </button>
       </div>
     </div>
   </div>
@@ -158,9 +169,11 @@
       </div>
       <div class="modal-body p-4 text-center">
         <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
-        <p class="mt-3 mb-0">Tem certeza que deseja excluir o projeto <strong>{{ projetoParaExclusao?.nome }}</strong>?
+        <p class="mt-3 mb-0">Tem certeza que deseja excluir o projeto <strong>{{ projetoParaExclusao?.nome
+            }}</strong>?
         </p>
-        <p class="text-muted small">Esta ação não poderá ser desfeita e todos os livros dentro dele serão removidos.</p>
+        <p class="text-muted small">Esta ação não poderá ser desfeita e todos os livros dentro dele serão removidos.
+        </p>
       </div>
       <div class="modal-footer border-top borda-customizada d-flex justify-content-center">
         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
@@ -247,7 +260,8 @@
       </div>
       <div class="modal-body p-4 text-center">
         <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
-        <p class="mt-3 mb-0">Tem certeza que deseja excluir o livro <strong>{{ livroParaExclusao?.nome }}</strong>?</p>
+        <p class="mt-3 mb-0">Tem certeza que deseja excluir o livro <strong>{{ livroParaExclusao?.nome }}</strong>?
+        </p>
         <p class="text-muted small">Esta ação não poderá ser desfeita.</p>
       </div>
       <div class="modal-footer border-top borda-customizada d-flex justify-content-center">

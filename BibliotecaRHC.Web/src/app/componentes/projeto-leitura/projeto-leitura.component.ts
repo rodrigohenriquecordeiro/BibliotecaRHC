@@ -22,6 +22,7 @@ export class ProjetosLeituraComponent implements OnInit {
   novoProjetoData: string = '';
   projetoParaEdicao: Projeto | null = null;
   nomeProjetoEdicao: string = '';
+  dataProjetoEdicao!: Date;
   projetoParaExclusao: Projeto | null = null;
 
   livroParaEdicao: LivroProjeto | null = null;
@@ -105,15 +106,17 @@ export class ProjetosLeituraComponent implements OnInit {
   prepararEdicao(projeto: Projeto) {
     this.projetoParaEdicao = projeto;
     this.nomeProjetoEdicao = projeto.nome;
+    this.dataProjetoEdicao = projeto.dataCriacao;
   }
 
   salvarEdicao() {
     if (this.projetoParaEdicao && this.nomeProjetoEdicao.trim()) {
-      const projetoAtualizado = { ...this.projetoParaEdicao, nome: this.nomeProjetoEdicao };
+      const projetoAtualizado = { ...this.projetoParaEdicao, nome: this.nomeProjetoEdicao, dataCriacao: this.dataProjetoEdicao };
 
       this.service.editarProjeto(projetoAtualizado).subscribe({
         next: (res) => {
           this.projetoParaEdicao!.nome = this.nomeProjetoEdicao;
+          this.projetoParaEdicao!.dataCriacao = this.dataProjetoEdicao;
           this.projetoParaEdicao = null;
         },
         error: (err) => console.error('Erro ao editar projeto:', err)

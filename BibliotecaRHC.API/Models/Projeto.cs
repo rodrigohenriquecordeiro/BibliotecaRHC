@@ -7,10 +7,12 @@ public class Projeto
 {
     public int Id { get; set; }
 
-    [StringLength(20, ErrorMessage = "Permitido no máximo 20 caracteres")]
+    [StringLength(100, ErrorMessage = "Permitido no máximo 100 caracteres")]
     public string? Nome { get; set; }
 
     public ICollection<LivroProjeto> LivroProjetos { get; set; } = [];
+
+    public DateTime? DataCriacao { get; set; }
 
     public void ValidaClasse()
     {
