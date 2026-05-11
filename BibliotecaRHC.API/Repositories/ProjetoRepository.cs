@@ -8,15 +8,27 @@ public class ProjetoRepository  : Repository<Projeto>, IProjetoRepository
 {
     public ProjetoRepository(AppDbContext context) : base(context) { }
 
-    public async Task<IEnumerable<Projeto>> GetAllWithLivros()
+    public async Task<IEnumerable<Projeto>> ObterTodosProjetosCompletos()
     {
         return await _context.Projeto
-            .Include(p => p.LivroProjetos) 
+            .Include(p => p.LivroProjetos)
+            .Include(h => h.HistoricoProjetos)
+            .AsNoTracking()
             .ToListAsync();
+    }
+
+    public async Task<Projeto?> ObterPorIdProjeto(int projetoId)
+    {
+        return await _context.Projeto
+            .Include(p => p.LivroProjetos)
+            .Include(h => h.HistoricoProjetos)
+            .FirstOrDefaultAsync(x => x.Id == projetoId);
     }
 }
 
 public interface IProjetoRepository : IRepository<Projeto> 
 {
-    Task<IEnumerable<Projeto>> GetAllWithLivros();
+    Task<IEnumerable<Projeto>> ObterTodosProjetosCompletos();
+
+    Task<Projeto?> ObterPorIdProjeto(int projetoId);
 }

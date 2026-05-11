@@ -16,6 +16,8 @@ public class Projeto
 
     public ProjetoStatus ProjetoStatus { get; set; }
 
+    public ICollection<HistoricoProjeto> HistoricoProjetos { get; set; } = [];
+
     public void ValidaClasse()
     {
         ValidationContext context = new(this, serviceProvider: null, items: null);

@@ -10,6 +10,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<FraseInesquecivel>? FraseInesquecivel{ get; set; }
     public DbSet<Projeto> Projeto { get; set; }
     public DbSet<LivroProjeto> LivroProjeto { get; set; }
+    public DbSet<HistoricoProjeto> HistoricoProjeto { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {

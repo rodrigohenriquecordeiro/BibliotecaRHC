@@ -1,4 +1,5 @@
 
+import { HistoricoProjeto } from "./historicoProjeto";
 import { LivroProjeto } from "./livroProjeto";
 import { ProjetoStatus } from "./projetoStatus";
 
@@ -8,4 +9,5 @@ export interface Projeto {
   livroProjetos: LivroProjeto[];
   dataCriacao: Date;
   projetoStatus: ProjetoStatus;
+  historicoProjetos: HistoricoProjeto[];
 }

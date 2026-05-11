@@ -1,5 +1,6 @@
 ﻿using BibliotecaRHC.API.Models;
 using BibliotecaRHC.API.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaRHC.API.Services;
 
@@ -16,7 +17,7 @@ public class ProjetoService : IProjetoService
 
     public async Task<IEnumerable<Projeto>> ObterTodosOsProjetos()
     {
-        var projetos = await _unityOfWork.ProjetoRepository.GetAllWithLivros();
+        var projetos = await _unityOfWork.ProjetoRepository.ObterTodosProjetosCompletos();
 
         if (!projetos.Any())
         {
@@ -27,13 +28,13 @@ public class ProjetoService : IProjetoService
         return projetos;
     }
 
-    public async Task<Projeto?> ObterProjetoPorId(int id)
+    public async Task<Projeto?> ObterProjetoPorId(int projetoId)
     {
-        var projeto = await _unityOfWork.ProjetoRepository.GetByIDAsync(id);
+        var projeto = await _unityOfWork.ProjetoRepository.ObterPorIdProjeto(projetoId);
 
         if (projeto == null)
         {
-            _logger.LogWarning($"Projeto com ID {id} não encontrado.");
+            _logger.LogWarning($"Projeto com ID {projetoId} não encontrado.");
         }
 
         return projeto;
@@ -41,29 +42,53 @@ public class ProjetoService : IProjetoService
 
     public async Task<Projeto> AdicionarProjeto(Projeto projeto)
     {
+        projeto.DataCriacao = DateTime.Now;
+        projeto.HistoricoProjetos ??= [];
+        projeto.HistoricoProjetos.Add(new HistoricoProjeto
+        {
+            DataAlteracao = DateTime.Now,
+            ProjetoStatus = ProjetoStatus.NaoIniciado
+        });
+
         _unityOfWork.ProjetoRepository.Add(projeto);
         await _unityOfWork.CommitAsync();
+
         return projeto;
     }
 
     public async Task<Projeto?> AtualizarProjeto(Projeto projeto)
     {
-        var projetos = await _unityOfWork.ProjetoRepository.GetByIDAsync(projeto.Id);
+        var projetoNoBanco = await _unityOfWork.ProjetoRepository.ObterPorIdProjeto(projeto.Id);
 
-        if (projetos == null)
+        if (projetoNoBanco == null) return null;
+
+        projetoNoBanco.Nome = projeto.Nome;
+        projetoNoBanco.LivroProjetos = projeto.LivroProjetos;
+        projetoNoBanco.DataCriacao = projeto.DataCriacao;
+        projetoNoBanco.ProjetoStatus = projeto.ProjetoStatus;
+        projetoNoBanco.HistoricoProjetos = projeto.HistoricoProjetos;
+
+        foreach (var livro in projeto.LivroProjetos)
         {
-            _logger.LogWarning($"Projeto com ID {projeto.Id} não encontrado para atualização.");
-            return null;
+            var livroBanco = projetoNoBanco.LivroProjetos.FirstOrDefault(x => x.Id == livro.Id);
+            if (livroBanco != null)
+            {
+                livroBanco.Nome = livro.Nome;
+                livroBanco.AnoDePublicacao = livro.AnoDePublicacao;
+                livroBanco.Lido = livro.Lido;
+                livroBanco.DataDeLeitura = livro.DataDeLeitura;
+            }
         }
 
-        _unityOfWork.ProjetoRepository.Update(projeto);
+        await _unityOfWork.HistoricoProjetoRepository.AtualizarHistorico(projetoNoBanco);
         await _unityOfWork.CommitAsync();
-        return projeto;
+
+        return projetoNoBanco;
     }
 
     public async Task<Projeto?> RemoverProjeto(int id)
     {
-        var projeto = await _unityOfWork.ProjetoRepository.GetByIDAsync(id);
+        var projeto = await _unityOfWork.ProjetoRepository.ObterPorIdProjeto(id);
 
         if (projeto == null)
         {
@@ -71,8 +96,6 @@ public class ProjetoService : IProjetoService
             return null;
         }
 
-        var livrosNoProjeto = await _unityOfWork.LivroProjetoRepository.FindAsync(lp => lp.Id == id);
-        _unityOfWork.LivroProjetoRepository.RemoveRange(livrosNoProjeto);
         _unityOfWork.ProjetoRepository.Remove(projeto);
         await _unityOfWork.CommitAsync();
         return projeto;
