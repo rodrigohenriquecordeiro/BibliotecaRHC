@@ -20,14 +20,14 @@ export class ProjetosLeituraComponent implements OnInit {
 
   projetoSelecionado: Projeto | null = null;
   novoProjetoNome: string = '';
-  novoProjetoData: string = '';
+  novoProjetoData: Date = new Date();
   novoProjetoStatus: ProjetoStatus = ProjetoStatus.NaoIniciado;
-  
+
   projetoParaEdicao: Projeto | null = null;
   nomeProjetoEdicao: string = '';
-  dataProjetoEdicao!: Date;
+  dataProjetoEdicao: Date = new Date();
   statusProjetoEdicao: ProjetoStatus = ProjetoStatus.NaoIniciado;
-  
+
   projetoParaExclusao: Projeto | null = null;
 
   livroParaEdicao: LivroProjeto | null = null;
@@ -70,7 +70,7 @@ export class ProjetosLeituraComponent implements OnInit {
 
   prepararNovoProjeto() {
     this.novoProjetoNome = '';
-    this.novoProjetoData = '';
+    this.novoProjetoData = new Date().toISOString().split('T')[0] as any;;
     this.novoProjetoStatus = ProjetoStatus.NaoIniciado;
   }
 
@@ -92,14 +92,14 @@ export class ProjetosLeituraComponent implements OnInit {
         nome: this.novoProjetoNome,
         dataCriacao: this.novoProjetoData,
         livros: [],
-        projetoStatus: this.novoProjetoStatus 
+        projetoStatus: this.novoProjetoStatus
       };
 
       this.service.criarProjeto(novoProjeto).subscribe({
         next: (projetoCriado) => {
           this.projetos.push(projetoCriado);
           this.novoProjetoNome = '';
-          this.novoProjetoData = '';
+          this.novoProjetoData = projetoCriado.dataCriacao;
           this.novoProjetoStatus = ProjetoStatus.NaoIniciado;
 
           const modalNovoEl = document.getElementById('modalNovoProjeto');
@@ -124,17 +124,23 @@ export class ProjetosLeituraComponent implements OnInit {
   prepararEdicao(projeto: Projeto) {
     this.projetoParaEdicao = projeto;
     this.nomeProjetoEdicao = projeto.nome;
-    this.dataProjetoEdicao = projeto.dataCriacao;
-    this.statusProjetoEdicao = projeto.projetoStatus ?? ProjetoStatus.NaoIniciado; 
-}
+    this.statusProjetoEdicao = projeto.projetoStatus ?? ProjetoStatus.NaoIniciado;
+
+    if (projeto.dataCriacao) {
+      const dateObj = new Date(projeto.dataCriacao);
+      this.dataProjetoEdicao = dateObj.toISOString().split('T')[0] as any;
+    }
+
+    this.statusProjetoEdicao = projeto.projetoStatus ?? ProjetoStatus.NaoIniciado;
+  }
 
   salvarEdicao() {
     if (this.projetoParaEdicao && this.nomeProjetoEdicao.trim()) {
-      const projetoAtualizado = { 
-        ...this.projetoParaEdicao, 
-        nome: this.nomeProjetoEdicao, 
+      const projetoAtualizado = {
+        ...this.projetoParaEdicao,
+        nome: this.nomeProjetoEdicao,
         dataCriacao: this.dataProjetoEdicao,
-        projetoStatus: this.statusProjetoEdicao 
+        projetoStatus: this.statusProjetoEdicao
       };
 
       this.service.editarProjeto(projetoAtualizado).subscribe({
