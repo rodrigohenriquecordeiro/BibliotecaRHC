@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BibliotecaRHC.API.Migrations
 {
     /// <inheritdoc />
-    public partial class Inicial : Migration
+    public partial class ProjetoInicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -118,6 +118,23 @@ namespace BibliotecaRHC.API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Livro", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Projeto",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nome = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DataCriacao = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    ProjetoStatus = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Projeto", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -248,6 +265,54 @@ namespace BibliotecaRHC.API.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "HistoricoProjeto",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ProjetoId = table.Column<int>(type: "int", nullable: false),
+                    DataAlteracao = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    ProjetoStatus = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HistoricoProjeto", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HistoricoProjeto_Projeto_ProjetoId",
+                        column: x => x.ProjetoId,
+                        principalTable: "Projeto",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "LivroProjeto",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nome = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AnoDePublicacao = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Lido = table.Column<bool>(type: "tinyint(1)", nullable: true),
+                    DataDeLeitura = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    ProjetoId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LivroProjeto", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LivroProjeto_Projeto_ProjetoId",
+                        column: x => x.ProjetoId,
+                        principalTable: "Projeto",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -284,6 +349,16 @@ namespace BibliotecaRHC.API.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HistoricoProjeto_ProjetoId",
+                table: "HistoricoProjeto",
+                column: "ProjetoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LivroProjeto_ProjetoId",
+                table: "LivroProjeto",
+                column: "ProjetoId");
         }
 
         /// <inheritdoc />
@@ -308,13 +383,22 @@ namespace BibliotecaRHC.API.Migrations
                 name: "FraseInesquecivel");
 
             migrationBuilder.DropTable(
+                name: "HistoricoProjeto");
+
+            migrationBuilder.DropTable(
                 name: "Livro");
+
+            migrationBuilder.DropTable(
+                name: "LivroProjeto");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Projeto");
         }
     }
 }

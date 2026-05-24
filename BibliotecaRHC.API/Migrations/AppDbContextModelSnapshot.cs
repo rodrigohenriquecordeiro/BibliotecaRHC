@@ -123,6 +123,30 @@ namespace BibliotecaRHC.API.Migrations
                     b.ToTable("FraseInesquecivel");
                 });
 
+            modelBuilder.Entity("BibliotecaRHC.API.Models.HistoricoProjeto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("DataAlteracao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("ProjetoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjetoStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjetoId");
+
+                    b.ToTable("HistoricoProjeto");
+                });
+
             modelBuilder.Entity("BibliotecaRHC.API.Models.Livro", b =>
                 {
                     b.Property<int>("Id")
@@ -178,6 +202,61 @@ namespace BibliotecaRHC.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Livro");
+                });
+
+            modelBuilder.Entity("BibliotecaRHC.API.Models.LivroProjeto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AnoDePublicacao")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<DateTime?>("DataDeLeitura")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool?>("Lido")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Nome")
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
+
+                    b.Property<int>("ProjetoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjetoId");
+
+                    b.ToTable("LivroProjeto");
+                });
+
+            modelBuilder.Entity("BibliotecaRHC.API.Models.Projeto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("DataCriacao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Nome")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("ProjetoStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Projeto");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -312,6 +391,24 @@ namespace BibliotecaRHC.API.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("BibliotecaRHC.API.Models.HistoricoProjeto", b =>
+                {
+                    b.HasOne("BibliotecaRHC.API.Models.Projeto", null)
+                        .WithMany("HistoricoProjetos")
+                        .HasForeignKey("ProjetoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BibliotecaRHC.API.Models.LivroProjeto", b =>
+                {
+                    b.HasOne("BibliotecaRHC.API.Models.Projeto", null)
+                        .WithMany("LivroProjetos")
+                        .HasForeignKey("ProjetoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -361,6 +458,13 @@ namespace BibliotecaRHC.API.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BibliotecaRHC.API.Models.Projeto", b =>
+                {
+                    b.Navigation("HistoricoProjetos");
+
+                    b.Navigation("LivroProjetos");
                 });
 #pragma warning restore 612, 618
         }

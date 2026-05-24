@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BibliotecaRHC.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260509160137_ProjetoDeLeitura")]
-    partial class ProjetoDeLeitura
+    [Migration("20260524125148_ProjetoInicial")]
+    partial class ProjetoInicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,6 +126,30 @@ namespace BibliotecaRHC.API.Migrations
                     b.ToTable("FraseInesquecivel");
                 });
 
+            modelBuilder.Entity("BibliotecaRHC.API.Models.HistoricoProjeto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("DataAlteracao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("ProjetoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjetoStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjetoId");
+
+                    b.ToTable("HistoricoProjeto");
+                });
+
             modelBuilder.Entity("BibliotecaRHC.API.Models.Livro", b =>
                 {
                     b.Property<int>("Id")
@@ -195,17 +219,17 @@ namespace BibliotecaRHC.API.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
-                    b.Property<DateTime>("DataDeLeitura")
+                    b.Property<DateTime?>("DataDeLeitura")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<bool>("Lido")
+                    b.Property<bool?>("Lido")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Nome")
                         .HasMaxLength(300)
                         .HasColumnType("varchar(300)");
 
-                    b.Property<int?>("ProjetoId")
+                    b.Property<int>("ProjetoId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -223,9 +247,15 @@ namespace BibliotecaRHC.API.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime?>("DataCriacao")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Nome")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("ProjetoStatus")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -364,11 +394,22 @@ namespace BibliotecaRHC.API.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("BibliotecaRHC.API.Models.HistoricoProjeto", b =>
+                {
+                    b.HasOne("BibliotecaRHC.API.Models.Projeto", null)
+                        .WithMany("HistoricoProjetos")
+                        .HasForeignKey("ProjetoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BibliotecaRHC.API.Models.LivroProjeto", b =>
                 {
                     b.HasOne("BibliotecaRHC.API.Models.Projeto", null)
-                        .WithMany("Livros")
-                        .HasForeignKey("ProjetoId");
+                        .WithMany("LivroProjetos")
+                        .HasForeignKey("ProjetoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -424,7 +465,9 @@ namespace BibliotecaRHC.API.Migrations
 
             modelBuilder.Entity("BibliotecaRHC.API.Models.Projeto", b =>
                 {
-                    b.Navigation("Livros");
+                    b.Navigation("HistoricoProjetos");
+
+                    b.Navigation("LivroProjetos");
                 });
 #pragma warning restore 612, 618
         }
