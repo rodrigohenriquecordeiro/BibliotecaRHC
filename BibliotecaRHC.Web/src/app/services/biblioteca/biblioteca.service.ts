@@ -7,11 +7,12 @@ import { Projeto } from '../../models/projeto';
 import { catchError, Observable, throwError, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LivroProjeto } from '../../models/livroProjeto';
+import { environment } from '../../../environments/environment.development'; 
 
 @Injectable({ providedIn: 'root' })
 export class BibliotecaService {
 
-  private readonly API = 'https://localhost:7254/api/';
+  private readonly API = `${environment.apiUrl}/`; 
 
   private idSelecionadoSource = new BehaviorSubject<number | null>(null);
   idSelecionado$ = this.idSelecionadoSource.asObservable();

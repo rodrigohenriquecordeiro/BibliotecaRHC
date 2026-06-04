@@ -13,7 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 ExcelPackage.License.SetNonCommercialPersonal("Rodrigo");
 
-// Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -129,5 +128,24 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+
+        Console.WriteLine("Checando/Aplicando Migrations no banco do Docker...");
+
+        context.Database.Migrate();
+
+        Console.WriteLine("Processo de Migrations concluído com sucesso!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Erro crítico ao aplicar migrations: {ex.Message}");
+    }
+}
 
 app.Run();

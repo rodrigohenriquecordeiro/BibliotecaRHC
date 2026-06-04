@@ -1,0 +1,62 @@
+
+services:
+  database:
+    image: mysql:8.0.42
+    container_name: bibliotecarhc-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "724051"
+      MYSQL_DATABASE: bibliotecarhc
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pSuaSenhaForteAqui"]
+      timeout: 5s
+      retries: 5
+    networks:
+      - bibliotecarhc-net
+
+  backend:
+    image: bibliotecarhc-api
+    container_name: bibliotecarhc-backend
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: BibliotecaRHC.API/Dockerfile
+    ports:
+      - "5000:8080" 
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=database;Database=bibliotecarhc;Uid=root;Pwd="724051";
+      - JWT__SecretKey=as285AS489A.A56A5S8Wlok6a/-*23321hgE;PDF998A321
+    depends_on:
+      database:
+        condition: service_healthy 
+    networks:
+      - bibliotecarhc-net
+
+  frontend:
+    image: bibliotecarhc-ui
+    container_name: bibliotecarhc-frontend
+    restart: unless-stopped
+    build:
+      context: ./BibliotecaRHC.Web
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./BibliotecaRHC.Web:/app 
+      - /app/node_modules        
+    depends_on:
+      - backend
+    networks:
+      - bibliotecarhc-net
+
+volumes:
+  mysql_data:
+
+networks:
+  bibliotecarhc-net:
+    driver: bridge
