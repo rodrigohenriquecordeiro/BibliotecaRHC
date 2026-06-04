@@ -24,8 +24,8 @@ export class CadastrarComponent {
     dataDeAquisicao: new FormControl<string | null>(null, Validators.required),
     classificacaoCatalografica: new FormControl<string | null>(null, Validators.required),
     observacao: new FormControl<string | null>(null),
-    lido: new FormControl<boolean | null>(null, Validators.required),
-    anoUltimaLeitura: new FormControl<number | null>(null, Validators.required)
+    lido: new FormControl<boolean>(false),
+    anoUltimaLeitura: new FormControl<number | null>(null)
   });
 
   constructor(
@@ -48,18 +48,30 @@ export class CadastrarComponent {
 
   private ControlaExibicaoCampoLido() {
     this.form.get('lido')?.valueChanges.subscribe(isLido => {
-      if (!isLido) {
-        this.form.get('anoUltimaLeitura')?.reset();
-        this.form.get('anoUltimaLeitura')?.clearValidators();
+      const anoControl = this.form.get('anoUltimaLeitura');
+
+      if (isLido) {
+        anoControl?.setValidators([Validators.required]);
       } else {
+        anoControl?.reset();
+        anoControl?.clearValidators();
       }
-      this.form.get('anoUltimaLeitura')?.updateValueAndValidity();
+
+      anoControl?.updateValueAndValidity();
     });
   }
 
   async cadastrar(): Promise<void> {
     if (this.form.invalid) {
       console.error('Formulário inválido.');
+
+      Object.keys(this.form.controls).forEach(key => {
+        const control = this.form.get(key);
+        if (control && control.invalid) {
+          console.log(`Campo inválido: ${key} | Erros:`, control.errors);
+        }
+      });
+
       return;
     }
 
