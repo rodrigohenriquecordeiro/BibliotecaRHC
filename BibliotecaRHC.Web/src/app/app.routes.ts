@@ -10,9 +10,11 @@ import { FrasesInesqueciveisDashboardComponent } from './componentes/frases-ines
 import { FrasesInesqueciveisAdicionarComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis-adicionar/frases-inesqueciveis-adicionar.component';
 import { FrasesInesqueciveisEditarComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis-editar/frases-inesqueciveis-editar.component';
 import { ImportarPlanilhaComponent } from './componentes/navbar/navbar-itens/importar-planilha/importar-planilha.component';
+import { LoginCadastroComponent } from './componentes/login/login-cadastro/login-cadastro.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  { path: 'login-cadastro', component: LoginCadastroComponent },
   {
     path: '',
     redirectTo: 'login',

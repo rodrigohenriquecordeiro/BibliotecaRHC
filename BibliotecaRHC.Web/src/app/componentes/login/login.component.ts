@@ -37,4 +37,8 @@ export class LoginComponent {
         }
       });
   }
+
+  onLoginCadastro(){
+    this.router.navigate(['/login-cadastro']);
+  }
 }
