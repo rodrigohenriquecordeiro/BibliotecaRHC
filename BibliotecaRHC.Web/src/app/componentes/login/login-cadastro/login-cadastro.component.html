@@ -1,1 +1,56 @@
-<p>login-cadastro works!</p>
+<div class="d-flex justify-content-center align-items-center flex-column min-vh-100 bg-primary">
+    <div class="login-card pt-0 px-4 pb-4 m-4 bg-white rounded shadow" style="width: 100%; max-width: 400px;">
+
+        <img src="assets/logo_biblioteca_rhc.png" alt="logo do Biblioteca RHC" style="width: 250px;"
+            class="mx-auto mt-4 d-block">
+
+        <h4 class="text-center mb-4">Criar Conta</h4>
+
+        <form [formGroup]="form" onsubmit="return false;">
+
+            <div class="mb-3">
+                <label for="nome" class="form-label">Usuário</label>
+                <input type="text" formControlName="nome" class="form-control" id="nome" placeholder="Digite seu usuário">
+                <div *ngIf="form.get('nome')?.touched && form.get('nome')?.invalid" class="text-danger"><small>Nome é
+                        obrigatório (mín. 3 caracteres).</small></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" formControlName="email" class="form-control" id="email"
+                    placeholder="exemplo@email.com">
+                <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="text-danger"><small>Insira
+                        um e-mail válido.</small></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="senha" class="form-label">Senha</label>
+                <input type="password" formControlName="senha" class="form-control" id="senha"
+                    placeholder="No mínimo 6 caracteres">
+                <div *ngIf="form.get('senha')?.touched && form.get('senha')?.invalid" class="text-danger"><small>Senha
+                        obrigatória (mín. 6 caracteres).</small></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="confirmarSenha" class="form-label">Confirmar Senha</label>
+                <input type="password" formControlName="confirmarSenha" class="form-control" id="confirmarSenha"
+                    placeholder="Digite a senha novamente">
+                <div *ngIf="form.hasError('senhasDiferentes') && form.get('confirmarSenha')?.touched"
+                    class="text-danger">
+                    <small>As senhas não coincidem.</small>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="button" class="btn btn-success" [disabled]="form.invalid" (click)="cadastrarUsuario()">
+                    Concluir Cadastro
+                </button>
+                <a routerLink="/login" class="btn btn-outline-secondary">Voltar para o Login</a>
+            </div>
+
+            <div class="text-danger text-center mt-3" *ngIf="erroCadastro">
+                <small>{{ erroCadastro }}</small>
+            </div>
+        </form>
+    </div>
+</div>

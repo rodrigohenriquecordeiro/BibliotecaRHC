@@ -61,7 +61,7 @@ public class AuthController : ControllerBase
                                   new Response { Status = "Success", Message = $"Usuário {user.Email} adicionado a role {roleName} com sucesso" });
             else
                 return StatusCode(StatusCodes.Status400BadRequest,
-                                      new Response { Status = "Error", Message = $"Erro ao adicionar ouUsuário {user.Email} a role {roleName}" });
+                                      new Response { Status = "Error", Message = $"Erro ao adicionar o Usuário {user.Email} a role {roleName}" });
         }
 
         return BadRequest(new { error = "Não foi possível localizar usuário"});
@@ -70,7 +70,7 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterModel model)
     {
-        var userExist = await _userManager.FindByNameAsync(model.UserName!);
+        var userExist = await _userManager.FindByNameAsync(model.Email!);
 
         if (userExist != null)
         {
@@ -81,10 +81,11 @@ public class AuthController : ControllerBase
         {
             Email = model.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
-            UserName = model.UserName
+            UserName = model.Nome,
+            DataCriacao = model.DataCriacao
         };
 
-        var result = await _userManager.CreateAsync(user, model.Password!);
+        var result = await _userManager.CreateAsync(user, model.Senha!);
 
         if (!result.Succeeded)
         {

@@ -80,9 +80,9 @@ public class AuthControllerTests
         // Act
         var result = await controller.Register(new RegisterModel
         {
-            UserName = "user1",
+            Nome = "user1",
             Email = "user1@example.com",
-            Password = "Test@123"
+            Senha = "Test@123"
         });
 
         // Assert
