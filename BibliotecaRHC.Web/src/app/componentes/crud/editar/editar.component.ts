@@ -32,8 +32,8 @@ export class EditarComponent {
     dataDeAquisicao: new FormControl<string | null>(null, Validators.required),
     classificacaoCatalografica: new FormControl<string | null>(null, Validators.required),
     observacao: new FormControl<string | null>(null),
-    lido: new FormControl<boolean | null>(null, Validators.required),
-    anoUltimaLeitura: new FormControl<number | null>(null, Validators.required)
+    lido: new FormControl<boolean>(false),
+    anoUltimaLeitura: new FormControl<number | null>(null)
   });
 
   constructor(
@@ -66,6 +66,12 @@ export class EditarComponent {
   }
 
   preencherFormulario(livro: Livro): void {
+    let dataFormatada: string | null = null;
+    if (livro.dataDeAquisicao) {
+      const data = new Date(livro.dataDeAquisicao);
+      dataFormatada = data.toISOString().split('T')[0];
+    }
+
     this.form.patchValue({
       codigoDoLivro: livro.id,
       nomeDoLivro: livro.nomeDoLivro,
@@ -73,7 +79,7 @@ export class EditarComponent {
       editora: livro.editora,
       numeroDePaginas: Number(livro.numeroDePaginas),
       anoDePublicacao: Number(livro.anoDePublicacao),
-      dataDeAquisicao: livro.dataDeAquisicao,
+      dataDeAquisicao: dataFormatada,
       classificacaoCatalografica: livro.classificacaoCatalografica,
       observacao: livro.observacao,
       lido: livro.lido!,
