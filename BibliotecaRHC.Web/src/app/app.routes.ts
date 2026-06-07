@@ -11,6 +11,7 @@ import { FrasesInesqueciveisAdicionarComponent } from './componentes/frases-ines
 import { FrasesInesqueciveisEditarComponent } from './componentes/frases-inesqueciveis/frases-inesqueciveis-editar/frases-inesqueciveis-editar.component';
 import { ImportarPlanilhaComponent } from './componentes/navbar/navbar-itens/importar-planilha/importar-planilha.component';
 import { LoginCadastroComponent } from './componentes/login/login-cadastro/login-cadastro.component';
+import { RelatoriosComponent } from './componentes/navbar/navbar-itens/relatorios/relatorios.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -32,6 +33,7 @@ export const routes: Routes = [
       { path: 'frases-inesqueciveis-dashboard', component: FrasesInesqueciveisDashboardComponent },
       { path: 'frases-inesqueciveis-adicionar', component: FrasesInesqueciveisAdicionarComponent},
       { path: 'frases-inesqueciveis-editar', component: FrasesInesqueciveisEditarComponent},
+      { path: 'relatorios', component: RelatoriosComponent},
       { path: 'importar-planilha', component: ImportarPlanilhaComponent}
     ]
   },
