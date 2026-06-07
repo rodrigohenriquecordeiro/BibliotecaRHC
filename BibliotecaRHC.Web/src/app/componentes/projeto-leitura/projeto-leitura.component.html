@@ -10,7 +10,7 @@
 
   <hr class="mb-4" />
 
-  <div class="d-flex flex-wrap gap-4 justify-content-center justify-content-sm-start">
+  <div class="row g-4 justify-content-center justify-content-sm-start">
     @for (projeto of projetos; track projeto.id) {
     <div class="col-12 col-md-6 col-lg-4">
       <div class="card bg-card-escuro h-100 borda-customizada shadow border-secondary">
@@ -51,8 +51,10 @@
       </div>
     </div>
     } @empty {
-    <div class="alert alert-info w-100 text-center" role="alert">
-      Nenhum projeto de leitura foi adicionado ainda.
+    <div class="col-12">
+      <div class="alert alert-info w-100 text-center" role="alert">
+        Nenhum projeto de leitura foi adicionado ainda.
+      </div>
     </div>
     }
   </div>
