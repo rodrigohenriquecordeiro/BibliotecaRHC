@@ -8,6 +8,7 @@ public interface IUnityOfWork : IDisposable
     IProjetoRepository ProjetoRepository { get; }
     ILivroProjetoRepository LivroProjetoRepository { get; }
     IHistoricoProjetoRepository HistoricoProjetoRepository { get; }
+    IRelatoriosRepository RelatoriosRepository { get; }
 
     Task<int> CommitAsync();
     void LimparRastreador();

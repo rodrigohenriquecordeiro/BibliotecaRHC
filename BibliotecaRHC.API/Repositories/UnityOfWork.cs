@@ -10,6 +10,7 @@ public class UnityOfWork : IUnityOfWork
     private IProjetoRepository? _projetoRepository;
     private ILivroProjetoRepository? _livroProjetoRepository;
     private IHistoricoProjetoRepository? _historicoProjetoRepository;
+    private IRelatoriosRepository? _relatoriosRepository;
 
     public UnityOfWork(AppDbContext context)
     {
@@ -21,6 +22,7 @@ public class UnityOfWork : IUnityOfWork
     public IProjetoRepository ProjetoRepository =>  _projetoRepository ??= new ProjetoRepository(_context);
     public ILivroProjetoRepository LivroProjetoRepository => _livroProjetoRepository ??= new LivroProjetoRepository(_context);
     public IHistoricoProjetoRepository HistoricoProjetoRepository => _historicoProjetoRepository ??= new HistoricoProjetoRepository(_context);
+    public IRelatoriosRepository RelatoriosRepository => _relatoriosRepository ??= new RelatoriosRepository(_context);
 
     public async Task<int> CommitAsync() => await _context.SaveChangesAsync();
 

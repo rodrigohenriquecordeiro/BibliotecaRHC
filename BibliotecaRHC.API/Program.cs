@@ -96,6 +96,8 @@ builder.Services.AddScoped<IProjetoService, ProjetoService>();
 builder.Services.AddScoped<ILivroProjetoRepository, LivroProjetoRepository>();
 builder.Services.AddScoped<ILivroProjetoService, LivroProjetoService>();
 builder.Services.AddScoped<IHistoricoProjetoRepository, HistoricoProjetoRepository>();
+builder.Services.AddScoped<IRelatoriosRepository, RelatoriosRepository>();
+builder.Services.AddScoped<IRelatoriosService, RelatoriosService>();
 
 builder.Services.AddCors(options =>
 {

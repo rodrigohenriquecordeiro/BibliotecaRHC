@@ -1,1 +1,182 @@
-<p>relatorios works!</p>
+<div class="dashboard-container">
+  
+  <div class="metrics-grid">
+    <div class="card card-primary">
+      <h3>Total de Livros</h3>
+      <p class="metric-value">{{ totalLivros() }}</p>
+    </div>
+
+    <div class="card card-success">
+      <h3>Livros Lidos</h3>
+      <p class="metric-value">{{ livrosLidos() }}</p>
+    </div>
+
+    <div class="card card-warning">
+      <h3>Livros Não Lidos</h3>
+      <p class="metric-value">{{ livrosNaoLidos() }}</p>
+    </div>
+
+    <div class="card">
+      <h3>Total de Autores</h3>
+      <p class="metric-value">{{ totalAutores() }}</p>
+    </div>
+
+    <div class="card">
+      <h3>Total de Editoras</h3>
+      <p class="metric-value">{{ totalEditoras() }}</p>
+    </div>
+
+    <div class="card card-info">
+      <h3>Projetos em Andamento</h3>
+      <p class="metric-value">{{ projetosLeituraAndamento() }}</p>
+    </div>
+  </div>
+
+  <div class="rankings-grid">
+
+    <div class="ranking-card">
+      <h4>Top 10 Autores</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Autor</th>
+            <th>Qtd. Livros</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (autor of topAutores(); track autor.descricao) {
+            <tr>
+              <td>{{ autor.descricao }}</td>
+              <td>{{ autor.quantidade }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="2" class="no-data">Nenhum dado encontrado</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ranking-card">
+      <h4>Top 10 Editoras</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Editora</th>
+            <th>Qtd. Livros</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (editora of topEditoras(); track editora.descricao) {
+            <tr>
+              <td>{{ editora.descricao }}</td>
+              <td>{{ editora.quantidade }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="2" class="no-data">Nenhum dado encontrado</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ranking-card">
+      <h4>Top 10 Classificações</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Classificação</th>
+            <th>Qtd. Livros</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (classe of topClassificacoes(); track classe.descricao) {
+            <tr>
+              <td>{{ classe.descricao }}</td>
+              <td>{{ classe.quantidade }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="2" class="no-data">Nenhum dado encontrado</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ranking-card">
+      <h4>Top 10 Anos de Publicação</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Ano</th>
+            <th>Qtd. Livros</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (ano of topAnosPublicacao(); track ano.descricao) {
+            <tr>
+              <td>{{ ano.descricao }}</td>
+              <td>{{ ano.quantidade }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="2" class="no-data">Nenhum dado encontrado</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ranking-card">
+      <h4>Top 10 Anos de Aquisição</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Ano</th>
+            <th>Qtd. Livros</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (ano of topAnosAquisicao(); track ano.descricao) {
+            <tr>
+              <td>{{ ano.descricao }}</td>
+              <td>{{ ano.quantidade }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="2" class="no-data">Nenhum dado encontrado</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ranking-card">
+      <h4>Top 10 Livros Mais Longos</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Livro</th>
+            <th>Páginas</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (livro of topLivrosLongos(); track livro.nomeDoLivro) {
+            <tr>
+              <td>{{ livro.nomeDoLivro }}</td>
+              <td>{{ livro.numeroDePaginas }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="2" class="no-data">Nenhum dado encontrado</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
