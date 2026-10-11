@@ -4,12 +4,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using BibliotecaRHC.API.Models;
 using BibliotecaRHC.API.Services;
+using BibliotecaRHC.API.Repositories;
 
 namespace BibliotecaRHC.Tests.Domain;
 
 public class ImportarPlanilhaServiceTests
 {
     private readonly Mock<ILivroService> _livroServiceMock;
+    private readonly Mock<IFrasesInesqueciveisService> _frasesServiceMock;
+    private readonly Mock<IProjetoService> _projetoServiceMock;
+    private readonly Mock<ILivroProjetoService> _livroProjetoServiceMock;
+    private readonly Mock<IHistoricoProjetoRepository> _historicoProjetoRepositoryMock;
     private readonly Mock<ILogger<ImportarPlanilhaService>> _loggerMock;
     private readonly ImportarPlanilhaService _service;
 
@@ -19,8 +24,18 @@ public class ImportarPlanilhaServiceTests
 
         _livroServiceMock = new Mock<ILivroService>();
         _loggerMock = new Mock<ILogger<ImportarPlanilhaService>>();
+        _frasesServiceMock = new Mock<IFrasesInesqueciveisService>();
+        _projetoServiceMock = new Mock<IProjetoService>();
+        _livroProjetoServiceMock = new Mock<ILivroProjetoService>();
+        _historicoProjetoRepositoryMock = new Mock<IHistoricoProjetoRepository>();
 
-        _service = new ImportarPlanilhaService(_livroServiceMock.Object, _loggerMock.Object);
+        _service = new ImportarPlanilhaService(
+            _livroServiceMock.Object,
+            _frasesServiceMock.Object,
+            _projetoServiceMock.Object,
+            _livroProjetoServiceMock.Object,
+            _historicoProjetoRepositoryMock.Object,
+            _loggerMock.Object);
     }
 
     [Fact]

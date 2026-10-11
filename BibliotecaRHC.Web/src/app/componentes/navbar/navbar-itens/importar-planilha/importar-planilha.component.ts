@@ -116,7 +116,7 @@ export class ImportarPlanilhaComponent {
 
   baixarModelo() {
     const link = document.createElement('a');
-    link.href = 'assets/modelo-importacao.xlsx';
+    link.href = '/api/importar-planilha/modelo';
     link.download = 'modelo-importacao.xlsx';
     link.click();
   }
