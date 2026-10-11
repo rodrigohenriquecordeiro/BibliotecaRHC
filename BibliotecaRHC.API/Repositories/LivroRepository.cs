@@ -20,7 +20,7 @@ public class LivroRepository : Repository<Livro>, ILivroRepository
     public async Task<IEnumerable<Livro>> ObterLivrosPaginados(int paginaAtual, int tamanhoPagina)
     {
         var livros = await _context.Livro!
-            .OrderBy(l => l.Id)
+            .OrderByDescending(l => l.Id)
             .Skip((paginaAtual - 1) * tamanhoPagina)
             .Take(tamanhoPagina)
             .ToListAsync();
