@@ -17,10 +17,13 @@ public class LivroRepository : Repository<Livro>, ILivroRepository
         return ultimoLivro?.Id ?? 0;
     }
 
-    public async Task<IEnumerable<Livro>> ObterLivrosPaginados(int paginaAtual, int tamanhoPagina)
+    public async Task<IEnumerable<Livro>> ObterLivrosPaginados(
+        int paginaAtual,
+        int tamanhoPagina,
+        string campoOrdenacao = "id",
+        string direcaoOrdenacao = "desc")
     {
-        var livros = await _context.Livro!
-            .OrderByDescending(l => l.Id)
+        var livros = await AplicarOrdenacao(_context.Livro!.AsQueryable(), campoOrdenacao, direcaoOrdenacao)
             .Skip((paginaAtual - 1) * tamanhoPagina)
             .Take(tamanhoPagina)
             .ToListAsync();
@@ -28,7 +31,11 @@ public class LivroRepository : Repository<Livro>, ILivroRepository
         return livros;
     }
 
-    public async Task<IEnumerable<Livro>> ObterLivrosFiltrados(string campo, string valor)
+    public async Task<IEnumerable<Livro>> ObterLivrosFiltrados(
+        string campo,
+        string valor,
+        string campoOrdenacao = "id",
+        string direcaoOrdenacao = "desc")
     {
         var query = _context.Livro!.AsQueryable();
 
@@ -47,7 +54,31 @@ public class LivroRepository : Repository<Livro>, ILivroRepository
             _ => query
         };
 
-        return await query.OrderBy(x => x.Id).ToListAsync();
+        return await AplicarOrdenacao(query, campoOrdenacao, direcaoOrdenacao).ToListAsync();
+    }
+
+    private static IOrderedQueryable<Livro> AplicarOrdenacao(
+        IQueryable<Livro> query,
+        string campoOrdenacao,
+        string direcaoOrdenacao)
+    {
+        var campo = campoOrdenacao.Trim().ToLowerInvariant();
+        var crescente = direcaoOrdenacao.Equals("asc", StringComparison.OrdinalIgnoreCase);
+
+        return campo switch
+        {
+            "autor" => crescente ? query.OrderBy(x => x.Autor).ThenBy(x => x.Id) : query.OrderByDescending(x => x.Autor).ThenBy(x => x.Id),
+            "nomedolivro" => crescente ? query.OrderBy(x => x.NomeDoLivro).ThenBy(x => x.Id) : query.OrderByDescending(x => x.NomeDoLivro).ThenBy(x => x.Id),
+            "editora" => crescente ? query.OrderBy(x => x.Editora).ThenBy(x => x.Id) : query.OrderByDescending(x => x.Editora).ThenBy(x => x.Id),
+            "numerodepaginas" => crescente ? query.OrderBy(x => x.NumeroDePaginas).ThenBy(x => x.Id) : query.OrderByDescending(x => x.NumeroDePaginas).ThenBy(x => x.Id),
+            "anodepublicacao" => crescente ? query.OrderBy(x => x.AnoDePublicacao).ThenBy(x => x.Id) : query.OrderByDescending(x => x.AnoDePublicacao).ThenBy(x => x.Id),
+            "datadeaquisicao" => crescente ? query.OrderBy(x => x.DataDeAquisicao).ThenBy(x => x.Id) : query.OrderByDescending(x => x.DataDeAquisicao).ThenBy(x => x.Id),
+            "classificacaocatalografica" => crescente ? query.OrderBy(x => x.ClassificacaoCatalografica).ThenBy(x => x.Id) : query.OrderByDescending(x => x.ClassificacaoCatalografica).ThenBy(x => x.Id),
+            "observacao" => crescente ? query.OrderBy(x => x.Observacao).ThenBy(x => x.Id) : query.OrderByDescending(x => x.Observacao).ThenBy(x => x.Id),
+            "lido" => crescente ? query.OrderBy(x => x.Lido).ThenBy(x => x.Id) : query.OrderByDescending(x => x.Lido).ThenBy(x => x.Id),
+            "anoultimaleitura" => crescente ? query.OrderBy(x => x.AnoUltimaLeitura).ThenBy(x => x.Id) : query.OrderByDescending(x => x.AnoUltimaLeitura).ThenBy(x => x.Id),
+            _ => crescente ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Id)
+        };
     }
 
     private static string FormataString(string valor) => valor.Trim().ToLower();
@@ -58,6 +89,6 @@ public class LivroRepository : Repository<Livro>, ILivroRepository
 public interface ILivroRepository : IRepository<Livro>
 {
     Task<int> ObterCodigoUltimoLivroAsync();
-    Task<IEnumerable<Livro>> ObterLivrosPaginados(int paginaAtual, int tamanhoPagina);
-    Task<IEnumerable<Livro>> ObterLivrosFiltrados(string campo, string valor);
+    Task<IEnumerable<Livro>> ObterLivrosPaginados(int paginaAtual, int tamanhoPagina, string campoOrdenacao = "id", string direcaoOrdenacao = "desc");
+    Task<IEnumerable<Livro>> ObterLivrosFiltrados(string campo, string valor, string campoOrdenacao = "id", string direcaoOrdenacao = "desc");
 }

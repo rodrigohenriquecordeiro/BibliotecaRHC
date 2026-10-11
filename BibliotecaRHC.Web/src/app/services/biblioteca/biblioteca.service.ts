@@ -41,12 +41,20 @@ export class BibliotecaService {
     });
   }
 
-  listarLivros(pagina: number = 1, campo: string = '', valor: string = ''): Observable<LivrosPaginados> {
+  listarLivros(
+    pagina: number = 1,
+    campo: string = '',
+    valor: string = '',
+    campoOrdenacao: string = 'id',
+    direcaoOrdenacao: 'asc' | 'desc' = 'desc'
+  ): Observable<LivrosPaginados> {
 
     if (valor && valor.trim() !== '') {
       const params = new HttpParams()
         .set('campo', campo)
-        .set('valor', valor);
+        .set('valor', valor)
+        .set('campoOrdenacao', campoOrdenacao)
+        .set('direcaoOrdenacao', direcaoOrdenacao);
 
       return this.http.get<Livro[]>(`${this.API}livros/filtra-dashboard`, {
         headers: this.getAuthHeaders(),
@@ -64,7 +72,10 @@ export class BibliotecaService {
       );
 
     } else {
-      const params = new HttpParams().set('paginaAtual', pagina.toString());
+      const params = new HttpParams()
+        .set('paginaAtual', pagina.toString())
+        .set('campoOrdenacao', campoOrdenacao)
+        .set('direcaoOrdenacao', direcaoOrdenacao);
 
       return this.http.get<LivrosPaginados>(`${this.API}livros/obter-livros-paginados`, {
         headers: this.getAuthHeaders(),

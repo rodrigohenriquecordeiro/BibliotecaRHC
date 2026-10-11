@@ -33,3 +33,21 @@ thead th {
   color: white;
   box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
 }
+
+.sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.sort-button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}

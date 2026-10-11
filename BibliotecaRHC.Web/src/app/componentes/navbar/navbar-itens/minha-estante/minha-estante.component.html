@@ -81,18 +81,54 @@
     <table class="table table-hover w-100">
       <thead class="table-dark" style="position: sticky; top: 0; z-index: 1;">
         <tr>
-          <th scope="col" class="text-center">#</th>
-          <th scope="col" class="text-center">Código</th>
-          <th scope="col">Livro</th>
-          <th scope="col">Autor</th>
-          <th scope="col">Editora</th>
-          <th scope="col" class="text-center">Nº de Páginas</th>
-          <th scope="col" class="text-center">Publicação</th>
-          <th scope="col" class="text-center">Aquisição</th>
-          <th scope="col">Classificação</th>
-          <th scope="col">Observação</th>
-          <th scope="col">Você já leu?</th>
-          <th scope="col">Última leitura</th>
+          <th scope="col" class="text-center" [attr.aria-sort]="ariaOrdenacao('id')">
+            <button type="button" class="sort-button" (click)="ordenarPor('id')" aria-label="Ordenar por número"
+              title="Ordenar por número"><span>#</span><i class="bi" [ngClass]="iconeOrdenacao('id')"></i></button>
+          </th>
+          <th scope="col" class="text-center" [attr.aria-sort]="ariaOrdenacao('id')">
+            <button type="button" class="sort-button" (click)="ordenarPor('id')" aria-label="Ordenar por código"
+              title="Ordenar por código"><span>Código</span><i class="bi" [ngClass]="iconeOrdenacao('id')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('nomeDoLivro')">
+            <button type="button" class="sort-button" (click)="ordenarPor('nomeDoLivro')" aria-label="Ordenar por livro"
+              title="Ordenar por livro"><span>Livro</span><i class="bi" [ngClass]="iconeOrdenacao('nomeDoLivro')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('autor')">
+            <button type="button" class="sort-button" (click)="ordenarPor('autor')" aria-label="Ordenar por autor"
+              title="Ordenar por autor"><span>Autor</span><i class="bi" [ngClass]="iconeOrdenacao('autor')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('editora')">
+            <button type="button" class="sort-button" (click)="ordenarPor('editora')" aria-label="Ordenar por editora"
+              title="Ordenar por editora"><span>Editora</span><i class="bi" [ngClass]="iconeOrdenacao('editora')"></i></button>
+          </th>
+          <th scope="col" class="text-center" [attr.aria-sort]="ariaOrdenacao('numeroDePaginas')">
+            <button type="button" class="sort-button" (click)="ordenarPor('numeroDePaginas')" aria-label="Ordenar por número de páginas"
+              title="Ordenar por número de páginas"><span>Nº de Páginas</span><i class="bi" [ngClass]="iconeOrdenacao('numeroDePaginas')"></i></button>
+          </th>
+          <th scope="col" class="text-center" [attr.aria-sort]="ariaOrdenacao('anoDePublicacao')">
+            <button type="button" class="sort-button" (click)="ordenarPor('anoDePublicacao')" aria-label="Ordenar por publicação"
+              title="Ordenar por publicação"><span>Publicação</span><i class="bi" [ngClass]="iconeOrdenacao('anoDePublicacao')"></i></button>
+          </th>
+          <th scope="col" class="text-center" [attr.aria-sort]="ariaOrdenacao('dataDeAquisicao')">
+            <button type="button" class="sort-button" (click)="ordenarPor('dataDeAquisicao')" aria-label="Ordenar por aquisição"
+              title="Ordenar por aquisição"><span>Aquisição</span><i class="bi" [ngClass]="iconeOrdenacao('dataDeAquisicao')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('classificacaoCatalografica')">
+            <button type="button" class="sort-button" (click)="ordenarPor('classificacaoCatalografica')" aria-label="Ordenar por classificação"
+              title="Ordenar por classificação"><span>Classificação</span><i class="bi" [ngClass]="iconeOrdenacao('classificacaoCatalografica')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('observacao')">
+            <button type="button" class="sort-button" (click)="ordenarPor('observacao')" aria-label="Ordenar por observação"
+              title="Ordenar por observação"><span>Observação</span><i class="bi" [ngClass]="iconeOrdenacao('observacao')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('lido')">
+            <button type="button" class="sort-button" (click)="ordenarPor('lido')" aria-label="Ordenar por lido"
+              title="Ordenar por lido"><span>Você já leu?</span><i class="bi" [ngClass]="iconeOrdenacao('lido')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('anoUltimaLeitura')">
+            <button type="button" class="sort-button" (click)="ordenarPor('anoUltimaLeitura')" aria-label="Ordenar por última leitura"
+              title="Ordenar por última leitura"><span>Última leitura</span><i class="bi" [ngClass]="iconeOrdenacao('anoUltimaLeitura')"></i></button>
+          </th>
         </tr>
       </thead>
       <tbody class="table-group-divider">
