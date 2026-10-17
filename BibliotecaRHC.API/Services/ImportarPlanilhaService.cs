@@ -58,7 +58,7 @@ public class ImportarPlanilhaService : IImportarPlanilha
             var sheetName = (worksheet.Name ?? string.Empty).Trim().ToLowerInvariant();
             int rowCount = worksheet.Dimension.End.Row;
 
-            // mapear cabeçalhos e detectar se existe coluna de número (N°, Nº) na coluna A
+            // Mapear cabeçalhos e detectar uma coluna de numeração opcional na primeira coluna.
             int maxColGlobal = worksheet.Dimension.End.Column;
             var headerMapGlobal = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             for (int c = 1; c <= maxColGlobal; c++)
@@ -69,10 +69,11 @@ public class ImportarPlanilhaService : IImportarPlanilha
             }
 
             int colOffset = 0;
-            string[] numeroKeys = new[] { "nº", "n°", "n", "no", "número", "numero", "#" };
-            if (headerMapGlobal.Keys.Any(k => numeroKeys.Any(nk => k.Contains(nk))))
+            string[] numeroHeaders = ["nº", "n°", "no", "no.", "número", "numero", "#"];
+            if (headerMapGlobal.Any(header =>
+                header.Value == 1 && numeroHeaders.Contains(header.Key, StringComparer.OrdinalIgnoreCase)))
             {
-                colOffset = 1; // planilha possui coluna 'Nº' antes dos dados
+                colOffset = 1;
             }
 
             if (sheetName.Contains("frase"))

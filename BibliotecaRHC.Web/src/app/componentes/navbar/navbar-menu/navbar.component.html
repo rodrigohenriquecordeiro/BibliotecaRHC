@@ -77,3 +77,20 @@
 </nav>
 
 <router-outlet></router-outlet>
+
+<footer class="app-footer">
+  <div class="footer-content">
+    <a class="footer-brand" routerLink="/minha-estante" aria-label="Biblioteca RHC - Minha Estante">
+      <i class="bi bi-book-half" aria-hidden="true"></i>
+      <span>Biblioteca RHC</span>
+    </a>
+
+    <p class="footer-message">Sua biblioteca, organizada para acompanhar cada leitura.</p>
+
+    <div class="footer-meta">
+      <span>&copy; {{ anoAtual }} Biblioteca RHC</span>
+      <a routerLink="/projeto-leitura">Projetos de Leitura</a>
+      <a routerLink="/relatorios">Relatórios</a>
+    </div>
+  </div>
+</footer>

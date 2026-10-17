@@ -3,6 +3,7 @@ using BibliotecaRHC.API.Models;
 using BibliotecaRHC.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System.Text.Json;
 
 namespace BibliotecaRHC.Tests.Controllers;
 
@@ -38,6 +39,20 @@ public class ProjetoControllerTests
         var ok = Assert.IsType<OkObjectResult>(resultado);
         var retornado = Assert.IsAssignableFrom<IEnumerable<Projeto>>(ok.Value);
         Assert.Single(retornado);
+    }
+
+    [Fact]
+    public void ProjetoComLivrosEHistorico_DeveSerializarSemCiclo()
+    {
+        var projeto = new Projeto { Id = 1, Nome = "Projeto de leitura" };
+        projeto.LivroProjetos.Add(new LivroProjeto { Id = 2, ProjetoId = projeto.Id, Projeto = projeto });
+        projeto.HistoricoProjetos.Add(new HistoricoProjeto { Id = 3, ProjetoId = projeto.Id, Projeto = projeto });
+
+        var json = JsonSerializer.Serialize(projeto);
+
+        Assert.Contains("\"LivroProjetos\"", json);
+        Assert.Contains("\"HistoricoProjetos\"", json);
+        Assert.DoesNotContain("\"Projeto\":", json);
     }
 
     [Fact]

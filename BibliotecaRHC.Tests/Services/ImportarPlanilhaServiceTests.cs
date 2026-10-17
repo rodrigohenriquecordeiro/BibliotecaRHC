@@ -160,6 +160,34 @@ public class ImportarPlanilhaServiceTests
     }
 
     [Fact]
+    public async Task ImportarPlanilhaAsync_DeveCriarProjetoQuandoAbaNaoPossuiColunaDeNumeracao()
+    {
+        const int userId = 42;
+        await using var context = TestDbContextFactory.Create(Guid.NewGuid().ToString(), userId);
+        using var package = new ExcelPackage();
+        var worksheet = package.Workbook.Worksheets.Add("Projetos");
+        PreencherLinha(worksheet, 1,
+        [
+            "Nome do Projeto", "Data da Criação", "Status do Projeto", "Nome do Livro",
+            "Autor", "Editora", "Ano de Publicação", "Número de Páginas", "Classificação",
+            "Observação", "Data de Aquisição", "Lido", "Ano Ultima Leitura"
+        ]);
+        PreencherLinha(worksheet, 2,
+        [
+            "Projeto sem numeração", new DateTime(2024, 1, 1), "Em andamento", "Livro do projeto",
+            "Autor", "Editora", "2024", 100, "A1", "", new DateTime(2024, 1, 1), "Não", ""
+        ]);
+
+        var erros = await CriarServicoReal(context).ImportarPlanilhaAsync(CriarArquivoExcel(package).Object);
+
+        Assert.Empty(erros);
+        var projeto = Assert.Single(context.Set<Projeto>().ToList());
+        Assert.Equal("Projeto sem numeração", projeto.Nome);
+        Assert.Equal(ProjetoStatus.Andamento, projeto.ProjetoStatus);
+        Assert.Equal("Livro do projeto", Assert.Single(context.Set<LivroProjeto>().ToList()).Nome);
+    }
+
+    [Fact]
     public async Task ImportarPlanilhaAsync_DeveRejeitarProjetoDeOutroUsuario()
     {
         const int projectOwnerId = 21;

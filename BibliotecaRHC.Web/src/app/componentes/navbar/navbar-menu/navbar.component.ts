@@ -21,6 +21,7 @@ export class NavbarComponent implements AfterViewInit {
   termoBusca: string = '';
   estaNaMinhaEstante = false;
   menuExpandido = false;
+  readonly anoAtual = new Date().getFullYear();
 
   private inscricaoFiltro = new Subscription();
 

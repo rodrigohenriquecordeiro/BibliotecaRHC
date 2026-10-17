@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using System.Text;
 
 namespace BibliotecaRHC.API.Models;
@@ -19,6 +20,8 @@ public class LivroProjeto : IEntidadeDoUsuario
     public DateTime? DataDeLeitura { get; set; }
 
     public int ProjetoId { get; set; }
+
+    [JsonIgnore]
     public Projeto? Projeto { get; set; }
 
     public void ValidaClasse()
