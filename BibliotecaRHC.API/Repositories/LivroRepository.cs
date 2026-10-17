@@ -37,9 +37,33 @@ public class LivroRepository : Repository<Livro>, ILivroRepository
         string campoOrdenacao = "id",
         string direcaoOrdenacao = "desc")
     {
+        var query = CriarConsultaFiltrada(campo, valor);
+        return await AplicarOrdenacao(query, campoOrdenacao, direcaoOrdenacao).ToListAsync();
+    }
+
+    public async Task<int> ContarLivrosFiltrados(string campo, string valor) =>
+        await CriarConsultaFiltrada(campo, valor).CountAsync();
+
+    public async Task<IEnumerable<Livro>> ObterLivrosFiltradosPaginados(
+        string campo,
+        string valor,
+        int paginaAtual,
+        int tamanhoPagina,
+        string campoOrdenacao = "id",
+        string direcaoOrdenacao = "desc")
+    {
+        var query = CriarConsultaFiltrada(campo, valor);
+        return await AplicarOrdenacao(query, campoOrdenacao, direcaoOrdenacao)
+            .Skip((paginaAtual - 1) * tamanhoPagina)
+            .Take(tamanhoPagina)
+            .ToListAsync();
+    }
+
+    private IQueryable<Livro> CriarConsultaFiltrada(string campo, string valor)
+    {
         var query = _context.Livro!.AsQueryable();
 
-        query = FormataString(campo) switch
+        return FormataString(campo) switch
         {
             "autor" => query.Where(x => x.Autor!.Contains(FormataString(valor))),
             "nomedolivro" => query.Where(x => x.NomeDoLivro!.Contains(FormataString(valor))),
@@ -53,8 +77,6 @@ public class LivroRepository : Repository<Livro>, ILivroRepository
             "anoultimaleitura" => query.Where(x => x.AnoUltimaLeitura == int.Parse(valor.Trim())),
             _ => query
         };
-
-        return await AplicarOrdenacao(query, campoOrdenacao, direcaoOrdenacao).ToListAsync();
     }
 
     private static IOrderedQueryable<Livro> AplicarOrdenacao(
@@ -91,4 +113,6 @@ public interface ILivroRepository : IRepository<Livro>
     Task<int> ObterCodigoUltimoLivroAsync();
     Task<IEnumerable<Livro>> ObterLivrosPaginados(int paginaAtual, int tamanhoPagina, string campoOrdenacao = "id", string direcaoOrdenacao = "desc");
     Task<IEnumerable<Livro>> ObterLivrosFiltrados(string campo, string valor, string campoOrdenacao = "id", string direcaoOrdenacao = "desc");
+    Task<int> ContarLivrosFiltrados(string campo, string valor);
+    Task<IEnumerable<Livro>> ObterLivrosFiltradosPaginados(string campo, string valor, int paginaAtual, int tamanhoPagina, string campoOrdenacao = "id", string direcaoOrdenacao = "desc");
 }

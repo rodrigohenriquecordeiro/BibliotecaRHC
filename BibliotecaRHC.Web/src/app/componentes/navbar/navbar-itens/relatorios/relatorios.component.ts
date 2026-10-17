@@ -2,6 +2,8 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RelatoriosService } from '../../../../services/relatorios/relatorios.service';
 import { Top10Item, Top10LivroLongo } from '../../../../models/relatorios';
+import { Router } from '@angular/router';
+import { FiltroService } from '../../../../services/filtro/filtro.service';
 
 @Component({
   selector: 'app-relatorios',
@@ -12,6 +14,8 @@ import { Top10Item, Top10LivroLongo } from '../../../../models/relatorios';
 })
 export class RelatoriosComponent implements OnInit {
   private relatoriosService = inject(RelatoriosService);
+  private router = inject(Router);
+  private filtroService = inject(FiltroService);
 
   totalLivros = signal<number>(0);
   livrosLidos = signal<number>(0);
@@ -29,6 +33,20 @@ export class RelatoriosComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarDados();
+  }
+
+  abrirMinhaEstante(filtroLeitura?: 'sim' | 'não'): void {
+    if (filtroLeitura) {
+      this.filtroService.atualizarFiltro('lido', filtroLeitura);
+    } else {
+      this.filtroService.atualizarFiltro('Livro', '');
+    }
+
+    this.router.navigate(['/minha-estante']);
+  }
+
+  abrirProjetosLeitura(): void {
+    this.router.navigate(['/projeto-leitura']);
   }
 
   private carregarDados(): void {

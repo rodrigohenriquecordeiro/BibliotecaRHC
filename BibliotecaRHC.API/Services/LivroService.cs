@@ -71,6 +71,34 @@ public class LivroService : ILivroService
         string direcaoOrdenacao = "desc") =>
         await _unityOfWork.LivroRepository.ObterLivrosFiltrados(campo, valor, campoOrdenacao, direcaoOrdenacao);
 
+    public async Task<LivroPaginado> ObterLivrosFiltradosPaginados(
+        string campo,
+        string valor,
+        int paginaAtual,
+        string campoOrdenacao = "id",
+        string direcaoOrdenacao = "desc")
+    {
+        const int tamanhoPagina = 10;
+        var totalLivros = await _unityOfWork.LivroRepository.ContarLivrosFiltrados(campo, valor);
+        var totalPaginas = (int)Math.Ceiling((double)totalLivros / tamanhoPagina);
+        var livros = await _unityOfWork.LivroRepository.ObterLivrosFiltradosPaginados(
+            campo,
+            valor,
+            paginaAtual,
+            tamanhoPagina,
+            campoOrdenacao,
+            direcaoOrdenacao);
+
+        return new LivroPaginado
+        {
+            Livros = livros,
+            TotalLivros = totalLivros,
+            TotalPaginas = totalPaginas,
+            TemPaginaAnterior = paginaAtual > 1,
+            TemProximaPagina = paginaAtual < totalPaginas
+        };
+    }
+
     public async Task<Livro> AdicionarLivroAsync(Livro livro)
     {
         try
@@ -130,6 +158,7 @@ public interface ILivroService
     Task<LivroPaginado> ObterTodosOsLivrosPaginados(int paginaAtual, string campoOrdenacao = "id", string direcaoOrdenacao = "desc");
     Task<Livro?> ObterLivroPorId(int id);
     Task<IEnumerable<Livro>> ObterLivrosFiltrados(string campo, string valor, string campoOrdenacao = "id", string direcaoOrdenacao = "desc");
+    Task<LivroPaginado> ObterLivrosFiltradosPaginados(string campo, string valor, int paginaAtual, string campoOrdenacao = "id", string direcaoOrdenacao = "desc");
     Task<Livro> AdicionarLivroAsync(Livro livro);
     Task<Livro?> AtualizarLivro(Livro livro);
     Task<Livro?> RemoverLivro(int id);

@@ -17,6 +17,7 @@ export class NavbarComponent implements AfterViewInit {
 
   filtroSelecionado: string = 'Livro';
   placeHolderFiltro: string = 'Selecione um filtro ou digite um livro';
+  termoBusca: string = '';
 
   private inscricaoFiltro!: Subscription;
 
@@ -46,17 +47,21 @@ export class NavbarComponent implements AfterViewInit {
     'Observação': 'observacao'
   };
 
+  private readonly filtrosParaCampoAPI: Record<string, string> = Object.fromEntries(
+    Object.entries(this.camposParaAPI).map(([filtro, campoAPI]) => [campoAPI, filtro])
+  );
+
   constructor(
     private router: Router,
     private filtroService: FiltroService) { }
 
   ngOnInit() {
     this.inscricaoFiltro = this.filtroService.filtroAtual$.subscribe(filtro => {
-      if (filtro.termo === '' && this.inputBusca) {
-        this.inputBusca.nativeElement.value = '';
-        this.filtroSelecionado = 'Livro';
-        this.placeHolderFiltro = this.placeholders['Livro'];
-      }
+      this.termoBusca = filtro.termo;
+      this.filtroSelecionado = filtro.termo === ''
+        ? 'Livro'
+        : this.filtrosParaCampoAPI[filtro.tipo] || 'Livro';
+      this.placeHolderFiltro = this.placeholders[this.filtroSelecionado] || 'Selecione um filtro';
     });
   }
 
@@ -71,8 +76,8 @@ export class NavbarComponent implements AfterViewInit {
   mudarFiltro(novoValor: string) {
     this.filtroSelecionado = novoValor;
     this.placeHolderFiltro = this.placeholders[novoValor] || 'Selecione um filtro';
-    this.inputBusca.nativeElement.value = '';
-    this.inputBusca.nativeElement.focus();
+    this.termoBusca = '';
+    this.inputBusca?.nativeElement?.focus();
   }
 
   logout() {

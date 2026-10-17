@@ -69,6 +69,25 @@ public class LivroController : ControllerBase
     }
 
     [Authorize]
+    [HttpGet("filtra-dashboard-paginado")]
+    public async Task<IActionResult> GetLivrosFiltradosPaginados(
+        [FromQuery] string campo,
+        [FromQuery] string valor,
+        [FromQuery] int paginaAtual = 1,
+        [FromQuery] string campoOrdenacao = "id",
+        [FromQuery] string direcaoOrdenacao = "desc")
+    {
+        var livros = await _service.ObterLivrosFiltradosPaginados(
+            campo,
+            valor,
+            paginaAtual,
+            campoOrdenacao,
+            direcaoOrdenacao);
+
+        return Ok(livros);
+    }
+
+    [Authorize]
     [HttpPut("atualizar-livro/{id}")]
     public async Task<IActionResult> Put(int id, [FromBody] Livro livro)
     {

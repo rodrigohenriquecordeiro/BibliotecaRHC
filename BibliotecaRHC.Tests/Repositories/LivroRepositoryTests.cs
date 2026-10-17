@@ -149,4 +149,31 @@ public class LivroRepositoryTests : BaseRepositoryTests<Livro>
 
         Assert.Equal(new[] { 4, 1 }, livros.Select(livro => livro.Id));
     }
+
+    [Fact]
+    public async Task ObterLivrosFiltradosPaginados_DeveRetornarPaginaEContagemDoFiltro()
+    {
+        var (repo, context) = CriarRepositorioComContexto();
+        context.Livro!.AddRange(Enumerable.Range(4, 9).Select(id => new Livro
+        {
+            Id = id,
+            Autor = $"Autor {id}",
+            NomeDoLivro = $"Livro {id}",
+            Editora = $"Editora {id}",
+            AnoDePublicacao = "2024",
+            NumeroDePaginas = 100,
+            ClassificacaoCatalografica = $"A{id}",
+            Observacao = "Teste",
+            DataDeAquisicao = DateTime.Now,
+            Lido = false
+        }));
+        await context.SaveChangesAsync();
+
+        var livroRepo = (LivroRepository)repo;
+        var totalLivros = await livroRepo.ContarLivrosFiltrados("lido", "não");
+        var livros = await livroRepo.ObterLivrosFiltradosPaginados("lido", "não", 2, 10);
+
+        Assert.Equal(12, totalLivros);
+        Assert.Equal(new[] { 2, 1 }, livros.Select(livro => livro.Id));
+    }
 }

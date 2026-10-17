@@ -20,6 +20,25 @@
   border-left: 5px solid #6c757d;
 }
 
+.card-clickable {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+.card-clickable:focus-visible {
+  outline: 3px solid #212529;
+  outline-offset: 2px;
+}
+
 .card h3 {
   margin: 0 0 0.5rem 0;
   font-size: 0.9rem;
