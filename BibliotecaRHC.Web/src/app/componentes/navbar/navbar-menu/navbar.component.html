@@ -1,40 +1,40 @@
-<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-  <div class="container-fluid">
+<nav class="navbar bg-primary" data-bs-theme="dark">
+  <div class="container-fluid navbar-content">
 
-    <a href="/minha-estante">
-      <img src="assets/logo_biblioteca_rhc.png" alt="Logo da Biblioteca RHC" class="navbar-brand" style="width: 100px;">
+    <a href="/minha-estante" class="navbar-logo-link">
+      <img src="assets/logo_biblioteca_rhc.png" alt="Logo da Biblioteca RHC" class="navbar-brand">
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" aria-controls="navbarContent"
+      [attr.aria-expanded]="menuExpandido" aria-label="Alternar menu"
+      (click)="alternarMenu()">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarContent">
+    <div class="navbar-collapse" id="navbarContent" [class.is-open]="menuExpandido">
 
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 fs-5">
         <li class="nav-item">
-          <a class="nav-link" href="/minha-estante">Minha Estante</a>
+          <a class="nav-link" href="/minha-estante" (click)="fecharMenu()">Minha Estante</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/projeto-leitura">Projetos de Leitura</a>
+          <a class="nav-link" href="/projeto-leitura" (click)="fecharMenu()">Projetos de Leitura</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/frases-inesqueciveis-dashboard">Frases Inesquecíveis</a>
+          <a class="nav-link" href="/frases-inesqueciveis-dashboard" (click)="fecharMenu()">Frases Inesquecíveis</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/relatorios">Relatórios</a>
+          <a class="nav-link" href="/relatorios" (click)="fecharMenu()">Relatórios</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/importar-planilha">Importar Planilha</a>
+          <a class="nav-link" href="/importar-planilha" (click)="fecharMenu()">Importar Planilha</a>
         </li>
       </ul>
 
-      <div
-        class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-3 ms-lg-auto mt-3 mt-lg-0 container-busca-sair">
+      <div class="container-busca-sair">
 
-        <form class="d-flex m-0 w-100" role="search" (submit)="pesquisar(inputBusca.value); $event.preventDefault()">
-          <div class="input-group mobile-stack">
+        <form *ngIf="estaNaMinhaEstante" class="d-flex m-0" role="search" (submit)="pesquisar(inputBusca.value); fecharMenu(); $event.preventDefault()">
+          <div class="input-group">
 
             <button class="btn btn-inset dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               {{ filtroSelecionado }}
@@ -66,9 +66,10 @@
         </form>
 
         <div class="account-actions">
-          <span class="nome-usuario" *ngIf="nomeUsuario" aria-live="polite">Conectado: <i>{{ nomeUsuario }}</i></span>
-          <button class="btn btn-conta" type="button" routerLink="/minha-conta">Minha Conta</button>
-          <button class="btn btn-outline-danger btn-sair" (click)="logout()">Sair</button>
+          <div class="account-buttons">
+            <button class="btn btn-conta" type="button" routerLink="/minha-conta" (click)="fecharMenu()">Minha Conta</button>
+            <button class="btn btn-outline-danger btn-sair" (click)="logout(); fecharMenu()">Sair</button>
+          </div>
         </div>
       </div>
     </div>

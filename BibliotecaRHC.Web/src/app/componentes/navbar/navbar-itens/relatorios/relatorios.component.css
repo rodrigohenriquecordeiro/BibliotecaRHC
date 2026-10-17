@@ -25,7 +25,6 @@
   text-align: left;
   font: inherit;
   color: inherit;
-  cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -130,7 +129,6 @@ table tbody tr:last-child {
 
 table tbody tr:hover {
   background-color: #f8f9fa; 
-  cursor: pointer;
 }
 
 .no-data {

@@ -157,12 +157,8 @@ export class MinhaEstanteComponent implements OnInit {
     return lista;
   }
 
-  onSelecionarLivro(event: any, id: number) {
-    if (event.target.checked) {
-      this.idLivrosSelecionados.push(id);
-    } else {
-      this.idLivrosSelecionados = this.idLivrosSelecionados.filter(i => i !== id);
-    }
+  selecionarLivro(id: number): void {
+    this.idLivrosSelecionados = this.idLivrosSelecionados[0] === id ? [] : [id];
   }
 
   getLivroSelecionado(): Livro | undefined {

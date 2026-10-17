@@ -1,8 +1,8 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FiltroService } from '../../../services/filtro/filtro.service';
-import { Subscription } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
@@ -19,7 +19,8 @@ export class NavbarComponent implements AfterViewInit {
   filtroSelecionado: string = 'Livro';
   placeHolderFiltro: string = 'Selecione um filtro ou digite um livro';
   termoBusca: string = '';
-  nomeUsuario = '';
+  estaNaMinhaEstante = false;
+  menuExpandido = false;
 
   private inscricaoFiltro = new Subscription();
 
@@ -59,6 +60,12 @@ export class NavbarComponent implements AfterViewInit {
     private authService: AuthService) { }
 
   ngOnInit() {
+    this.estaNaMinhaEstante = this.router.url.startsWith('/minha-estante');
+    this.inscricaoFiltro.add(this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe(event => {
+      this.estaNaMinhaEstante = event.urlAfterRedirects.startsWith('/minha-estante');
+    }));
     this.inscricaoFiltro.add(this.filtroService.filtroAtual$.subscribe(filtro => {
       this.termoBusca = filtro.termo;
       this.filtroSelecionado = filtro.termo === ''
@@ -66,12 +73,6 @@ export class NavbarComponent implements AfterViewInit {
         : this.filtrosParaCampoAPI[filtro.tipo] || 'Livro';
       this.placeHolderFiltro = this.placeholders[this.filtroSelecionado] || 'Selecione um filtro';
     }));
-    this.inscricaoFiltro.add(this.authService.usuarioAtual$.subscribe(usuario => {
-      this.nomeUsuario = usuario?.nome || '';
-    }));
-    this.authService.obterConta().subscribe({
-      error: erro => console.error('Erro ao carregar o usuário conectado:', erro)
-    });
   }
 
   ngOnDestroy() {
@@ -91,6 +92,14 @@ export class NavbarComponent implements AfterViewInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  alternarMenu() {
+    this.menuExpandido = !this.menuExpandido;
+  }
+
+  fecharMenu() {
+    this.menuExpandido = false;
   }
 
   pesquisar(termo: string) {

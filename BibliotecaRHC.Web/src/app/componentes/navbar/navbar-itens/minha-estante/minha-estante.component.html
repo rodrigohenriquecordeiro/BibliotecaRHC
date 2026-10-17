@@ -82,10 +82,6 @@
       <thead class="table-dark" style="position: sticky; top: 0; z-index: 1;">
         <tr>
           <th scope="col" class="text-center" [attr.aria-sort]="ariaOrdenacao('id')">
-            <button type="button" class="sort-button" (click)="ordenarPor('id')" aria-label="Ordenar por número"
-              title="Ordenar por número"><span>#</span><i class="bi" [ngClass]="iconeOrdenacao('id')"></i></button>
-          </th>
-          <th scope="col" class="text-center" [attr.aria-sort]="ariaOrdenacao('id')">
             <button type="button" class="sort-button" (click)="ordenarPor('id')" aria-label="Ordenar por código"
               title="Ordenar por código"><span>Código</span><i class="bi" [ngClass]="iconeOrdenacao('id')"></i></button>
           </th>
@@ -132,11 +128,13 @@
         </tr>
       </thead>
       <tbody class="table-group-divider">
-        <tr *ngFor="let livro of livros">
-          <td class="text-center">
-            <input type="checkbox" [checked]="idLivrosSelecionados.includes(livro.id)"
-              (change)="onSelecionarLivro($event, livro.id)" />
-          </td>
+        <tr *ngFor="let livro of livros"
+          [class.livro-selecionado]="idLivrosSelecionados.includes(livro.id)"
+          [attr.aria-selected]="idLivrosSelecionados.includes(livro.id)"
+          tabindex="0"
+          (click)="selecionarLivro(livro.id)"
+          (keydown.enter)="selecionarLivro(livro.id)"
+          (keydown.space)="selecionarLivro(livro.id); $event.preventDefault()">
           <td class="text-center">{{livro.id}}</td>
           <td class="text-wrap">{{livro.nomeDoLivro}}</td>
           <td class="text-wrap">{{livro.autor}}</td>
