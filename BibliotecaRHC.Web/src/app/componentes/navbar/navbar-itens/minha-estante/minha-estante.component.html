@@ -1,29 +1,22 @@
 @if (livros.length === 0 && !temFiltroAtivo) {
-<div class="container text-center my-4">
-  <h1 class="text-center h2 mb-3 large">Bem vindo a Biblioteca RHC</h1>
-
-  <div class="d-flex justify-content-center align-items-center gap-2">
-    <button type="button" [routerLink]="['/cadastrar']" class="btn btn-success btn-primary m-1" style="width: 150px;">
-      Cadastrar Livro
+<main class="page-shell empty-library text-center">
+  <app-page-header class="page-header--centered" title="Bem-vindo à Biblioteca RHC"
+    subtitle="Sua coleção começa com a próxima leitura.">
+    <button type="button" [routerLink]="['/cadastrar']" class="btn btn-primary">Cadastrar livro</button>
+    <button type="button" [routerLink]="['/importar-planilha']" class="btn btn-outline-primary">
+      Importar planilha
     </button>
-
-    <button type="button" [routerLink]="['/importar-planilha']" class="btn btn-success btn-primary m-1"
-      style="width: 150px;">
-      Importar Planilha
-    </button>
-  </div>
-
-  <hr class="mb-4" />
+  </app-page-header>
 
   <div class="alert alert-info w-80 text-center" role="alert">
     <span class="text-center mb-4">Nenhum livro foi adicionado ainda.</span>
   </div>
-</div>
+</main>
 }
 @else if (livros.length === 0 && temFiltroAtivo) {
-<div class="container text-center my-5">
-  <i class="bi bi-search" style="font-size: 3rem; color: #6c757d;"></i>
-  <h3 class="mt-3 text-muted">Nenhum livro encontrado</h3>
+<main class="page-shell text-center">
+  <i class="bi bi-search fs-1 text-muted" aria-hidden="true"></i>
+  <h1 class="h3 mt-3">Nenhum livro encontrado</h1>
   <p class="text-secondary">
     Não encontramos resultados na sua estante para o filtro <strong>{{ campoFiltroComErroAmigavel }}</strong> com o termo
     "<strong>{{ valorFiltroAtual }}</strong>".
@@ -31,55 +24,51 @@
   <button class="btn btn-outline-primary mt-2" (click)="limparFiltro()">
     <i class="bi bi-x-circle"></i> Limpar Filtro e Voltar
   </button>
-</div>
+</main>
 } @else {
-<div>
-  <div class="d-flex justify-content-between align-items-center my-4 ms-4 mb-4">
-
-    <p class="mb-0">
-      "<em>{{ fraseDestaque?.frase }}</em>". <strong>{{ fraseDestaque?.autor }}</strong>
-    </p>
-
-    <div class="d-flex flex-column flex-md-row gap-1 justify-content-center">
-      <button type="button" [routerLink]="['/cadastrar']" class="btn btn-primary mx-1">
-        Cadastrar
-      </button>
-
-      <button type="button" [routerLink]="['/editar']" class="btn btn-primary mx-1" (click)="editarLivro()"
+<main class="page-shell">
+  <app-page-header title="Minha estante" subtitle="Sua coleção, organizada em um só lugar.">
+    <button type="button" [routerLink]="['/cadastrar']" class="btn btn-primary">Cadastrar livro</button>
+    <button type="button" [routerLink]="['/editar']" class="btn btn-outline-primary" (click)="editarLivro()"
         [disabled]="idLivrosSelecionados.length !== 1">
-        Editar
-      </button>
+      Editar
+    </button>
 
-      <button type="button" class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#modalApagar"
-        [disabled]="idLivrosSelecionados.length === 0">
-        Apagar
-      </button>
+    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalApagar"
+      [disabled]="idLivrosSelecionados.length === 0">
+      Apagar
+    </button>
+  </app-page-header>
 
-      <div class="modal fade" id="modalApagar" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Apagar Livro(s)</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              Você tem certeza que deseja apagar <strong>{{ idLivrosSelecionados.length }} livro(s)</strong>
-              selecionado(s)?
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-              <button type="button" class="btn btn-primary" (click)="confirmarApagar()"
-                data-bs-dismiss="modal">Confirmar</button>
-            </div>
-          </div>
+  @if (fraseDestaque) {
+    <blockquote class="featured-quote">
+      “{{ fraseDestaque.frase }}” <cite>— {{ fraseDestaque.autor }}</cite>
+    </blockquote>
+  }
+
+  <div class="modal fade" id="modalApagar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="exampleModalLabel">Apagar livro(s)</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          Você tem certeza que deseja apagar <strong>{{ idLivrosSelecionados.length }} livro(s)</strong>
+          selecionado(s)?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+          <button type="button" class="btn btn-primary" (click)="confirmarApagar()"
+            data-bs-dismiss="modal">Confirmar</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="table-responsive container-tabela mt-4" style="height: calc(100vh - 250px); overflow-y: auto;">
+  <div class="table-responsive container-tabela mt-4">
     <table class="table table-hover w-100">
-      <thead class="table-dark" style="position: sticky; top: 0; z-index: 1;">
+      <thead class="table-dark">
         <tr>
           <th scope="col" class="text-center" [attr.aria-sort]="ariaOrdenacao('id')">
             <button type="button" class="sort-button" (click)="ordenarPor('id')" aria-label="Ordenar por código"
@@ -178,5 +167,5 @@
       </ul>
     </nav>
   </div>
-</div>
+</main>
 }

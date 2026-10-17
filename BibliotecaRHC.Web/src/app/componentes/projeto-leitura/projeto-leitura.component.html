@@ -1,25 +1,22 @@
 <!-- #region Listagem de Projetos -->
-<div class="container mt-4 mb-5">
-  <h1 class="text-center h2 mb-3">Gerenciamento dos Projetos de Leitura</h1>
-  <div class="text-center mb-4">
-    <button class="btn btn-warning fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNovoProjeto"
+<main class="page-shell">
+  <app-page-header title="Projetos de leitura" subtitle="Planeje suas próximas jornadas literárias.">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNovoProjeto"
       (click)="prepararNovoProjeto()">
-      <i class="bi bi-plus-circle-fill me-1"></i> Novo Projeto
+      <i class="bi bi-plus-circle-fill me-1"></i> Novo projeto
     </button>
-  </div>
-
-  <hr class="mb-4" />
+  </app-page-header>
 
   <div class="row g-4 justify-content-center justify-content-sm-start">
     @for (projeto of projetos; track projeto.id) {
     <div class="col-12 col-md-6 col-lg-4">
-      <div class="card bg-card-escuro h-100 borda-customizada shadow border-secondary">
+      <div class="card project-card bg-card-escuro h-100 borda-customizada shadow border-secondary">
         <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
           <h4 class="card-title text-white mb-2 fw-semibold">{{ projeto.nome }}</h4>
-          <span class="badge bg-dark border border-secondary mb-3 px-3 py-2 text-light rounded-pill">
+          <span class="badge project-count mb-3 px-3 py-2 rounded-pill">
             <i class="bi bi-book me-1"></i> {{ projeto.livroProjetos.length || 0 }} Livros
           </span>
-          <button class="btn btn-outline-light w-100 fw-bold" data-bs-toggle="modal" data-bs-target="#modalProjeto"
+          <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#modalProjeto"
             (click)="abrirModalProjeto(projeto)">
             <i class="bi bi-gear-fill me-1"></i> Gerenciar Projeto
           </button>
@@ -58,11 +55,11 @@
     </div>
     }
   </div>
-</div>
+</main>
 <!-- #endregion -->
 
 <!-- #region Gerenciar Projeto e Lista de Livros -->
-<div class="modal fade" id="modalProjeto" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
+<div class="modal fade" id="modalProjeto" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
       <div class="modal-header border-bottom border-secondary">
@@ -132,7 +129,7 @@
 <!-- #endregion -->
 
 <!-- #region Novo Projeto -->
-<div class="modal fade" id="modalNovoProjeto" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
+<div class="modal fade" id="modalNovoProjeto" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
       <div class="modal-header border-bottom border-secondary">
@@ -176,7 +173,7 @@
 <!-- #endregion -->
 
 <!-- #region Editar Projeto -->
-<div class="modal fade" id="modalEditarProjeto" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
+<div class="modal fade" id="modalEditarProjeto" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
       <div class="modal-header border-bottom border-secondary">
@@ -217,7 +214,7 @@
 <!-- #endregion -->
 
 <!-- #region Excluir Projeto -->
-<div class="modal fade" id="modalConfirmarExclusao" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
+<div class="modal fade" id="modalConfirmarExclusao" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
       <div class="modal-header border-bottom borda-customizada">
@@ -225,7 +222,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body p-4 text-center">
-        <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+        <i class="bi bi-exclamation-triangle text-danger fs-1"></i>
         <p class="mt-3 mb-0">Tem certeza que deseja excluir o projeto <strong>{{ projetoParaExclusao?.nome
             }}</strong>?
         </p>
@@ -243,7 +240,7 @@
 <!-- #endregion -->
 
 <!-- #region Adicionar Livro -->
-<div class="modal fade" id="modalAdicionarLivro" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
+<div class="modal fade" id="modalAdicionarLivro" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
 
@@ -282,7 +279,7 @@
 <!-- #endregion -->
 
 <!-- #region Editar Livro -->
-<div class="modal fade" id="modalEditarLivro" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
+<div class="modal fade" id="modalEditarLivro" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
       <div class="modal-header border-bottom borda-customizada">
@@ -314,7 +311,7 @@
 <!-- #endregion -->
 
 <!-- #region Excluir Livro -->
-<div class="modal fade" id="modalConfirmarExclusaoLivro" tabindex="-1" aria-hidden="true" data-bs-theme="dark">
+<div class="modal fade" id="modalConfirmarExclusaoLivro" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-card-escuro text-white borda-customizada">
       <div class="modal-header border-bottom borda-customizada">
@@ -322,7 +319,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body p-4 text-center">
-        <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+        <i class="bi bi-exclamation-triangle text-danger fs-1"></i>
         <p class="mt-3 mb-0">Tem certeza que deseja excluir o livro <strong>{{ livroParaExclusao?.nome }}</strong>?
         </p>
         <p class="text-muted small">Esta ação não poderá ser desfeita.</p>

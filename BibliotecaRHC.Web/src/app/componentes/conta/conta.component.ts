@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
+import { PageHeaderComponent } from '../shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-conta',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, PageHeaderComponent],
   templateUrl: './conta.component.html',
   styleUrl: './conta.component.css'
 })

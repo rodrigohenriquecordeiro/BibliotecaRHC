@@ -1,7 +1,7 @@
-<main class="container py-5 conta-container">
-  <section class="card shadow-sm mx-auto conta-card">
+<main class="page-shell conta-container">
+  <section class="card mx-auto conta-card">
     <div class="card-body p-4 p-md-5">
-      <h1 class="h3 mb-4">Minha Conta</h1>
+      <app-page-header title="Minha conta" subtitle="Gerencie seus dados e suas credenciais."></app-page-header>
 
       <div *ngIf="carregando" class="text-center py-4" role="status">
         Carregando dados da conta...

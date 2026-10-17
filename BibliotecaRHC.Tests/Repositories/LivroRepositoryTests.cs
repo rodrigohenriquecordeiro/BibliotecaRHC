@@ -115,6 +115,16 @@ public class LivroRepositoryTests : BaseRepositoryTests<Livro>
     }
 
     [Fact]
+    public async Task ObterLivrosFiltradosPorId_DeveRetornarSomenteOCodigoInformado()
+    {
+        var (repo, _) = CriarRepositorioComContexto();
+
+        var livros = await ((LivroRepository)repo).ObterLivrosFiltrados("id", "2");
+
+        Assert.Equal(new[] { 2 }, livros.Select(livro => livro.Id));
+    }
+
+    [Fact]
     public async Task ObterLivrosPaginados_DeveOrdenarAntesDeAplicarPaginacao()
     {
         var (repo, context) = CriarRepositorioComContexto();

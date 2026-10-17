@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { PageHeaderComponent } from '../../shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-frases-inesqueciveis-editar',
@@ -13,7 +14,8 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule, 
     ReactiveFormsModule, 
-    RouterModule],
+    RouterModule,
+    PageHeaderComponent],
   templateUrl: './frases-inesqueciveis-editar.component.html',
   styleUrl: './frases-inesqueciveis-editar.component.css'
 })

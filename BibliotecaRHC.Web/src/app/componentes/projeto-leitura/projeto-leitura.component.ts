@@ -5,12 +5,13 @@ import { Projeto } from '../../models/projeto';
 import { LivroProjeto } from '../../models/livroProjeto';
 import { BibliotecaService } from '../../services/biblioteca/biblioteca.service';
 import { ProjetoStatus } from '../../models/projetoStatus';
+import { PageHeaderComponent } from '../shared/page-header/page-header.component';
 
 declare var bootstrap: any;
 @Component({
   selector: 'app-projetos-leitura',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PageHeaderComponent],
   templateUrl: './projeto-leitura.component.html',
   styleUrls: ['./projeto-leitura.component.css']
 })

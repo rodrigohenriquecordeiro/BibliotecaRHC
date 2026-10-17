@@ -9,11 +9,12 @@ import { SimNaoPipe } from '../../../../pipes/sim-nao.pipe';
 import { Subscription } from 'rxjs';
 import { FiltroService } from '../../../../services/filtro/filtro.service'
 import { LivrosPaginados } from '../../../../models/livrosPaginados';
+import { PageHeaderComponent } from '../../../shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-minha-estante',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, SimNaoPipe],
+  imports: [FormsModule, CommonModule, RouterModule, SimNaoPipe, PageHeaderComponent],
   templateUrl: './minha-estante.component.html',
   styleUrl: './minha-estante.component.css'
 })

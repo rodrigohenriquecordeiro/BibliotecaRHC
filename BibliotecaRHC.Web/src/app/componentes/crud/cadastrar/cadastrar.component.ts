@@ -4,10 +4,11 @@ import { BibliotecaService } from '../../../services/biblioteca/biblioteca.servi
 import { Livro } from '../../../models/livro';
 import { firstValueFrom } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
+import { PageHeaderComponent } from '../../shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterModule, PageHeaderComponent],
   templateUrl: './cadastrar.component.html',
   styleUrl: './cadastrar.component.css'
 })

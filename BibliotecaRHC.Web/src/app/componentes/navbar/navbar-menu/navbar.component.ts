@@ -26,6 +26,7 @@ export class NavbarComponent implements AfterViewInit {
   private inscricaoFiltro = new Subscription();
 
   private readonly placeholders: Record<string, string> = {
+    'Código': 'Digite o código do livro',
     'Livro': 'Digite um livro',
     'Autor': 'Digite um autor',
     'Editora': 'Digite uma editora',
@@ -39,6 +40,7 @@ export class NavbarComponent implements AfterViewInit {
   };
 
   private readonly camposParaAPI: Record<string, string> = {
+    'Código': 'id',
     'Livro': 'nomedolivro',
     'Autor': 'autor',
     'Editora': 'editora',

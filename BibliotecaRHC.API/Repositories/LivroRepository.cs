@@ -65,6 +65,7 @@ public class LivroRepository : Repository<Livro>, ILivroRepository
 
         return FormataString(campo) switch
         {
+            "id" => query.Where(x => x.Id == int.Parse(valor.Trim())),
             "autor" => query.Where(x => x.Autor!.Contains(FormataString(valor))),
             "nomedolivro" => query.Where(x => x.NomeDoLivro!.Contains(FormataString(valor))),
             "editora" => query.Where(x => x.Editora!.Contains(FormataString(valor))),

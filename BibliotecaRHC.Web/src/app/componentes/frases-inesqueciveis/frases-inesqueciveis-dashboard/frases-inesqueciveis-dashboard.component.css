@@ -1,30 +1,37 @@
+.quote-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  gap: 1rem;
+}
+
+.quote-grid > .alert {
+  grid-column: 1 / -1;
+}
+
+.quote-card {
+  min-height: 13rem;
+  border-top: 3px solid var(--color-highlight);
+}
+
 .livro {
-    font-weight: bold;
-    font-size: 1.1rem;
-  }
+  color: var(--color-primary);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
 
-  .frase {
-    font-style: italic;
-    font-size: 1rem;
-  }
+.frase {
+  color: var(--color-ink);
+  font-size: 1rem;
+  font-style: italic;
+}
 
-  .autor {
-    text-align: right;
-    font-size: 0.85rem;
-    font-weight: bold;
-  }
+.autor {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
 
-  .card-body:hover {
-    border: 2px solid #000 !important;
-    border-radius: 8px !important;
-  }
-
-  .btn:hover {
-    border: 2px solid #000 !important;
-  }
-  
-  .btn-xs {
-  padding: 0.15rem 0.35rem;
-  font-size: 0.95rem; 
-  line-height: 1.2; 
+.btn-xs {
+  padding: 0.35rem 0.55rem;
+  font-size: 0.9rem;
 }

@@ -1,11 +1,10 @@
-<div class="container my-4">
+<main class="page-shell">
   <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
 
-      <h2 class="fw-normal bg-secondary mb-3 text-center"><strong>Editar uma Frase</strong></h2>
-      <hr class="mb-4">
+      <app-page-header title="Editar frase" subtitle="Atualize os detalhes desta passagem."></app-page-header>
 
-      <form [formGroup]="form">
+      <form class="card p-4" [formGroup]="form">
 
         <div class="mb-3">
           <label for="frase" class="form-label w-100"><strong>Frase Inesquecível</strong></label>
@@ -26,12 +25,12 @@
         </div>
 
         <div class="d-flex justify-content-end gap-2 mt-4">
-          <a class="btn bg-primary btn-lg ms-2" href="/frases-inesqueciveis-dashboard" role="button">Voltar</a>
-          <button type="button" class="btn bg-primary btn-lg ms-2" (click)="salvarAlteracoes()">Salvar</button>
+          <a class="btn btn-secondary" routerLink="/frases-inesqueciveis-dashboard">Voltar</a>
+          <button type="button" class="btn btn-primary" (click)="salvarAlteracoes()">Salvar</button>
         </div>
 
       </form>
 
     </div>
   </div>
-</div>
+</main>

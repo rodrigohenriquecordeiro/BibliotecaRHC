@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { PageHeaderComponent } from '../../shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-editar',
@@ -13,7 +14,8 @@ import { Router, RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule],
+    RouterModule,
+    PageHeaderComponent],
   templateUrl: './editar.component.html',
   styleUrl: './editar.component.css'
 })

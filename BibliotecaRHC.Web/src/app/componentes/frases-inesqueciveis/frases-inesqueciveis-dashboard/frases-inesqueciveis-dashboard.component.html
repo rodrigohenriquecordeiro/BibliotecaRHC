@@ -1,60 +1,55 @@
-<div class="container my-4">
-  <h1 class="text-center h2 mb-3">Gerenciamento das Frases Inesquecíveis</h1>
-  <div class="text-center mb-4">
-    <button type="button" [routerLink]="['/frases-inesqueciveis-adicionar']" class="btn btn-success">
-      Adicionar Frase
+<main class="page-shell">
+  <app-page-header title="Frases inesquecíveis" subtitle="Reúna os trechos que marcaram suas leituras.">
+    <button type="button" [routerLink]="['/frases-inesqueciveis-adicionar']" class="btn btn-primary">
+      Adicionar frase
     </button>
+  </app-page-header>
 
-    <hr class="mb-4" />
-
-    <div class="d-flex flex-wrap gap-4 justify-content-center justify-content-sm-start">
-
-      @for (frase of frases; track frase.id) {
-      <div class="card shadow-sm" style="width: 18rem">
+  <section class="quote-grid" aria-label="Frases salvas">
+    @for (frase of frases; track frase.id) {
+      <article class="card quote-card">
         <div class="card-body d-flex flex-column">
           <span class="livro d-block mb-2">{{ frase.nomeDoLivro }}</span>
-          <p class="card-text frase mb-1 flex-grow-1">
-            "{{ frase.frase }}"
-          </p>
+          <p class="card-text frase mb-1 flex-grow-1">"{{ frase.frase }}"</p>
           <div class="d-flex justify-content-between align-items-baseline mt-auto pt-3">
             <p class="autor m-0">{{ frase.autor }}</p>
             <div>
               <button type="button" class="btn btn-outline-primary btn-xs me-2" title="Editar"
-                (click)="onEditar(frase.id)">
+                aria-label="Editar frase" (click)="onEditar(frase.id)">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button type="button" class="btn btn-outline-danger btn-xs" title="Apagar" data-bs-toggle="modal"
-                data-bs-target="#modalApagar" (click)="onApagar(frase.id)">
+              <button type="button" class="btn btn-outline-danger btn-xs" title="Apagar"
+                aria-label="Apagar frase" data-bs-toggle="modal" data-bs-target="#modalApagar"
+                (click)="onApagar(frase.id)">
                 <i class="bi bi-trash"></i>
               </button>
             </div>
           </div>
         </div>
-      </div>
-      } @empty {
-      <div class="alert alert-info w-100 text-center" role="alert">
+      </article>
+    } @empty {
+      <div class="alert alert-info text-center" role="alert">
         Nenhuma frase inesquecível foi adicionada ainda.
       </div>
-      }
-    </div>
+    }
+  </section>
 
-    <div class="modal fade" id="modalApagar" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Apagar Frase</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            Você tem certeza que deseja apagar a frase selecionada?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-            <button type="button" class="btn btn-primary" (click)="confirmarApagar()"
-              data-bs-dismiss="modal">Confirmar</button>
-          </div>
+  <div class="modal fade" id="modalApagar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="exampleModalLabel">Apagar frase</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          Você tem certeza que deseja apagar a frase selecionada?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+          <button type="button" class="btn btn-primary" (click)="confirmarApagar()"
+            data-bs-dismiss="modal">Confirmar</button>
         </div>
       </div>
     </div>
   </div>
-</div>
+</main>

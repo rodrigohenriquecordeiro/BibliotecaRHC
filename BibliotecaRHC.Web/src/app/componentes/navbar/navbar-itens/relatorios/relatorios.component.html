@@ -1,182 +1,50 @@
-<div class="dashboard-container">
-  
-  <div class="metrics-grid">
-    <button type="button" class="card card-primary card-clickable" (click)="abrirMinhaEstante()">
-      <h3>Total de Livros</h3>
-      <p class="metric-value">{{ totalLivros() }}</p>
+<main class="page-shell dashboard-container">
+  <app-page-header title="Relatórios" subtitle="Acompanhe os números e tendências da sua biblioteca."></app-page-header>
+
+  <section class="metrics-grid" aria-label="Resumo da biblioteca">
+    <button type="button" class="metric-card card-clickable" (click)="abrirMinhaEstante()">
+      <span class="metric-label">Total de livros</span>
+      <span class="metric-value">{{ totalLivros() }}</span>
     </button>
 
-    <button type="button" class="card card-success card-clickable" (click)="abrirMinhaEstante('sim')">
-      <h3>Livros Lidos</h3>
-      <p class="metric-value">{{ livrosLidos() }}</p>
+    <button type="button" class="metric-card card-clickable" (click)="abrirMinhaEstante('sim')">
+      <span class="metric-label">Livros lidos</span>
+      <span class="metric-value">{{ livrosLidos() }}</span>
     </button>
 
-    <button type="button" class="card card-warning card-clickable" (click)="abrirMinhaEstante('não')">
-      <h3>Livros Não Lidos</h3>
-      <p class="metric-value">{{ livrosNaoLidos() }}</p>
+    <button type="button" class="metric-card card-clickable" (click)="abrirMinhaEstante('não')">
+      <span class="metric-label">Livros não lidos</span>
+      <span class="metric-value">{{ livrosNaoLidos() }}</span>
     </button>
 
-    <div class="card">
-      <h3>Total de Autores</h3>
-      <p class="metric-value">{{ totalAutores() }}</p>
+    <div class="metric-card">
+      <span class="metric-label">Total de autores</span>
+      <span class="metric-value">{{ totalAutores() }}</span>
     </div>
 
-    <div class="card">
-      <h3>Total de Editoras</h3>
-      <p class="metric-value">{{ totalEditoras() }}</p>
+    <div class="metric-card">
+      <span class="metric-label">Total de editoras</span>
+      <span class="metric-value">{{ totalEditoras() }}</span>
     </div>
 
-    <button type="button" class="card card-info card-clickable" (click)="abrirProjetosLeitura()">
-      <h3>Projetos em Andamento</h3>
-      <p class="metric-value">{{ projetosLeituraAndamento() }}</p>
+    <button type="button" class="metric-card card-clickable" (click)="abrirProjetosLeitura()">
+      <span class="metric-label">Projetos em andamento</span>
+      <span class="metric-value">{{ projetosLeituraAndamento() }}</span>
     </button>
-  </div>
+  </section>
 
-  <div class="rankings-grid">
-
-    <div class="ranking-card">
-      <h4>Top 10 Autores</h4>
-      <table>
-        <thead>
-          <tr>
-            <th>Autor</th>
-            <th>Qtd. Livros</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (autor of topAutores(); track autor.descricao) {
-            <tr>
-              <td>{{ autor.descricao }}</td>
-              <td>{{ autor.quantidade }}</td>
-            </tr>
-          } @empty {
-            <tr>
-              <td colspan="2" class="no-data">Nenhum dado encontrado</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <div class="ranking-card">
-      <h4>Top 10 Editoras</h4>
-      <table>
-        <thead>
-          <tr>
-            <th>Editora</th>
-            <th>Qtd. Livros</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (editora of topEditoras(); track editora.descricao) {
-            <tr>
-              <td>{{ editora.descricao }}</td>
-              <td>{{ editora.quantidade }}</td>
-            </tr>
-          } @empty {
-            <tr>
-              <td colspan="2" class="no-data">Nenhum dado encontrado</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <div class="ranking-card">
-      <h4>Top 10 Classificações</h4>
-      <table>
-        <thead>
-          <tr>
-            <th>Classificação</th>
-            <th>Qtd. Livros</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (classe of topClassificacoes(); track classe.descricao) {
-            <tr>
-              <td>{{ classe.descricao }}</td>
-              <td>{{ classe.quantidade }}</td>
-            </tr>
-          } @empty {
-            <tr>
-              <td colspan="2" class="no-data">Nenhum dado encontrado</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <div class="ranking-card">
-      <h4>Top 10 Anos de Publicação</h4>
-      <table>
-        <thead>
-          <tr>
-            <th>Ano</th>
-            <th>Qtd. Livros</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (ano of topAnosPublicacao(); track ano.descricao) {
-            <tr>
-              <td>{{ ano.descricao }}</td>
-              <td>{{ ano.quantidade }}</td>
-            </tr>
-          } @empty {
-            <tr>
-              <td colspan="2" class="no-data">Nenhum dado encontrado</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <div class="ranking-card">
-      <h4>Top 10 Anos de Aquisição</h4>
-      <table>
-        <thead>
-          <tr>
-            <th>Ano</th>
-            <th>Qtd. Livros</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (ano of topAnosAquisicao(); track ano.descricao) {
-            <tr>
-              <td>{{ ano.descricao }}</td>
-              <td>{{ ano.quantidade }}</td>
-            </tr>
-          } @empty {
-            <tr>
-              <td colspan="2" class="no-data">Nenhum dado encontrado</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <div class="ranking-card">
-      <h4>Top 10 Livros Mais Longos</h4>
-      <table>
-        <thead>
-          <tr>
-            <th>Livro</th>
-            <th>Páginas</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (livro of topLivrosLongos(); track livro.nomeDoLivro) {
-            <tr>
-              <td>{{ livro.nomeDoLivro }}</td>
-              <td>{{ livro.numeroDePaginas }}</td>
-            </tr>
-          } @empty {
-            <tr>
-              <td colspan="2" class="no-data">Nenhum dado encontrado</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
-  </div>
-</div>
+  <section class="rankings-grid" aria-label="Rankings da biblioteca">
+    <app-report-ranking title="Top 10 autores" firstColumn="Autor" secondColumn="Qtd. livros"
+      [rows]="autoresRanking()"></app-report-ranking>
+    <app-report-ranking title="Top 10 editoras" firstColumn="Editora" secondColumn="Qtd. livros"
+      [rows]="editorasRanking()"></app-report-ranking>
+    <app-report-ranking title="Top 10 classificações" firstColumn="Classificação" secondColumn="Qtd. livros"
+      [rows]="classificacoesRanking()"></app-report-ranking>
+    <app-report-ranking title="Top 10 anos de publicação" firstColumn="Ano" secondColumn="Qtd. livros"
+      [rows]="anosPublicacaoRanking()"></app-report-ranking>
+    <app-report-ranking title="Top 10 anos de aquisição" firstColumn="Ano" secondColumn="Qtd. livros"
+      [rows]="anosAquisicaoRanking()"></app-report-ranking>
+    <app-report-ranking title="Top 10 livros mais longos" firstColumn="Livro" secondColumn="Páginas"
+      [rows]="livrosLongosRanking()"></app-report-ranking>
+  </section>
+</main>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { PageHeaderComponent } from '../../shared/page-header/page-header.component';
 import { BibliotecaService } from '../../../services/biblioteca/biblioteca.service';
 import { Frase } from '../../../models/frase';
 import { firstValueFrom } from 'rxjs';
@@ -13,7 +14,8 @@ import e from 'express';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    PageHeaderComponent
   ],
   templateUrl: './frases-inesqueciveis-adicionar.component.html',
   styleUrl: './frases-inesqueciveis-adicionar.component.css'

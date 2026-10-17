@@ -1,14 +1,16 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RelatoriosService } from '../../../../services/relatorios/relatorios.service';
 import { Top10Item, Top10LivroLongo } from '../../../../models/relatorios';
 import { Router } from '@angular/router';
 import { FiltroService } from '../../../../services/filtro/filtro.service';
+import { PageHeaderComponent } from '../../../shared/page-header/page-header.component';
+import { RankingRow, ReportRankingComponent } from '../../../shared/report-ranking/report-ranking.component';
 
 @Component({
   selector: 'app-relatorios',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PageHeaderComponent, ReportRankingComponent],
   templateUrl: './relatorios.component.html',
   styleUrls: ['./relatorios.component.css']
 })
@@ -31,6 +33,16 @@ export class RelatoriosComponent implements OnInit {
   topAnosAquisicao = signal<Top10Item[]>([]);
   topLivrosLongos = signal<Top10LivroLongo[]>([]);
 
+  autoresRanking = computed(() => this.mapearItens(this.topAutores()));
+  editorasRanking = computed(() => this.mapearItens(this.topEditoras()));
+  classificacoesRanking = computed(() => this.mapearItens(this.topClassificacoes()));
+  anosPublicacaoRanking = computed(() => this.mapearItens(this.topAnosPublicacao()));
+  anosAquisicaoRanking = computed(() => this.mapearItens(this.topAnosAquisicao()));
+  livrosLongosRanking = computed(() => this.topLivrosLongos().map(livro => ({
+    label: livro.nomeDoLivro,
+    value: livro.numeroDePaginas
+  })));
+
   ngOnInit(): void {
     this.carregarDados();
   }
@@ -47,6 +59,10 @@ export class RelatoriosComponent implements OnInit {
 
   abrirProjetosLeitura(): void {
     this.router.navigate(['/projeto-leitura']);
+  }
+
+  private mapearItens(itens: Top10Item[]): RankingRow[] {
+    return itens.map(item => ({ label: item.descricao, value: item.quantidade }));
   }
 
   private carregarDados(): void {
