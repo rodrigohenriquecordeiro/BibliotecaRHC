@@ -2,9 +2,11 @@
 using OfficeOpenXml;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using BibliotecaRHC.API.Context;
 using BibliotecaRHC.API.Models;
-using BibliotecaRHC.API.Services;
 using BibliotecaRHC.API.Repositories;
+using BibliotecaRHC.API.Services;
 
 namespace BibliotecaRHC.Tests.Domain;
 
@@ -137,6 +139,140 @@ public class ImportarPlanilhaServiceTests
         Assert.Equal(2, resultado.Count);
         Assert.Contains("Erro ao salvar 'Livro Erro'", resultado[0]);
         Assert.Contains("Erro de Banco de Dados", resultado[0]);
+    }
+
+    [Fact]
+    public async Task ImportarPlanilhaAsync_DeveVincularTodosOsRegistrosAoUsuarioAutenticado()
+    {
+        const int userId = 42;
+        await using var context = TestDbContextFactory.Create(Guid.NewGuid().ToString(), userId);
+        var arquivo = CriarPlanilhaCompleta();
+        var service = CriarServicoReal(context);
+
+        var erros = await service.ImportarPlanilhaAsync(arquivo.Object);
+
+        Assert.Empty(erros);
+        Assert.All(context.Set<Livro>().ToList(), livro => Assert.Equal(userId, livro.UsuarioId));
+        Assert.All(context.Set<FraseInesquecivel>().ToList(), frase => Assert.Equal(userId, frase.UsuarioId));
+        Assert.All(context.Set<Projeto>().ToList(), projeto => Assert.Equal(userId, projeto.UsuarioId));
+        Assert.All(context.Set<LivroProjeto>().ToList(), livro => Assert.Equal(userId, livro.UsuarioId));
+        Assert.All(context.Set<HistoricoProjeto>().ToList(), historico => Assert.Equal(userId, historico.UsuarioId));
+    }
+
+    [Fact]
+    public async Task ImportarPlanilhaAsync_DeveRejeitarProjetoDeOutroUsuario()
+    {
+        const int projectOwnerId = 21;
+        int projectId;
+        await using (var ownerContext = TestDbContextFactory.Create(Guid.NewGuid().ToString(), projectOwnerId))
+        {
+            var projeto = new Projeto { Nome = "Projeto privado" };
+            ownerContext.Set<Projeto>().Add(projeto);
+            await ownerContext.SaveChangesAsync();
+            projectId = projeto.Id;
+        }
+
+        await using var importerContext = TestDbContextFactory.Create(Guid.NewGuid().ToString(), 22);
+        var service = CriarServicoReal(importerContext);
+        var arquivo = CriarPlanilhaLivroProjeto(projectId);
+
+        var erros = await service.ImportarPlanilhaAsync(arquivo.Object);
+
+        Assert.Contains(erros, erro => erro.Contains($"ProjetoID {projectId} não encontrado."));
+        Assert.Empty(importerContext.Set<LivroProjeto>().ToList());
+    }
+
+    private static ImportarPlanilhaService CriarServicoReal(AppDbContext context)
+    {
+        var unitOfWork = new UnityOfWork(context);
+        return new ImportarPlanilhaService(
+            new LivroService(unitOfWork, NullLogger<LivroService>.Instance),
+            new FrasesInesqueciveisService(unitOfWork, NullLogger<FrasesInesqueciveisService>.Instance),
+            new ProjetoService(unitOfWork, NullLogger<ProjetoService>.Instance),
+            new LivroProjetoService(unitOfWork, NullLogger<LivroProjetoService>.Instance),
+            new HistoricoProjetoRepository(context),
+            NullLogger<ImportarPlanilhaService>.Instance);
+    }
+
+    private static Mock<IFormFile> CriarPlanilhaCompleta()
+    {
+        using var package = new ExcelPackage();
+
+        var livros = package.Workbook.Worksheets.Add("Livros");
+        livros.Cells[1, 1].Value = "N°";
+        livros.Cells[1, 2].Value = "Nome do Livro";
+        livros.Cells[1, 3].Value = "Autor";
+        livros.Cells[1, 4].Value = "Editora";
+        livros.Cells[1, 5].Value = "Ano";
+        livros.Cells[1, 6].Value = "Páginas";
+        livros.Cells[1, 7].Value = "Classificação";
+        livros.Cells[1, 8].Value = "Observação";
+        livros.Cells[1, 9].Value = "Data de Aquisição";
+        livros.Cells[1, 10].Value = "Lido";
+        livros.Cells[1, 11].Value = "Ano Última Leitura";
+        PreencherLinha(livros, 2, ["", "Livro da estante", "Autor", "Editora", "2024", 100, "A1", "", new DateTime(2024, 1, 1), "Sim", 2024]);
+
+        var frases = package.Workbook.Worksheets.Add("Frases");
+        frases.Cells[1, 1].Value = "N°";
+        frases.Cells[1, 2].Value = "Frase";
+        frases.Cells[1, 3].Value = "Autor";
+        frases.Cells[1, 4].Value = "Nome do Livro";
+        PreencherLinha(frases, 2, ["", "Frase importada", "Autor", "Livro da estante"]);
+
+        var projetos = package.Workbook.Worksheets.Add("Projetos");
+        projetos.Cells[1, 1].Value = "N°";
+        projetos.Cells[1, 2].Value = "Nome do Projeto";
+        projetos.Cells[1, 3].Value = "Data da Criação";
+        projetos.Cells[1, 4].Value = "Status do Projeto";
+        projetos.Cells[1, 5].Value = "Nome do Livro";
+        projetos.Cells[1, 7].Value = "Ano";
+        projetos.Cells[1, 12].Value = "Lido";
+        projetos.Cells[1, 13].Value = "Data de Leitura";
+        PreencherLinha(projetos, 2, ["", "Projeto importado", new DateTime(2024, 1, 1), "Em andamento", "Livro do projeto", "", "2024", "", "", "", "", "Não", new DateTime(2024, 1, 1)]);
+
+        var livrosProjeto = package.Workbook.Worksheets.Add("LivroProjeto");
+        livrosProjeto.Cells[1, 1].Value = "N°";
+        livrosProjeto.Cells[1, 2].Value = "Nome do Livro";
+        livrosProjeto.Cells[1, 3].Value = "Ano de Publicação";
+        livrosProjeto.Cells[1, 4].Value = "Lido";
+        livrosProjeto.Cells[1, 5].Value = "Data de Leitura";
+        livrosProjeto.Cells[1, 6].Value = "ProjetoID";
+        PreencherLinha(livrosProjeto, 2, ["", "Livro associado", "2024", "Não", new DateTime(2024, 1, 1), 1]);
+
+        return CriarArquivoExcel(package);
+    }
+
+    private static Mock<IFormFile> CriarPlanilhaLivroProjeto(int projectId)
+    {
+        using var package = new ExcelPackage();
+        var worksheet = package.Workbook.Worksheets.Add("LivroProjeto");
+        worksheet.Cells[1, 1].Value = "N°";
+        worksheet.Cells[1, 2].Value = "Nome do Livro";
+        worksheet.Cells[1, 3].Value = "Ano de Publicação";
+        worksheet.Cells[1, 4].Value = "Lido";
+        worksheet.Cells[1, 5].Value = "Data de Leitura";
+        worksheet.Cells[1, 6].Value = "ProjetoID";
+        PreencherLinha(worksheet, 2, ["", "Livro privado", "2024", "Não", new DateTime(2024, 1, 1), projectId]);
+        return CriarArquivoExcel(package);
+    }
+
+    private static void PreencherLinha(ExcelWorksheet worksheet, int row, object?[] values)
+    {
+        for (var column = 0; column < values.Length; column++)
+            worksheet.Cells[row, column + 1].Value = values[column];
+    }
+
+    private static Mock<IFormFile> CriarArquivoExcel(ExcelPackage package)
+    {
+        var stream = new MemoryStream(package.GetAsByteArray());
+        var fileMock = new Mock<IFormFile>();
+        fileMock.Setup(file => file.OpenReadStream()).Returns(stream);
+        fileMock.Setup(file => file.FileName).Returns("importacao.xlsx");
+        fileMock.Setup(file => file.Length).Returns(stream.Length);
+        fileMock.Setup(file => file.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
+            .Callback<Stream, CancellationToken>((target, _) => stream.CopyTo(target))
+            .Returns(Task.CompletedTask);
+        return fileMock;
     }
 
     /// <summary>

@@ -1,6 +1,7 @@
 using BibliotecaRHC.API.Context;
 using BibliotecaRHC.API.Models;
 using BibliotecaRHC.API.Repositories;
+using BibliotecaRHC.Tests;
 using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaRHC.Tests.Repositories;
@@ -35,11 +36,7 @@ public class HistoricoProjetoRepositoryTests : BaseRepositoryTests<HistoricoProj
     {
         // Arrange
         var nomeBanco = Guid.NewGuid().ToString();
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(nomeBanco)
-            .Options;
-
-        await using var context = new AppDbContext(options);
+        await using var context = TestDbContextFactory.Create(nomeBanco);
         var projeto = new Projeto { Id = 10, Nome = "Projeto Teste", DataCriacao = DateTime.Now, ProjetoStatus = ProjetoStatus.Andamento };
         context.Set<Projeto>().Add(projeto);
         await context.SaveChangesAsync();

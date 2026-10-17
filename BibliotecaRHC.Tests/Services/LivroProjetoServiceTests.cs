@@ -10,13 +10,16 @@ public class LivroProjetoServiceTests
 {
     private readonly Mock<IUnityOfWork> _mockUow;
     private readonly Mock<ILivroProjetoRepository> _mockRepo;
+    private readonly Mock<IProjetoRepository> _mockProjetoRepo;
     private readonly LivroProjetoService _service;
 
     public LivroProjetoServiceTests()
     {
         _mockUow = new Mock<IUnityOfWork>();
         _mockRepo = new Mock<ILivroProjetoRepository>();
+        _mockProjetoRepo = new Mock<IProjetoRepository>();
         _mockUow.Setup(u => u.LivroProjetoRepository).Returns(_mockRepo.Object);
+        _mockUow.Setup(u => u.ProjetoRepository).Returns(_mockProjetoRepo.Object);
 
         var mockLogger = new Mock<ILogger<LivroProjetoService>>();
         _service = new LivroProjetoService(_mockUow.Object, mockLogger.Object);
@@ -69,7 +72,9 @@ public class LivroProjetoServiceTests
     [Fact]
     public async Task AdicionarLivroNoProjeto_DeveChamarAddECommit()
     {
-        var entidade = new LivroProjeto { Id = 10, Nome = "Novo" };
+        var entidade = new LivroProjeto { Id = 10, Nome = "Novo", ProjetoId = 1 };
+        _mockProjetoRepo.Setup(r => r.ObterPorIdProjeto(1))
+            .ReturnsAsync(new Projeto { Id = 1, Nome = "Projeto" });
         _mockRepo.Setup(r => r.Add(It.IsAny<LivroProjeto>())).Verifiable();
         _mockUow.Setup(u => u.CommitAsync()).ReturnsAsync(1);
 
@@ -81,10 +86,25 @@ public class LivroProjetoServiceTests
     }
 
     [Fact]
+    public async Task AdicionarLivroNoProjeto_DeveRejeitarProjetoDeOutroUsuario()
+    {
+        var entidade = new LivroProjeto { Nome = "Livro indevido", ProjetoId = 2 };
+        _mockProjetoRepo.Setup(r => r.ObterPorIdProjeto(2)).ReturnsAsync((Projeto?)null);
+
+        var resultado = await _service.AdicionarLivroNoProjeto(entidade);
+
+        Assert.Null(resultado);
+        _mockRepo.Verify(r => r.Add(It.IsAny<LivroProjeto>()), Times.Never);
+        _mockUow.Verify(u => u.CommitAsync(), Times.Never);
+    }
+
+    [Fact]
     public async Task AtualizarLivroNoProjeto_DeveAtualizar_QuandoExiste()
     {
-        var entidade = new LivroProjeto { Id = 1, Nome = "Existente" };
+        var entidade = new LivroProjeto { Id = 1, Nome = "Existente", ProjetoId = 1 };
         _mockRepo.Setup(r => r.GetByIDAsync(1)).ReturnsAsync(entidade);
+        _mockProjetoRepo.Setup(r => r.ObterPorIdProjeto(1))
+            .ReturnsAsync(new Projeto { Id = 1, Nome = "Projeto" });
         _mockRepo.Setup(r => r.Update(It.IsAny<LivroProjeto>())).Verifiable();
         _mockUow.Setup(u => u.CommitAsync()).ReturnsAsync(1);
 
@@ -93,6 +113,20 @@ public class LivroProjetoServiceTests
         Assert.NotNull(resultado);
         _mockRepo.Verify(r => r.Update(It.IsAny<LivroProjeto>()), Times.Once);
         _mockUow.Verify(u => u.CommitAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task AtualizarLivroNoProjeto_DeveRejeitarProjetoDeOutroUsuario()
+    {
+        var entidade = new LivroProjeto { Id = 1, Nome = "Existente", ProjetoId = 2 };
+        _mockRepo.Setup(r => r.GetByIDAsync(1)).ReturnsAsync(entidade);
+        _mockProjetoRepo.Setup(r => r.ObterPorIdProjeto(2)).ReturnsAsync((Projeto?)null);
+
+        var resultado = await _service.AtualizarLivroNoProjeto(entidade);
+
+        Assert.Null(resultado);
+        _mockRepo.Verify(r => r.Update(It.IsAny<LivroProjeto>()), Times.Never);
+        _mockUow.Verify(u => u.CommitAsync(), Times.Never);
     }
 
     [Fact]

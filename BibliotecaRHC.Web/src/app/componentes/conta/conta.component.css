@@ -1,0 +1,8 @@
+.conta-container {
+  min-height: calc(100vh - 94px);
+  background-color: #f8f9fa;
+}
+
+.conta-card {
+  max-width: 640px;
+}

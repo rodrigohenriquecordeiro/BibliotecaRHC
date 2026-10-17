@@ -65,7 +65,11 @@
           </div>
         </form>
 
-        <button class="btn btn-outline-danger btn-sair" (click)="logout()">Sair</button>
+        <div class="account-actions">
+          <span class="nome-usuario" *ngIf="nomeUsuario" aria-live="polite">Conectado: <i>{{ nomeUsuario }}</i></span>
+          <button class="btn btn-conta" type="button" routerLink="/minha-conta">Minha Conta</button>
+          <button class="btn btn-outline-danger btn-sair" (click)="logout()">Sair</button>
+        </div>
       </div>
     </div>
   </div>

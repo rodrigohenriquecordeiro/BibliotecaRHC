@@ -52,6 +52,38 @@
   cursor: pointer; 
 }
 
+.account-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+}
+
+.nome-usuario {
+  color: var(--texto-branco);
+  white-space: nowrap;
+}
+
+.btn-conta {
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+  color: #18323d;
+}
+
+.btn-conta:hover,
+.btn-conta:focus-visible {
+  background-color: #e8942f;
+  border-color: #e8942f;
+  color: #18323d;
+}
+
+.btn-conta,
+.btn-sair {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
 @media (min-width: 1235px) {
   .container-busca-sair {
     width: 100%;
@@ -84,8 +116,14 @@
 }
 
 @media (max-width: 991.98px) {
-  .btn-sair {
-    width: 100%; 
+  .account-actions {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .nome-usuario {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .input-inset {

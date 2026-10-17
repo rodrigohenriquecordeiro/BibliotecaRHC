@@ -1,0 +1,71 @@
+<main class="container py-5 conta-container">
+  <section class="card shadow-sm mx-auto conta-card">
+    <div class="card-body p-4 p-md-5">
+      <h1 class="h3 mb-4">Minha Conta</h1>
+
+      <div *ngIf="carregando" class="text-center py-4" role="status">
+        Carregando dados da conta...
+      </div>
+
+      <form *ngIf="!carregando" [formGroup]="form" (ngSubmit)="salvar()">
+        <div class="mb-3">
+          <label for="nome" class="form-label">Usuário</label>
+          <input id="nome" type="text" class="form-control" formControlName="nome" autocomplete="username">
+          <small *ngIf="form.get('nome')?.touched && form.get('nome')?.invalid" class="text-danger">
+            Informe um usuário com pelo menos 3 caracteres.
+          </small>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input id="email" type="email" class="form-control" formControlName="email" autocomplete="email">
+          <small *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="text-danger">
+            Informe um email válido.
+          </small>
+        </div>
+
+        <hr class="my-4">
+        <p class="text-muted">Deixe os campos de senha vazios para mantê-la como está.</p>
+
+        <div class="mb-3">
+          <label for="senhaAtual" class="form-label">Senha atual</label>
+          <input id="senhaAtual" type="password" class="form-control" formControlName="senhaAtual"
+            autocomplete="current-password">
+        </div>
+
+        <div class="mb-3">
+          <label for="novaSenha" class="form-label">Nova senha</label>
+          <input id="novaSenha" type="password" class="form-control" formControlName="novaSenha"
+            autocomplete="new-password">
+          <small *ngIf="form.get('novaSenha')?.touched && form.get('novaSenha')?.hasError('minlength')"
+            class="text-danger">
+            A senha deve ter pelo menos 6 caracteres.
+          </small>
+        </div>
+
+        <div class="mb-3">
+          <label for="confirmarSenha" class="form-label">Confirmar nova senha</label>
+          <input id="confirmarSenha" type="password" class="form-control" formControlName="confirmarSenha"
+            autocomplete="new-password">
+        </div>
+
+        <div *ngIf="form.touched && form.hasError('senhaAtualObrigatoria')" class="text-danger mb-3" role="alert">
+          Informe a senha atual para alterá-la.
+        </div>
+        <div *ngIf="form.touched && form.hasError('senhasDiferentes')" class="text-danger mb-3" role="alert">
+          As novas senhas não coincidem.
+        </div>
+
+        <div *ngIf="mensagemErro" class="alert alert-danger" role="alert">{{ mensagemErro }}</div>
+        <div *ngIf="mensagemSucesso" class="alert alert-success" role="status">{{ mensagemSucesso }}</div>
+
+        <div class="d-flex justify-content-between align-items-center gap-2 mt-4">
+          <a class="btn btn-secondary" routerLink="/minha-estante">Voltar</a>
+          <button type="submit" class="btn btn-primary" [disabled]="salvando">
+            {{ salvando ? 'Salvando...' : 'Salvar alterações' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>

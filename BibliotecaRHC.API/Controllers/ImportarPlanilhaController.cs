@@ -1,10 +1,12 @@
 ﻿using BibliotecaRHC.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 
 namespace BibliotecaRHC.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/importar-planilha")]
 public class ImportarPlanilhaController : ControllerBase
 {

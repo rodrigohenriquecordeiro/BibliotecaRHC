@@ -1,6 +1,7 @@
 using BibliotecaRHC.API.Context;
 using BibliotecaRHC.API.Models;
 using BibliotecaRHC.API.Repositories;
+using BibliotecaRHC.Tests;
 using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaRHC.Tests.Repositories;
@@ -9,11 +10,7 @@ public class RelatoriosRepositoryTests
 {
     private AppDbContext CriarContexto(string nomeBanco)
     {
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(nomeBanco)
-            .Options;
-
-        return new AppDbContext(options);
+        return TestDbContextFactory.Create(nomeBanco);
     }
 
     [Fact]

@@ -17,14 +17,16 @@ public class Repository<T> : IRepository<T> where T : class
 
     public async Task<IEnumerable<T>> GetAllAsync() => await _dbSet.AsNoTracking().ToListAsync();
 
-    public async Task<T?> GetByIDAsync(int id) => await _dbSet.FindAsync(id);
+    public async Task<T?> GetByIDAsync(int id) =>
+        await _dbSet.FirstOrDefaultAsync(entity => EF.Property<int>(entity, "Id") == id);
 
     public void Add(T entity) => _dbSet.Add(entity);
 
     public void Update(T entity)
     {
         var key = _context.Entry(entity).Property("Id").CurrentValue;
-        var existente = _context.Set<T>().Find(key);
+        var existente = _dbSet.FirstOrDefault(existing =>
+            EF.Property<int>(existing, "Id") == (int)key!);
 
         if (existente == null)
             throw new InvalidOperationException($"{typeof(T).Name} não encontrado para atualizar.");

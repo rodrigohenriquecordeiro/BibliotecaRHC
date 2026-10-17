@@ -39,8 +39,15 @@ public class LivroProjetoService : ILivroProjetoService
         return livroDoProjeto;
     }
 
-    public async Task<LivroProjeto> AdicionarLivroNoProjeto(LivroProjeto livroNoProjeto)
+    public async Task<LivroProjeto?> AdicionarLivroNoProjeto(LivroProjeto livroNoProjeto)
     {
+        var projeto = await _unityOfWork.ProjetoRepository.ObterPorIdProjeto(livroNoProjeto.ProjetoId);
+        if (projeto == null)
+        {
+            _logger.LogWarning("Projeto com ID {ProjetoId} não encontrado para o usuário atual.", livroNoProjeto.ProjetoId);
+            return null;
+        }
+
         _unityOfWork.LivroProjetoRepository.Add(livroNoProjeto);
         await _unityOfWork.CommitAsync();
         return livroNoProjeto;
@@ -48,11 +55,18 @@ public class LivroProjetoService : ILivroProjetoService
 
     public async Task<LivroProjeto?> AtualizarLivroNoProjeto(LivroProjeto livroNoProjeto)
     {
-        var projetos = await _unityOfWork.LivroProjetoRepository.GetByIDAsync(livroNoProjeto.Id);
+        var livroExistente = await _unityOfWork.LivroProjetoRepository.GetByIDAsync(livroNoProjeto.Id);
 
-        if (projetos == null)
+        if (livroExistente == null)
         {
             _logger.LogWarning($"Livro do Projeto com ID {livroNoProjeto.Id} não encontrado para atualização.");
+            return null;
+        }
+
+        var projeto = await _unityOfWork.ProjetoRepository.ObterPorIdProjeto(livroNoProjeto.ProjetoId);
+        if (projeto == null)
+        {
+            _logger.LogWarning("Projeto com ID {ProjetoId} não encontrado para o usuário atual.", livroNoProjeto.ProjetoId);
             return null;
         }
 
@@ -81,7 +95,7 @@ public interface ILivroProjetoService
 {
     Task<IEnumerable<LivroProjeto>> ObterTodosOsLivrosDoProjeto();
     Task<LivroProjeto?> ObterLivroDoProjetoPorId(int id);
-    Task<LivroProjeto> AdicionarLivroNoProjeto(LivroProjeto projeto);
+    Task<LivroProjeto?> AdicionarLivroNoProjeto(LivroProjeto projeto);
     Task<LivroProjeto?> AtualizarLivroNoProjeto(LivroProjeto projeto);
     Task<LivroProjeto?> RemoverLivroDoProjeto(int id);
 }

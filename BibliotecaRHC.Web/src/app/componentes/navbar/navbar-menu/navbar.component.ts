@@ -3,6 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FiltroService } from '../../../services/filtro/filtro.service';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -18,8 +19,9 @@ export class NavbarComponent implements AfterViewInit {
   filtroSelecionado: string = 'Livro';
   placeHolderFiltro: string = 'Selecione um filtro ou digite um livro';
   termoBusca: string = '';
+  nomeUsuario = '';
 
-  private inscricaoFiltro!: Subscription;
+  private inscricaoFiltro = new Subscription();
 
   private readonly placeholders: Record<string, string> = {
     'Livro': 'Digite um livro',
@@ -53,20 +55,27 @@ export class NavbarComponent implements AfterViewInit {
 
   constructor(
     private router: Router,
-    private filtroService: FiltroService) { }
+    private filtroService: FiltroService,
+    private authService: AuthService) { }
 
   ngOnInit() {
-    this.inscricaoFiltro = this.filtroService.filtroAtual$.subscribe(filtro => {
+    this.inscricaoFiltro.add(this.filtroService.filtroAtual$.subscribe(filtro => {
       this.termoBusca = filtro.termo;
       this.filtroSelecionado = filtro.termo === ''
         ? 'Livro'
         : this.filtrosParaCampoAPI[filtro.tipo] || 'Livro';
       this.placeHolderFiltro = this.placeholders[this.filtroSelecionado] || 'Selecione um filtro';
+    }));
+    this.inscricaoFiltro.add(this.authService.usuarioAtual$.subscribe(usuario => {
+      this.nomeUsuario = usuario?.nome || '';
+    }));
+    this.authService.obterConta().subscribe({
+      error: erro => console.error('Erro ao carregar o usuário conectado:', erro)
     });
   }
 
   ngOnDestroy() {
-    if (this.inscricaoFiltro) this.inscricaoFiltro.unsubscribe();
+    this.inscricaoFiltro.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -81,8 +90,7 @@ export class NavbarComponent implements AfterViewInit {
   }
 
   logout() {
-    localStorage.removeItem('usuarioLogado');
-    this.router.navigate(['/login']);
+    this.authService.logout();
   }
 
   pesquisar(termo: string) {

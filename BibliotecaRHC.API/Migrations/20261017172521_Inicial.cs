@@ -19,8 +19,8 @@ namespace BibliotecaRHC.API.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NormalizedName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -38,8 +38,8 @@ namespace BibliotecaRHC.API.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     RefreshToken = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -74,79 +74,12 @@ namespace BibliotecaRHC.API.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "FraseInesquecivel",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Frase = table.Column<string>(type: "longtext", maxLength: 65000, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Autor = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    NomeDoLivro = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DataCriacao = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FraseInesquecivel", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Livro",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Autor = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    NomeDoLivro = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Editora = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    AnoDePublicacao = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    NumeroDePaginas = table.Column<int>(type: "int", nullable: false),
-                    ClassificacaoCatalografica = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Observacao = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DataDeAquisicao = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Lido = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    AnoUltimaLeitura = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Livro", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Projeto",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nome = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DataCriacao = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    ProjetoStatus = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Projeto", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    RoleId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
                     ClaimType = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ClaimValue = table.Column<string>(type: "longtext", nullable: true)
@@ -170,8 +103,7 @@ namespace BibliotecaRHC.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     ClaimType = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ClaimValue = table.Column<string>(type: "longtext", nullable: true)
@@ -199,8 +131,7 @@ namespace BibliotecaRHC.API.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProviderDisplayName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -218,10 +149,8 @@ namespace BibliotecaRHC.API.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RoleId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -245,8 +174,7 @@ namespace BibliotecaRHC.API.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     LoginProvider = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "varchar(255)", nullable: false)
@@ -267,11 +195,127 @@ namespace BibliotecaRHC.API.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "FraseInesquecivel",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UsuarioId = table.Column<int>(type: "int", nullable: false),
+                    Frase = table.Column<string>(type: "longtext", maxLength: 65000, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Autor = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NomeDoLivro = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DataCriacao = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FraseInesquecivel", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FraseInesquecivel_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "HistoricoAlteracaoConta",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UsuarioId = table.Column<int>(type: "int", nullable: false),
+                    DataAlteracaoUtc = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CampoAlterado = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ValorAnterior = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ValorNovo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HistoricoAlteracaoConta", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HistoricoAlteracaoConta_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Livro",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UsuarioId = table.Column<int>(type: "int", nullable: false),
+                    Autor = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NomeDoLivro = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Editora = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AnoDePublicacao = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NumeroDePaginas = table.Column<int>(type: "int", nullable: false),
+                    ClassificacaoCatalografica = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Observacao = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DataDeAquisicao = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Lido = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    AnoUltimaLeitura = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Livro", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Livro_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Projeto",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UsuarioId = table.Column<int>(type: "int", nullable: false),
+                    Nome = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DataCriacao = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    ProjetoStatus = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Projeto", x => x.Id);
+                    table.UniqueConstraint("AK_Projeto_Id_UsuarioId", x => new { x.Id, x.UsuarioId });
+                    table.ForeignKey(
+                        name: "FK_Projeto_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "HistoricoProjeto",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UsuarioId = table.Column<int>(type: "int", nullable: false),
                     ProjetoId = table.Column<int>(type: "int", nullable: false),
                     DataAlteracao = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     ProjetoStatus = table.Column<int>(type: "int", nullable: false)
@@ -280,10 +324,16 @@ namespace BibliotecaRHC.API.Migrations
                 {
                     table.PrimaryKey("PK_HistoricoProjeto", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HistoricoProjeto_Projeto_ProjetoId",
-                        column: x => x.ProjetoId,
-                        principalTable: "Projeto",
+                        name: "FK_HistoricoProjeto_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_HistoricoProjeto_Projeto_ProjetoId_UsuarioId",
+                        columns: x => new { x.ProjetoId, x.UsuarioId },
+                        principalTable: "Projeto",
+                        principalColumns: new[] { "Id", "UsuarioId" },
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -294,6 +344,7 @@ namespace BibliotecaRHC.API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UsuarioId = table.Column<int>(type: "int", nullable: false),
                     Nome = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AnoDePublicacao = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true)
@@ -306,10 +357,16 @@ namespace BibliotecaRHC.API.Migrations
                 {
                     table.PrimaryKey("PK_LivroProjeto", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LivroProjeto_Projeto_ProjetoId",
-                        column: x => x.ProjetoId,
-                        principalTable: "Projeto",
+                        name: "FK_LivroProjeto_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LivroProjeto_Projeto_ProjetoId_UsuarioId",
+                        columns: x => new { x.ProjetoId, x.UsuarioId },
+                        principalTable: "Projeto",
+                        principalColumns: new[] { "Id", "UsuarioId" },
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -352,14 +409,44 @@ namespace BibliotecaRHC.API.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_HistoricoProjeto_ProjetoId",
-                table: "HistoricoProjeto",
-                column: "ProjetoId");
+                name: "IX_FraseInesquecivel_UsuarioId",
+                table: "FraseInesquecivel",
+                column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LivroProjeto_ProjetoId",
+                name: "IX_HistoricoAlteracaoConta_UsuarioId_DataAlteracaoUtc",
+                table: "HistoricoAlteracaoConta",
+                columns: new[] { "UsuarioId", "DataAlteracaoUtc" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HistoricoProjeto_ProjetoId_UsuarioId",
+                table: "HistoricoProjeto",
+                columns: new[] { "ProjetoId", "UsuarioId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HistoricoProjeto_UsuarioId",
+                table: "HistoricoProjeto",
+                column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Livro_UsuarioId",
+                table: "Livro",
+                column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LivroProjeto_ProjetoId_UsuarioId",
                 table: "LivroProjeto",
-                column: "ProjetoId");
+                columns: new[] { "ProjetoId", "UsuarioId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LivroProjeto_UsuarioId",
+                table: "LivroProjeto",
+                column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Projeto_UsuarioId",
+                table: "Projeto",
+                column: "UsuarioId");
         }
 
         /// <inheritdoc />
@@ -384,6 +471,9 @@ namespace BibliotecaRHC.API.Migrations
                 name: "FraseInesquecivel");
 
             migrationBuilder.DropTable(
+                name: "HistoricoAlteracaoConta");
+
+            migrationBuilder.DropTable(
                 name: "HistoricoProjeto");
 
             migrationBuilder.DropTable(
@@ -396,10 +486,10 @@ namespace BibliotecaRHC.API.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Projeto");
 
             migrationBuilder.DropTable(
-                name: "Projeto");
+                name: "AspNetUsers");
         }
     }
 }

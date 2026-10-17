@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BibliotecaRHC.API.Models;
 
-public class Livro
+public class Livro : IEntidadeDoUsuario
 {
     public int Id { get; set; }
+    public int UsuarioId { get; set; }
 
     [Required(ErrorMessage = "Obrigatório colocar o Autor")]
     [StringLength(200, ErrorMessage = "Permitido no máximo 200 caracteres")]

@@ -21,6 +21,9 @@ public class LivroProjetoController : Controller
     public async Task<IActionResult> Post([FromBody] LivroProjeto livroProjeto)
     {
         var livroProjetoAdicionado = await _service.AdicionarLivroNoProjeto(livroProjeto);
+        if (livroProjetoAdicionado == null)
+            return NotFound("Projeto não encontrado para o usuário atual.");
+
         return CreatedAtAction(nameof(GetById), new { id = livroProjetoAdicionado.Id }, livroProjetoAdicionado);
     }
 

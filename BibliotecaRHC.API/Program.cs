@@ -47,12 +47,13 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
 string? mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
+builder.Services.AddHttpContextAccessor();
 
 var secretKey = builder.Configuration["JWT:SecretKey"]
     ?? throw new ArgumentException("SecretKey not found in configuration.");
@@ -148,6 +149,7 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         Console.WriteLine($"Erro crítico ao aplicar migrations: {ex.Message}");
+        throw;
     }
 }
 
