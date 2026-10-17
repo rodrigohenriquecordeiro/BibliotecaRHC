@@ -1,19 +1,36 @@
 .border-dashed {
-  border: 2px dashed #dee2e6;
+  border: 2px dashed var(--color-border);
   transition: all 0.3s ease;
+}
+
+.import-card {
+  overflow: hidden;
+}
+
+.progress--busy {
+  height: 10px;
+}
+
+.progress--busy .progress-bar {
+  width: 100%;
+}
+
+.import-errors {
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .upload-drop-zone {
   cursor: pointer;
   
   &:hover {
-    border-color: #0d6efd; 
-    background-color: #f8f9fa;
+    border-color: var(--color-secondary);
+    background-color: color-mix(in srgb, var(--color-secondary), white 94%);
   }
 
   &.drag-over {
-    border-color: #0d6efd;
-    background-color: #e9ecef;
+    border-color: var(--color-primary);
+    background-color: color-mix(in srgb, var(--color-secondary), white 88%);
     transform: scale(1.02);
   }
 

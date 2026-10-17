@@ -12,7 +12,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pSuaSenhaForteAqui"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p724051"]
       timeout: 5s
       retries: 5
     networks:

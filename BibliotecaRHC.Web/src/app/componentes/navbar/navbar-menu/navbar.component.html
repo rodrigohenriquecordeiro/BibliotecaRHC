@@ -1,60 +1,63 @@
-<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-  <div class="container-fluid">
+<nav class="navbar bg-primary" data-bs-theme="dark">
+  <div class="container-fluid navbar-content">
 
-    <a href="/minha-estante">
-      <img src="assets/logo_biblioteca_rhc.png" alt="Logo da Biblioteca RHC" class="navbar-brand" style="width: 100px;">
+    <a href="/minha-estante" class="navbar-logo-link">
+      <img src="assets/logo_biblioteca_rhc.png" alt="Logo da Biblioteca RHC" class="navbar-brand">
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" aria-controls="navbarContent"
+      [attr.aria-expanded]="menuExpandido" aria-label="Alternar menu"
+      (click)="alternarMenu()">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarContent">
+    <div class="navbar-collapse" id="navbarContent" [class.is-open]="menuExpandido">
 
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 fs-5">
         <li class="nav-item">
-          <a class="nav-link" href="/minha-estante">Minha Estante</a>
+          <a class="nav-link" href="/minha-estante" (click)="fecharMenu()">Minha Estante</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/projeto-leitura">Projetos de Leitura</a>
+          <a class="nav-link" href="/projeto-leitura" (click)="fecharMenu()">Projetos de Leitura</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/frases-inesqueciveis-dashboard">Frases Inesquecíveis</a>
+          <a class="nav-link" href="/frases-inesqueciveis-dashboard" (click)="fecharMenu()">Frases Inesquecíveis</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/relatorios">Relatórios</a>
+          <a class="nav-link" href="/relatorios" (click)="fecharMenu()">Relatórios</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/importar-planilha">Importar Planilha</a>
+          <a class="nav-link" href="/importar-planilha" (click)="fecharMenu()">Importar Planilha</a>
         </li>
       </ul>
 
-      <div
-        class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-3 ms-lg-auto mt-3 mt-lg-0 container-busca-sair">
+      <div class="container-busca-sair">
 
-        <form class="d-flex m-0 w-100" role="search" (submit)="pesquisar(inputBusca.value); $event.preventDefault()">
-          <div class="input-group mobile-stack">
+        <form *ngIf="estaNaMinhaEstante" class="d-flex m-0" role="search" (submit)="pesquisar(inputBusca.value); fecharMenu(); $event.preventDefault()">
+          <div class="input-group">
 
-            <button class="btn btn-inset dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-inset dropdown-toggle" type="button" data-bs-toggle="dropdown"
+              aria-expanded="false" aria-label="Selecionar coluna para filtrar">
               {{ filtroSelecionado }}
             </button>
 
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" (click)="mudarFiltro('Livro')">Livro</a></li>
-              <li><a class="dropdown-item" (click)="mudarFiltro('Autor')">Autor</a></li>
-              <li><a class="dropdown-item" (click)="mudarFiltro('Editora')">Editora</a></li>
-              <li><a class="dropdown-item" (click)="mudarFiltro('Número de Páginas')">Número de Páginas</a></li>
-              <li><a class="dropdown-item" (click)="mudarFiltro('Ano de Publicação')">Ano de Publicação</a></li>
-              <li><a class="dropdown-item" (click)="mudarFiltro('Data de Aquisição')">Data de Aquisição</a></li>
-              <li><a class="dropdown-item" (click)="mudarFiltro('Classificação Catalográfica')">Classificação
-                  Catalográfica</a></li>
-              <li><a class="dropdown-item" (click)="mudarFiltro('Você já leu?')">Você já leu?</a></li>
-              <li><a class="dropdown-item" (click)="mudarFiltro('Última leitura')">Última leitura</a></li>
-              <li><a class="dropdown-item" (click)="mudarFiltro('Observação')">Observação</a></li>
+            <ul class="dropdown-menu filter-dropdown-menu" data-bs-theme="light">
+              <li><button type="button" class="dropdown-item" (click)="mudarFiltro('Código')">Código</button></li>
+              <li><button type="button" class="dropdown-item" (click)="mudarFiltro('Livro')">Livro</button></li>
+              <li><button type="button" class="dropdown-item" (click)="mudarFiltro('Autor')">Autor</button></li>
+              <li><button type="button" class="dropdown-item" (click)="mudarFiltro('Editora')">Editora</button></li>
+              <li><button type="button" class="dropdown-item" (click)="mudarFiltro('Número de Páginas')">Número de Páginas</button></li>
+              <li><button type="button" class="dropdown-item" (click)="mudarFiltro('Ano de Publicação')">Ano de Publicação</button></li>
+              <li><button type="button" class="dropdown-item" (click)="mudarFiltro('Data de Aquisição')">Data de Aquisição</button></li>
+              <li><button type="button" class="dropdown-item" (click)="mudarFiltro('Classificação Catalográfica')">Classificação
+                  Catalográfica</button></li>
+              <li><button type="button" class="dropdown-item" (click)="mudarFiltro('Observação')">Observação</button></li>
+              <li><button type="button" class="dropdown-item" (click)="mudarFiltro('Você já leu?')">Você já leu?</button></li>
+              <li><button type="button" class="dropdown-item" (click)="mudarFiltro('Última leitura')">Última leitura</button></li>
             </ul>
 
             <input #inputBusca type="search" class="form-control input-inset" [placeholder]="placeHolderFiltro"
+              [value]="termoBusca"
               aria-label="Pesquisar">
 
             <button class="btn btn-inset" type="submit">
@@ -64,10 +67,32 @@
           </div>
         </form>
 
-        <button class="btn btn-outline-danger btn-sair" (click)="logout()">Sair</button>
+        <div class="account-actions">
+          <div class="account-buttons">
+            <button class="btn btn-conta" type="button" routerLink="/minha-conta" (click)="fecharMenu()">Minha Conta</button>
+            <button class="btn btn-outline-danger btn-sair" (click)="logout(); fecharMenu()">Sair</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </nav>
 
 <router-outlet></router-outlet>
+
+<footer class="app-footer">
+  <div class="footer-content">
+    <a class="footer-brand" routerLink="/minha-estante" aria-label="Biblioteca RHC - Minha Estante">
+      <i class="bi bi-book-half" aria-hidden="true"></i>
+      <span>Biblioteca RHC</span>
+    </a>
+
+    <p class="footer-message">Sua biblioteca, organizada para acompanhar cada leitura.</p>
+
+    <div class="footer-meta">
+      <span>&copy; {{ anoAtual }} Biblioteca RHC</span>
+      <a routerLink="/projeto-leitura">Projetos de Leitura</a>
+      <a routerLink="/relatorios">Relatórios</a>
+    </div>
+  </div>
+</footer>

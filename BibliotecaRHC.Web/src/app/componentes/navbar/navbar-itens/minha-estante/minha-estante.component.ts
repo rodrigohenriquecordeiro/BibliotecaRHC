@@ -9,11 +9,12 @@ import { SimNaoPipe } from '../../../../pipes/sim-nao.pipe';
 import { Subscription } from 'rxjs';
 import { FiltroService } from '../../../../services/filtro/filtro.service'
 import { LivrosPaginados } from '../../../../models/livrosPaginados';
+import { PageHeaderComponent } from '../../../shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-minha-estante',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, SimNaoPipe],
+  imports: [FormsModule, CommonModule, RouterModule, SimNaoPipe, PageHeaderComponent],
   templateUrl: './minha-estante.component.html',
   styleUrl: './minha-estante.component.css'
 })
@@ -27,6 +28,8 @@ export class MinhaEstanteComponent implements OnInit {
   totalPaginas: number = 0;
   temProximaPagina: boolean = false;
   temPaginaAnterior: boolean = false;
+  campoOrdenacao: string = 'id';
+  direcaoOrdenacao: 'asc' | 'desc' = 'desc';
 
   private inscricaoFiltro!: Subscription;
   campoFiltroAtual: string = 'nomeDoLivro';
@@ -75,7 +78,13 @@ export class MinhaEstanteComponent implements OnInit {
 
     this.idLivrosSelecionados = [];
 
-    this.service.listarLivros(pagina, this.campoFiltroAtual, this.valorFiltroAtual).subscribe({
+    this.service.listarLivros(
+      pagina,
+      this.campoFiltroAtual,
+      this.valorFiltroAtual,
+      this.campoOrdenacao,
+      this.direcaoOrdenacao
+    ).subscribe({
       next: (dados: any) => {
         this.livros = dados.Livros || dados.livros || [];
         this.totalPaginas = Number(dados.TotalPaginas || dados.totalPaginas || 0);
@@ -90,6 +99,28 @@ export class MinhaEstanteComponent implements OnInit {
         this.livros = [];
       }
     });
+  }
+
+  ordenarPor(campo: string): void {
+    this.direcaoOrdenacao = this.campoOrdenacao === campo && this.direcaoOrdenacao === 'asc' ? 'desc' : 'asc';
+    this.campoOrdenacao = campo;
+    this.carregarLivros(1);
+  }
+
+  iconeOrdenacao(campo: string): string {
+    if (this.campoOrdenacao !== campo) {
+      return 'bi-arrow-down-up';
+    }
+
+    return this.direcaoOrdenacao === 'asc' ? 'bi-sort-up' : 'bi-sort-down';
+  }
+
+  ariaOrdenacao(campo: string): 'ascending' | 'descending' | 'none' {
+    if (this.campoOrdenacao !== campo) {
+      return 'none';
+    }
+
+    return this.direcaoOrdenacao === 'asc' ? 'ascending' : 'descending';
   }
 
   get paginas(): number[] {
@@ -127,12 +158,8 @@ export class MinhaEstanteComponent implements OnInit {
     return lista;
   }
 
-  onSelecionarLivro(event: any, id: number) {
-    if (event.target.checked) {
-      this.idLivrosSelecionados.push(id);
-    } else {
-      this.idLivrosSelecionados = this.idLivrosSelecionados.filter(i => i !== id);
-    }
+  selecionarLivro(id: number): void {
+    this.idLivrosSelecionados = this.idLivrosSelecionados[0] === id ? [] : [id];
   }
 
   getLivroSelecionado(): Livro | undefined {

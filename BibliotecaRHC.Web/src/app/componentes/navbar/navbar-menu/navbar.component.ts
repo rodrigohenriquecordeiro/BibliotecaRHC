@@ -1,8 +1,9 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FiltroService } from '../../../services/filtro/filtro.service';
-import { Subscription } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -17,10 +18,15 @@ export class NavbarComponent implements AfterViewInit {
 
   filtroSelecionado: string = 'Livro';
   placeHolderFiltro: string = 'Selecione um filtro ou digite um livro';
+  termoBusca: string = '';
+  estaNaMinhaEstante = false;
+  menuExpandido = false;
+  readonly anoAtual = new Date().getFullYear();
 
-  private inscricaoFiltro!: Subscription;
+  private inscricaoFiltro = new Subscription();
 
   private readonly placeholders: Record<string, string> = {
+    'Código': 'Digite o código do livro',
     'Livro': 'Digite um livro',
     'Autor': 'Digite um autor',
     'Editora': 'Digite uma editora',
@@ -34,6 +40,7 @@ export class NavbarComponent implements AfterViewInit {
   };
 
   private readonly camposParaAPI: Record<string, string> = {
+    'Código': 'id',
     'Livro': 'nomedolivro',
     'Autor': 'autor',
     'Editora': 'editora',
@@ -46,22 +53,33 @@ export class NavbarComponent implements AfterViewInit {
     'Observação': 'observacao'
   };
 
+  private readonly filtrosParaCampoAPI: Record<string, string> = Object.fromEntries(
+    Object.entries(this.camposParaAPI).map(([filtro, campoAPI]) => [campoAPI, filtro])
+  );
+
   constructor(
     private router: Router,
-    private filtroService: FiltroService) { }
+    private filtroService: FiltroService,
+    private authService: AuthService) { }
 
   ngOnInit() {
-    this.inscricaoFiltro = this.filtroService.filtroAtual$.subscribe(filtro => {
-      if (filtro.termo === '' && this.inputBusca) {
-        this.inputBusca.nativeElement.value = '';
-        this.filtroSelecionado = 'Livro';
-        this.placeHolderFiltro = this.placeholders['Livro'];
-      }
-    });
+    this.estaNaMinhaEstante = this.router.url.startsWith('/minha-estante');
+    this.inscricaoFiltro.add(this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe(event => {
+      this.estaNaMinhaEstante = event.urlAfterRedirects.startsWith('/minha-estante');
+    }));
+    this.inscricaoFiltro.add(this.filtroService.filtroAtual$.subscribe(filtro => {
+      this.termoBusca = filtro.termo;
+      this.filtroSelecionado = filtro.termo === ''
+        ? 'Livro'
+        : this.filtrosParaCampoAPI[filtro.tipo] || 'Livro';
+      this.placeHolderFiltro = this.placeholders[this.filtroSelecionado] || 'Selecione um filtro';
+    }));
   }
 
   ngOnDestroy() {
-    if (this.inscricaoFiltro) this.inscricaoFiltro.unsubscribe();
+    this.inscricaoFiltro.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -71,13 +89,20 @@ export class NavbarComponent implements AfterViewInit {
   mudarFiltro(novoValor: string) {
     this.filtroSelecionado = novoValor;
     this.placeHolderFiltro = this.placeholders[novoValor] || 'Selecione um filtro';
-    this.inputBusca.nativeElement.value = '';
-    this.inputBusca.nativeElement.focus();
+    this.termoBusca = '';
+    this.inputBusca?.nativeElement?.focus();
   }
 
   logout() {
-    localStorage.removeItem('usuarioLogado');
-    this.router.navigate(['/login']);
+    this.authService.logout();
+  }
+
+  alternarMenu() {
+    this.menuExpandido = !this.menuExpandido;
+  }
+
+  fecharMenu() {
+    this.menuExpandido = false;
   }
 
   pesquisar(termo: string) {

@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BibliotecaService } from '../../../../services/biblioteca/biblioteca.service';
+import { PageHeaderComponent } from '../../../shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-importar-planilha',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, PageHeaderComponent],
   templateUrl: './importar-planilha.component.html',
   styleUrl: './importar-planilha.component.css'
 })
@@ -116,7 +117,7 @@ export class ImportarPlanilhaComponent {
 
   baixarModelo() {
     const link = document.createElement('a');
-    link.href = 'assets/modelo-importacao.xlsx';
+    link.href = '/api/importar-planilha/modelo';
     link.download = 'modelo-importacao.xlsx';
     link.click();
   }

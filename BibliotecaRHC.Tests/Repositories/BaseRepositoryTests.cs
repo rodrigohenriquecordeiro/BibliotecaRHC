@@ -1,5 +1,6 @@
 ﻿using BibliotecaRHC.API.Context;
 using BibliotecaRHC.API.Repositories;
+using BibliotecaRHC.Tests;
 using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaRHC.Tests.Repositories;
@@ -20,12 +21,7 @@ public abstract class BaseRepositoryTests<T> where T : class
 
     protected AppDbContext CriarContextoComBancoEmMemoria(string nomeBanco)
     {
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(nomeBanco)
-            .EnableSensitiveDataLogging()
-            .Options;
-
-        return new AppDbContext(options);
+        return TestDbContextFactory.Create(nomeBanco);
     }
 
     protected (IRepository<T> repo, AppDbContext context) CriarRepositorioComContexto(string? nomeBanco = null, bool comDados = true)

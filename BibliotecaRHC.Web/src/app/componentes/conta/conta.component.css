@@ -1,0 +1,7 @@
+.conta-container {
+  min-height: calc(100vh - 9rem);
+}
+
+.conta-card {
+  max-width: 640px;
+}

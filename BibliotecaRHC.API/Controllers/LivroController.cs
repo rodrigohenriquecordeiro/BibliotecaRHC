@@ -30,9 +30,12 @@ public class LivroController : ControllerBase
 
     [Authorize]
     [HttpGet("obter-livros-paginados")]
-    public async Task<IActionResult> GetLivrosPaginados([FromQuery] int paginaAtual = 1)
+    public async Task<IActionResult> GetLivrosPaginados(
+        [FromQuery] int paginaAtual = 1,
+        [FromQuery] string campoOrdenacao = "id",
+        [FromQuery] string direcaoOrdenacao = "desc")
     {
-        var livros = await _service.ObterTodosOsLivrosPaginados(paginaAtual);
+        var livros = await _service.ObterTodosOsLivrosPaginados(paginaAtual, campoOrdenacao, direcaoOrdenacao);
         if (livros == null) 
             return NotFound();
         
@@ -52,11 +55,34 @@ public class LivroController : ControllerBase
 
     [Authorize]
     [HttpGet("filtra-dashboard")]
-    public async Task<IActionResult> GetLivrosFiltrados([FromQuery] string campo, string valor)
+    public async Task<IActionResult> GetLivrosFiltrados(
+        [FromQuery] string campo,
+        [FromQuery] string valor,
+        [FromQuery] string campoOrdenacao = "id",
+        [FromQuery] string direcaoOrdenacao = "desc")
     {
-        var livros = await _service.ObterLivrosFiltrados(campo, valor);
+        var livros = await _service.ObterLivrosFiltrados(campo, valor, campoOrdenacao, direcaoOrdenacao);
         if (livros == null)
             return NotFound();
+
+        return Ok(livros);
+    }
+
+    [Authorize]
+    [HttpGet("filtra-dashboard-paginado")]
+    public async Task<IActionResult> GetLivrosFiltradosPaginados(
+        [FromQuery] string campo,
+        [FromQuery] string valor,
+        [FromQuery] int paginaAtual = 1,
+        [FromQuery] string campoOrdenacao = "id",
+        [FromQuery] string direcaoOrdenacao = "desc")
+    {
+        var livros = await _service.ObterLivrosFiltradosPaginados(
+            campo,
+            valor,
+            paginaAtual,
+            campoOrdenacao,
+            direcaoOrdenacao);
 
         return Ok(livros);
     }

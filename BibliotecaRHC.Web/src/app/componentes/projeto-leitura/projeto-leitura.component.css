@@ -1,43 +1,75 @@
-:host {
-  --borda-escura: rgba(255, 255, 255, 0.15);
-  --fundo-card: #012a3d;
-  --laranja-hover: orange;
+.bg-card-escuro {
+  background-color: var(--color-white) !important;
+  color: var(--color-ink) !important;
 }
 
-.bg-card-escuro {
-  background-color: var(--fundo-card) !important;
+.bg-card-escuro .text-white,
+.bg-card-escuro .text-light {
+  color: var(--color-ink) !important;
+}
+
+.bg-card-escuro .text-warning {
+  color: var(--color-primary) !important;
+}
+
+.bg-card-escuro .btn-close {
+  filter: none;
+  opacity: 0.65;
+}
+
+.bg-card-escuro .bg-dark,
+.bg-card-escuro input,
+.bg-card-escuro select {
+  border-color: var(--color-border) !important;
+  background-color: var(--color-white) !important;
+  color: var(--color-ink) !important;
+}
+
+.bg-card-escuro .btn-outline-light {
+  border-color: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+.bg-card-escuro .btn-outline-light:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.project-card {
+  overflow: hidden;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md) !important;
+}
+
+.project-count {
+  background: color-mix(in srgb, var(--color-secondary), white 90%);
+  color: var(--color-primary);
 }
 
 .borda-customizada {
-  border-color: var(--borda-escura) !important;
-}
-
-.card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3) !important;
+  border-color: var(--color-border) !important;
 }
 
 .input-data-container {
   min-width: 140px;
 }
 
-.input-data-custom {
-  border-color: var(--borda-escura);
-}
-
 .input-data-custom:disabled {
-  background-color: rgba(0, 0, 0, 0.3) !important;
-  color: rgba(255, 255, 255, 0.3) !important;
+  background-color: var(--color-surface) !important;
+  color: var(--color-muted) !important;
   cursor: not-allowed;
 }
 
-.form-check-input:checked {
-  background-color: #198754;
-  border-color: #198754;
+.livro-item-hover {
+  transition: background-color 180ms ease;
+}
+
+.livro-item-hover:hover {
+  background-color: color-mix(in srgb, var(--color-secondary), white 94%) !important;
 }
 
 @media (max-width: 767.98px) {
@@ -53,13 +85,4 @@
   .d-flex.gap-2.justify-content-end .btn {
     flex: 1;
   }
-}
-
-.livro-item-hover {
-  transition: background-color 0.2s ease-in-out;
-  cursor: pointer;
-}
-
-.livro-item-hover:hover {
-  background-color: rgba(255, 255, 255, 0.08) !important;
 }

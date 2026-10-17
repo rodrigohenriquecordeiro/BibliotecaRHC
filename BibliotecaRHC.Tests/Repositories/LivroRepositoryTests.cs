@@ -113,4 +113,77 @@ public class LivroRepositoryTests : BaseRepositoryTests<Livro>
         var livro = await repo.GetByIDAsync(id);
         Assert.Equal(autorEsperado, livro!.Autor);
     }
+
+    [Fact]
+    public async Task ObterLivrosFiltradosPorId_DeveRetornarSomenteOCodigoInformado()
+    {
+        var (repo, _) = CriarRepositorioComContexto();
+
+        var livros = await ((LivroRepository)repo).ObterLivrosFiltrados("id", "2");
+
+        Assert.Equal(new[] { 2 }, livros.Select(livro => livro.Id));
+    }
+
+    [Fact]
+    public async Task ObterLivrosPaginados_DeveOrdenarAntesDeAplicarPaginacao()
+    {
+        var (repo, context) = CriarRepositorioComContexto();
+        context.Livro!.AddRange(
+            new Livro
+            {
+                Id = 4,
+                Autor = "Autor 4",
+                NomeDoLivro = "Alfa",
+                Editora = "Editora 4",
+                AnoDePublicacao = "2023",
+                NumeroDePaginas = 400,
+                ClassificacaoCatalografica = "A4",
+                Observacao = "Obs 4",
+                DataDeAquisicao = DateTime.Now
+            },
+            new Livro
+            {
+                Id = 5,
+                Autor = "Autor 5",
+                NomeDoLivro = "Zulu",
+                Editora = "Editora 5",
+                AnoDePublicacao = "2024",
+                NumeroDePaginas = 500,
+                ClassificacaoCatalografica = "A5",
+                Observacao = "Obs 5",
+                DataDeAquisicao = DateTime.Now
+            });
+        await context.SaveChangesAsync();
+
+        var livros = await ((LivroRepository)repo).ObterLivrosPaginados(1, 2, "nomeDoLivro", "asc");
+
+        Assert.Equal(new[] { 4, 1 }, livros.Select(livro => livro.Id));
+    }
+
+    [Fact]
+    public async Task ObterLivrosFiltradosPaginados_DeveRetornarPaginaEContagemDoFiltro()
+    {
+        var (repo, context) = CriarRepositorioComContexto();
+        context.Livro!.AddRange(Enumerable.Range(4, 9).Select(id => new Livro
+        {
+            Id = id,
+            Autor = $"Autor {id}",
+            NomeDoLivro = $"Livro {id}",
+            Editora = $"Editora {id}",
+            AnoDePublicacao = "2024",
+            NumeroDePaginas = 100,
+            ClassificacaoCatalografica = $"A{id}",
+            Observacao = "Teste",
+            DataDeAquisicao = DateTime.Now,
+            Lido = false
+        }));
+        await context.SaveChangesAsync();
+
+        var livroRepo = (LivroRepository)repo;
+        var totalLivros = await livroRepo.ContarLivrosFiltrados("lido", "não");
+        var livros = await livroRepo.ObterLivrosFiltradosPaginados("lido", "não", 2, 10);
+
+        Assert.Equal(12, totalLivros);
+        Assert.Equal(new[] { 2, 1 }, livros.Select(livro => livro.Id));
+    }
 }

@@ -68,6 +68,23 @@ public class LivroServiceTests
     }
 
     [Fact]
+    public async Task ObterLivrosFiltradosPaginados_DeveRetornarMetadadosDePaginacao()
+    {
+        var livros = new List<Livro> { new() { Id = 11 }, new() { Id = 12 } };
+        _mockRepo.Setup(r => r.ContarLivrosFiltrados("lido", "sim")).ReturnsAsync(12);
+        _mockRepo.Setup(r => r.ObterLivrosFiltradosPaginados("lido", "sim", 2, 10, "id", "desc"))
+            .ReturnsAsync(livros);
+
+        var resultado = await _service.ObterLivrosFiltradosPaginados("lido", "sim", 2);
+
+        Assert.Equal(12, resultado.TotalLivros);
+        Assert.Equal(2, resultado.TotalPaginas);
+        Assert.True(resultado.TemPaginaAnterior);
+        Assert.False(resultado.TemProximaPagina);
+        Assert.Equal(livros, resultado.Livros);
+    }
+
+    [Fact]
     public async Task AdicionarLivro_DeveChamarAdd()
     {
         // Arrange

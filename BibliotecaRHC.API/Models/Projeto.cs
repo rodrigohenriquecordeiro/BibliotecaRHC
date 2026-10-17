@@ -3,9 +3,10 @@ using System.Text;
 
 namespace BibliotecaRHC.API.Models;
 
-public class Projeto
+public class Projeto : IEntidadeDoUsuario
 {
     public int Id { get; set; }
+    public int UsuarioId { get; set; }
 
     [StringLength(100, ErrorMessage = "Permitido no máximo 100 caracteres")]
     public string? Nome { get; set; }

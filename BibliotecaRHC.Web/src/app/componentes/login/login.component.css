@@ -1,8 +1,21 @@
-.bg-primary {
-    background-color: #013750 !important;
+.auth-layout {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: var(--color-primary);
 }
 
 .login-card {
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    width: min(100%, 26rem);
+    padding: 0 1.75rem 1.75rem;
+    border: 1px solid rgb(255 255 255 / 35%);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-md);
+}
+
+.brand-logo {
+    width: min(15.625rem, 85%);
 }
   

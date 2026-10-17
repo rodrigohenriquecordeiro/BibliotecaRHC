@@ -3,9 +3,10 @@ using System.Text;
 
 namespace BibliotecaRHC.API.Models;
 
-public class FraseInesquecivel
+public class FraseInesquecivel : IEntidadeDoUsuario
 {
     public int Id { get; set; }
+    public int UsuarioId { get; set; }
 
     [Required(ErrorMessage = "Obrigatório colocar a Frase")]
     [StringLength(65000, ErrorMessage = "Número de caracteres excede o permitido")]

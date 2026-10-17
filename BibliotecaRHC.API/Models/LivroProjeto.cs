@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using System.Text;
 
 namespace BibliotecaRHC.API.Models;
 
-public class LivroProjeto
+public class LivroProjeto : IEntidadeDoUsuario
 {
     public int Id { get; set; }
+    public int UsuarioId { get; set; }
 
     [StringLength(300, ErrorMessage = "Permitido no máximo 300 caracteres")]
     public string? Nome { get; set; }
@@ -18,6 +20,9 @@ public class LivroProjeto
     public DateTime? DataDeLeitura { get; set; }
 
     public int ProjetoId { get; set; }
+
+    [JsonIgnore]
+    public Projeto? Projeto { get; set; }
 
     public void ValidaClasse()
     {

@@ -27,12 +27,19 @@ public class LivroService : ILivroService
         return livros;
     }
 
-    public async Task<LivroPaginado> ObterTodosOsLivrosPaginados(int paginaAtual)
+    public async Task<LivroPaginado> ObterTodosOsLivrosPaginados(
+        int paginaAtual,
+        string campoOrdenacao = "id",
+        string direcaoOrdenacao = "desc")
     {
         int tamanhoPagina = 10;
         int totalLivrosGeral = await _unityOfWork.LivroRepository.CountAsync(); 
 
-        var livrosDaPagina = await _unityOfWork.LivroRepository.ObterLivrosPaginados(paginaAtual, tamanhoPagina);
+        var livrosDaPagina = await _unityOfWork.LivroRepository.ObterLivrosPaginados(
+            paginaAtual,
+            tamanhoPagina,
+            campoOrdenacao,
+            direcaoOrdenacao);
         int totalPaginas = (int)Math.Ceiling((double)totalLivrosGeral / tamanhoPagina);
 
         return new LivroPaginado
@@ -57,7 +64,40 @@ public class LivroService : ILivroService
         return livro;
     }
 
-    public async Task<IEnumerable<Livro>> ObterLivrosFiltrados(string campo, string valor) => await _unityOfWork.LivroRepository.ObterLivrosFiltrados(campo, valor);
+    public async Task<IEnumerable<Livro>> ObterLivrosFiltrados(
+        string campo,
+        string valor,
+        string campoOrdenacao = "id",
+        string direcaoOrdenacao = "desc") =>
+        await _unityOfWork.LivroRepository.ObterLivrosFiltrados(campo, valor, campoOrdenacao, direcaoOrdenacao);
+
+    public async Task<LivroPaginado> ObterLivrosFiltradosPaginados(
+        string campo,
+        string valor,
+        int paginaAtual,
+        string campoOrdenacao = "id",
+        string direcaoOrdenacao = "desc")
+    {
+        const int tamanhoPagina = 10;
+        var totalLivros = await _unityOfWork.LivroRepository.ContarLivrosFiltrados(campo, valor);
+        var totalPaginas = (int)Math.Ceiling((double)totalLivros / tamanhoPagina);
+        var livros = await _unityOfWork.LivroRepository.ObterLivrosFiltradosPaginados(
+            campo,
+            valor,
+            paginaAtual,
+            tamanhoPagina,
+            campoOrdenacao,
+            direcaoOrdenacao);
+
+        return new LivroPaginado
+        {
+            Livros = livros,
+            TotalLivros = totalLivros,
+            TotalPaginas = totalPaginas,
+            TemPaginaAnterior = paginaAtual > 1,
+            TemProximaPagina = paginaAtual < totalPaginas
+        };
+    }
 
     public async Task<Livro> AdicionarLivroAsync(Livro livro)
     {
@@ -115,9 +155,10 @@ public class LivroService : ILivroService
 public interface ILivroService
 {
     Task<IEnumerable<Livro>> ObterTodosOsLivros();
-    Task<LivroPaginado> ObterTodosOsLivrosPaginados(int paginaAtual);
+    Task<LivroPaginado> ObterTodosOsLivrosPaginados(int paginaAtual, string campoOrdenacao = "id", string direcaoOrdenacao = "desc");
     Task<Livro?> ObterLivroPorId(int id);
-    Task<IEnumerable<Livro>> ObterLivrosFiltrados(string campo, string valor);
+    Task<IEnumerable<Livro>> ObterLivrosFiltrados(string campo, string valor, string campoOrdenacao = "id", string direcaoOrdenacao = "desc");
+    Task<LivroPaginado> ObterLivrosFiltradosPaginados(string campo, string valor, int paginaAtual, string campoOrdenacao = "id", string direcaoOrdenacao = "desc");
     Task<Livro> AdicionarLivroAsync(Livro livro);
     Task<Livro?> AtualizarLivro(Livro livro);
     Task<Livro?> RemoverLivro(int id);

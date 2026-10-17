@@ -1,35 +1,99 @@
-.bg-primary {
-    background-color: #015043f1 !important;
-    color: white !important;
-}
-
 table {
-    table-layout: auto;
-    width: 100%;
+  table-layout: auto;
+  width: 100%;
 }
 
-td, th {
-    white-space: nowrap; 
-    text-overflow: ellipsis; 
-    overflow: hidden; 
+td,
+th {
+  max-width: 18rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .text-wrap {
-    white-space: normal; 
+  white-space: normal;
 }
 
 .container-tabela {
-  border: 1px solid #dee2e6;
-  border-radius: 6px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  background-color: white;
+  max-height: calc(100vh - 20rem);
+  overflow: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 0.9rem;
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.featured-quote {
+  margin: 0 0 1.25rem;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--color-highlight);
+  border-radius: 0 0.7rem 0.7rem 0;
+  background: var(--color-white);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.featured-quote cite {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  font-style: normal;
+  font-weight: 600;
 }
 
 thead th {
   position: sticky;
   top: 0;
-  z-index: 100;
-  background-color: #212529 !important; 
-  color: white;
-  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+  background-color: var(--color-primary) !important;
+  color: var(--color-white);
+  box-shadow: 0 2px 2px -1px rgb(37 42 59 / 20%);
+}
+
+tbody tr {
+  cursor: pointer;
+}
+
+tbody tr.livro-selecionado {
+  --bs-table-bg: color-mix(in srgb, var(--color-secondary), white 88%);
+  --bs-table-color: var(--color-ink);
+}
+
+tbody tr:focus-visible {
+  outline: 2px solid var(--color-highlight);
+  outline-offset: -2px;
+}
+
+.sort-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.sort-button:focus-visible {
+  outline: 2px solid var(--color-highlight);
+  outline-offset: 3px;
+}
+
+.empty-library {
+  max-width: 48rem;
+  margin-inline: auto;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 767.98px) {
+  .container-tabela {
+    max-height: calc(100vh - 20rem) !important;
+  }
 }

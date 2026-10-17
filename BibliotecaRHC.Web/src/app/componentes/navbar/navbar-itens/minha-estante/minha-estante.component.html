@@ -1,29 +1,22 @@
 @if (livros.length === 0 && !temFiltroAtivo) {
-<div class="container text-center my-4">
-  <h1 class="text-center h2 mb-3 large">Bem vindo a Biblioteca RHC</h1>
-
-  <div class="d-flex justify-content-center align-items-center gap-2">
-    <button type="button" [routerLink]="['/cadastrar']" class="btn btn-success btn-primary m-1" style="width: 150px;">
-      Cadastrar Livro
+<main class="page-shell empty-library text-center">
+  <app-page-header class="page-header--centered" title="Bem-vindo à Biblioteca RHC"
+    subtitle="Sua coleção começa com a próxima leitura.">
+    <button type="button" [routerLink]="['/cadastrar']" class="btn btn-primary">Cadastrar livro</button>
+    <button type="button" [routerLink]="['/importar-planilha']" class="btn btn-outline-primary">
+      Importar planilha
     </button>
-
-    <button type="button" [routerLink]="['/importar-planilha']" class="btn btn-success btn-primary m-1"
-      style="width: 150px;">
-      Importar Planilha
-    </button>
-  </div>
-
-  <hr class="mb-4" />
+  </app-page-header>
 
   <div class="alert alert-info w-80 text-center" role="alert">
     <span class="text-center mb-4">Nenhum livro foi adicionado ainda.</span>
   </div>
-</div>
+</main>
 }
 @else if (livros.length === 0 && temFiltroAtivo) {
-<div class="container text-center my-5">
-  <i class="bi bi-search" style="font-size: 3rem; color: #6c757d;"></i>
-  <h3 class="mt-3 text-muted">Nenhum livro encontrado</h3>
+<main class="page-shell text-center">
+  <i class="bi bi-search fs-1 text-muted" aria-hidden="true"></i>
+  <h1 class="h3 mt-3">Nenhum livro encontrado</h1>
   <p class="text-secondary">
     Não encontramos resultados na sua estante para o filtro <strong>{{ campoFiltroComErroAmigavel }}</strong> com o termo
     "<strong>{{ valorFiltroAtual }}</strong>".
@@ -31,76 +24,106 @@
   <button class="btn btn-outline-primary mt-2" (click)="limparFiltro()">
     <i class="bi bi-x-circle"></i> Limpar Filtro e Voltar
   </button>
-</div>
+</main>
 } @else {
-<div>
-  <div class="d-flex justify-content-between align-items-center my-4 ms-4 mb-4">
-
-    <p class="mb-0">
-      "<em>{{ fraseDestaque?.frase }}</em>". <strong>{{ fraseDestaque?.autor }}</strong>
-    </p>
-
-    <div class="d-flex flex-column flex-md-row gap-1 justify-content-center">
-      <button type="button" [routerLink]="['/cadastrar']" class="btn btn-primary mx-1">
-        Cadastrar
-      </button>
-
-      <button type="button" [routerLink]="['/editar']" class="btn btn-primary mx-1" (click)="editarLivro()"
+<main class="page-shell">
+  <app-page-header title="Minha estante" subtitle="Sua coleção, organizada em um só lugar.">
+    <button type="button" [routerLink]="['/cadastrar']" class="btn btn-primary">Cadastrar livro</button>
+    <button type="button" [routerLink]="['/editar']" class="btn btn-outline-primary" (click)="editarLivro()"
         [disabled]="idLivrosSelecionados.length !== 1">
-        Editar
-      </button>
+      Editar
+    </button>
 
-      <button type="button" class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#modalApagar"
-        [disabled]="idLivrosSelecionados.length === 0">
-        Apagar
-      </button>
+    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalApagar"
+      [disabled]="idLivrosSelecionados.length === 0">
+      Apagar
+    </button>
+  </app-page-header>
 
-      <div class="modal fade" id="modalApagar" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Apagar Livro(s)</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              Você tem certeza que deseja apagar <strong>{{ idLivrosSelecionados.length }} livro(s)</strong>
-              selecionado(s)?
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
-              <button type="button" class="btn btn-primary" (click)="confirmarApagar()"
-                data-bs-dismiss="modal">Confirmar</button>
-            </div>
-          </div>
+  @if (fraseDestaque) {
+    <blockquote class="featured-quote">
+      “{{ fraseDestaque.frase }}” <cite>— {{ fraseDestaque.autor }}</cite>
+    </blockquote>
+  }
+
+  <div class="modal fade" id="modalApagar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="exampleModalLabel">Apagar livro(s)</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          Você tem certeza que deseja apagar <strong>{{ idLivrosSelecionados.length }} livro(s)</strong>
+          selecionado(s)?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+          <button type="button" class="btn btn-primary" (click)="confirmarApagar()"
+            data-bs-dismiss="modal">Confirmar</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="table-responsive container-tabela mt-4" style="height: calc(100vh - 250px); overflow-y: auto;">
+  <div class="table-responsive container-tabela mt-4">
     <table class="table table-hover w-100">
-      <thead class="table-dark" style="position: sticky; top: 0; z-index: 1;">
+      <thead class="table-dark">
         <tr>
-          <th scope="col" class="text-center">#</th>
-          <th scope="col" class="text-center">Código</th>
-          <th scope="col">Livro</th>
-          <th scope="col">Autor</th>
-          <th scope="col">Editora</th>
-          <th scope="col" class="text-center">Nº de Páginas</th>
-          <th scope="col" class="text-center">Publicação</th>
-          <th scope="col" class="text-center">Aquisição</th>
-          <th scope="col">Classificação</th>
-          <th scope="col">Observação</th>
-          <th scope="col">Você já leu?</th>
-          <th scope="col">Última leitura</th>
+          <th scope="col" class="text-center" [attr.aria-sort]="ariaOrdenacao('id')">
+            <button type="button" class="sort-button" (click)="ordenarPor('id')" aria-label="Ordenar por código"
+              title="Ordenar por código"><span>Código</span><i class="bi" [ngClass]="iconeOrdenacao('id')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('nomeDoLivro')">
+            <button type="button" class="sort-button" (click)="ordenarPor('nomeDoLivro')" aria-label="Ordenar por livro"
+              title="Ordenar por livro"><span>Livro</span><i class="bi" [ngClass]="iconeOrdenacao('nomeDoLivro')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('autor')">
+            <button type="button" class="sort-button" (click)="ordenarPor('autor')" aria-label="Ordenar por autor"
+              title="Ordenar por autor"><span>Autor</span><i class="bi" [ngClass]="iconeOrdenacao('autor')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('editora')">
+            <button type="button" class="sort-button" (click)="ordenarPor('editora')" aria-label="Ordenar por editora"
+              title="Ordenar por editora"><span>Editora</span><i class="bi" [ngClass]="iconeOrdenacao('editora')"></i></button>
+          </th>
+          <th scope="col" class="text-center" [attr.aria-sort]="ariaOrdenacao('numeroDePaginas')">
+            <button type="button" class="sort-button" (click)="ordenarPor('numeroDePaginas')" aria-label="Ordenar por número de páginas"
+              title="Ordenar por número de páginas"><span>Nº de Páginas</span><i class="bi" [ngClass]="iconeOrdenacao('numeroDePaginas')"></i></button>
+          </th>
+          <th scope="col" class="text-center" [attr.aria-sort]="ariaOrdenacao('anoDePublicacao')">
+            <button type="button" class="sort-button" (click)="ordenarPor('anoDePublicacao')" aria-label="Ordenar por publicação"
+              title="Ordenar por publicação"><span>Publicação</span><i class="bi" [ngClass]="iconeOrdenacao('anoDePublicacao')"></i></button>
+          </th>
+          <th scope="col" class="text-center" [attr.aria-sort]="ariaOrdenacao('dataDeAquisicao')">
+            <button type="button" class="sort-button" (click)="ordenarPor('dataDeAquisicao')" aria-label="Ordenar por aquisição"
+              title="Ordenar por aquisição"><span>Aquisição</span><i class="bi" [ngClass]="iconeOrdenacao('dataDeAquisicao')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('classificacaoCatalografica')">
+            <button type="button" class="sort-button" (click)="ordenarPor('classificacaoCatalografica')" aria-label="Ordenar por classificação"
+              title="Ordenar por classificação"><span>Classificação</span><i class="bi" [ngClass]="iconeOrdenacao('classificacaoCatalografica')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('observacao')">
+            <button type="button" class="sort-button" (click)="ordenarPor('observacao')" aria-label="Ordenar por observação"
+              title="Ordenar por observação"><span>Observação</span><i class="bi" [ngClass]="iconeOrdenacao('observacao')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('lido')">
+            <button type="button" class="sort-button" (click)="ordenarPor('lido')" aria-label="Ordenar por lido"
+              title="Ordenar por lido"><span>Você já leu?</span><i class="bi" [ngClass]="iconeOrdenacao('lido')"></i></button>
+          </th>
+          <th scope="col" [attr.aria-sort]="ariaOrdenacao('anoUltimaLeitura')">
+            <button type="button" class="sort-button" (click)="ordenarPor('anoUltimaLeitura')" aria-label="Ordenar por última leitura"
+              title="Ordenar por última leitura"><span>Última leitura</span><i class="bi" [ngClass]="iconeOrdenacao('anoUltimaLeitura')"></i></button>
+          </th>
         </tr>
       </thead>
       <tbody class="table-group-divider">
-        <tr *ngFor="let livro of livros">
-          <td class="text-center">
-            <input type="checkbox" [checked]="idLivrosSelecionados.includes(livro.id)"
-              (change)="onSelecionarLivro($event, livro.id)" />
-          </td>
+        <tr *ngFor="let livro of livros"
+          [class.livro-selecionado]="idLivrosSelecionados.includes(livro.id)"
+          [attr.aria-selected]="idLivrosSelecionados.includes(livro.id)"
+          tabindex="0"
+          (click)="selecionarLivro(livro.id)"
+          (keydown.enter)="selecionarLivro(livro.id)"
+          (keydown.space)="selecionarLivro(livro.id); $event.preventDefault()">
           <td class="text-center">{{livro.id}}</td>
           <td class="text-wrap">{{livro.nomeDoLivro}}</td>
           <td class="text-wrap">{{livro.autor}}</td>
@@ -144,5 +167,5 @@
       </ul>
     </nav>
   </div>
-</div>
+</main>
 }

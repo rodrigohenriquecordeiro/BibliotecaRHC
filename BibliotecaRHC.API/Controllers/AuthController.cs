@@ -14,13 +14,13 @@ public class AuthController : ControllerBase
 {
     private readonly ITokenService _tokenService;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly RoleManager<IdentityRole<int>> _roleManager;
     private readonly IConfiguration _configuration;
 
     public AuthController(
         ITokenService tokenService,
         UserManager<ApplicationUser> userManager,
-        RoleManager<IdentityRole> roleManager,
+        RoleManager<IdentityRole<int>> roleManager,
         IConfiguration configuration)
     {
         _tokenService = tokenService;
@@ -36,7 +36,7 @@ public class AuthController : ControllerBase
 
         if (!roleExist)
         {
-            var roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
+            var roleResult = await _roleManager.CreateAsync(new IdentityRole<int>(roleName));
 
             if (roleResult.Succeeded)
                 return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = $"Criado role {roleName} com sucesso" });
@@ -106,6 +106,7 @@ public class AuthController : ControllerBase
 
             var authClaims = new List<Claim>
             {
+                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new(ClaimTypes.Name, user.UserName!),
                 new(ClaimTypes.Email, user.Email!),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())

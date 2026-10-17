@@ -19,7 +19,7 @@ public class AuthControllerTests
     private readonly Mock<IConfiguration> _configurationMock;
     private readonly Mock<ITokenService> _tokenServiceMock;
     private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
-    private readonly Mock<RoleManager<IdentityRole>> _roleManagerMock;
+    private readonly Mock<RoleManager<IdentityRole<int>>> _roleManagerMock;
 
     public AuthControllerTests()
     {
@@ -34,7 +34,7 @@ public class AuthControllerTests
     {
         // Arrange
         _roleManagerMock.Setup(r => r.RoleExistsAsync("Admin")).ReturnsAsync(false);
-        _roleManagerMock.Setup(r => r.CreateAsync(It.IsAny<IdentityRole>()))
+        _roleManagerMock.Setup(r => r.CreateAsync(It.IsAny<IdentityRole<int>>()))
                         .ReturnsAsync(IdentityResult.Success);
 
         var controller = new AuthController(_tokenServiceMock.Object, _userManagerMock.Object, _roleManagerMock.Object, _configurationMock.Object);
@@ -221,15 +221,15 @@ public class AuthControllerTests
             new Mock<ILogger<UserManager<ApplicationUser>>>().Object);
     }
 
-    private static Mock<RoleManager<IdentityRole>> CreateMockRoleManager()
+    private static Mock<RoleManager<IdentityRole<int>>> CreateMockRoleManager()
     {
-        var store = new Mock<IRoleStore<IdentityRole>>();
-        return new Mock<RoleManager<IdentityRole>>(
+        var store = new Mock<IRoleStore<IdentityRole<int>>>();
+        return new Mock<RoleManager<IdentityRole<int>>>(
             store.Object,
-            Array.Empty<IRoleValidator<IdentityRole>>(),
+            Array.Empty<IRoleValidator<IdentityRole<int>>>(),
             new Mock<ILookupNormalizer>().Object,
             new Mock<IdentityErrorDescriber>().Object,
-            new Mock<ILogger<RoleManager<IdentityRole>>>().Object);
+            new Mock<ILogger<RoleManager<IdentityRole<int>>>>().Object);
     }
     #endregion
 }

@@ -63,22 +63,8 @@ public class ProjetoService : IProjetoService
         if (projetoNoBanco == null) return null;
 
         projetoNoBanco.Nome = projeto.Nome;
-        projetoNoBanco.LivroProjetos = projeto.LivroProjetos;
         projetoNoBanco.DataCriacao = projeto.DataCriacao;
         projetoNoBanco.ProjetoStatus = projeto.ProjetoStatus;
-        projetoNoBanco.HistoricoProjetos = projeto.HistoricoProjetos;
-
-        foreach (var livro in projeto.LivroProjetos)
-        {
-            var livroBanco = projetoNoBanco.LivroProjetos.FirstOrDefault(x => x.Id == livro.Id);
-            if (livroBanco != null)
-            {
-                livroBanco.Nome = livro.Nome;
-                livroBanco.AnoDePublicacao = livro.AnoDePublicacao;
-                livroBanco.Lido = livro.Lido;
-                livroBanco.DataDeLeitura = livro.DataDeLeitura;
-            }
-        }
 
         await _unityOfWork.HistoricoProjetoRepository.AtualizarHistorico(projetoNoBanco);
         await _unityOfWork.CommitAsync();

@@ -5,7 +5,6 @@ import { LivrosPaginados } from '../../models/livrosPaginados';
 import { Frase } from '../../models/frase';
 import { Projeto } from '../../models/projeto';
 import { catchError, Observable, throwError, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { LivroProjeto } from '../../models/livroProjeto';
 import { environment } from '../../../environments/environment.development'; 
 
@@ -41,30 +40,32 @@ export class BibliotecaService {
     });
   }
 
-  listarLivros(pagina: number = 1, campo: string = '', valor: string = ''): Observable<LivrosPaginados> {
+  listarLivros(
+    pagina: number = 1,
+    campo: string = '',
+    valor: string = '',
+    campoOrdenacao: string = 'id',
+    direcaoOrdenacao: 'asc' | 'desc' = 'desc'
+  ): Observable<LivrosPaginados> {
 
     if (valor && valor.trim() !== '') {
       const params = new HttpParams()
         .set('campo', campo)
-        .set('valor', valor);
+        .set('valor', valor)
+        .set('paginaAtual', pagina.toString())
+        .set('campoOrdenacao', campoOrdenacao)
+        .set('direcaoOrdenacao', direcaoOrdenacao);
 
-      return this.http.get<Livro[]>(`${this.API}livros/filtra-dashboard`, {
+      return this.http.get<LivrosPaginados>(`${this.API}livros/filtra-dashboard-paginado`, {
         headers: this.getAuthHeaders(),
         params: params
-      }).pipe(
-        map((livrosFiltrados: Livro[]) => {
-          return {
-            Livros: livrosFiltrados,
-            TotalLivros: livrosFiltrados.length,
-            TotalPaginas: 1,
-            TemPaginaAnterior: false,
-            TemProximaPagina: false
-          } as LivrosPaginados;
-        })
-      );
+      });
 
     } else {
-      const params = new HttpParams().set('paginaAtual', pagina.toString());
+      const params = new HttpParams()
+        .set('paginaAtual', pagina.toString())
+        .set('campoOrdenacao', campoOrdenacao)
+        .set('direcaoOrdenacao', direcaoOrdenacao);
 
       return this.http.get<LivrosPaginados>(`${this.API}livros/obter-livros-paginados`, {
         headers: this.getAuthHeaders(),

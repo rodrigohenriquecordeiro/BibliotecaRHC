@@ -4,11 +4,12 @@ import { FrasesInesqueciveisAdicionarComponent } from '../frases-inesqueciveis-a
 import { BibliotecaService } from '../../../services/biblioteca/biblioteca.service';
 import { Frase } from '../../../models/frase';
 import { Router, RouterModule } from '@angular/router';
+import { PageHeaderComponent } from '../../shared/page-header/page-header.component';
 
 @Component({
   selector: 'app-frases-inesqueciveis-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, PageHeaderComponent],
   templateUrl: './frases-inesqueciveis-dashboard.component.html',
   styleUrl: './frases-inesqueciveis-dashboard.component.css'
 })
